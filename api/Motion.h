@@ -24,12 +24,30 @@ class Accelerometer {
   virtual bool readAcceleration(float &x, float &y, float &z) = 0;
   virtual unsigned int availableAcceleration() = 0;
   virtual unsigned long sampleRateAcceleration() = 0;
-}
+};
 
 class Gyro {
   virtual bool readGyro(float &x, float &y, float &z) = 0;
   virtual unsigned int availableGyro() = 0;
   virtual unsigned long sampleRateGyro() = 0;
-}
+};
+
+struct Rotation {
+  float yaw;
+  float pitch;
+  float roll;
+};
+
+struct Quaternion {
+  union {
+    float q[4];
+    struct {
+      float x;
+      float y;
+      float z;
+      float w;
+    };
+  };
+};
 
 #endif
