@@ -32,7 +32,7 @@ int minute(); // current minute as an integer (0 - 59)
 int second(); // current second as an integer (0 - 59)
 void setTime(int hour, int minute, int second, int day, int month, int year); // set the current time
 
-// Functions to get ans set current time with unix-timestamps
+// Functions to get and set current time with unix-timestamps
 
 unsigned long now();           // current time as seconds since Jan 1 1970
 void setTime(unsigned long t); // set the current time from seconds since Jan 1 1970
@@ -49,7 +49,7 @@ int second(unsigned long t);   // second of t as an integer (0 - 59)
 unsigned long convertTime(int hour, int minute, int second, int day, int month, int year);
 
 // Real Time Clock interface
-// Time sources should implement this interfaces
+// Time sources should implement this interface
 class RealTimeClock
 {
 public:
