@@ -47,6 +47,18 @@ class Gyro {
   virtual unsigned long sampleRateGyro() { return 0; }
 };
 
+// Base class for magnetometers
+class Magnetometer {
+  // read a magnetometer sample from the FIFO or wait until one is available
+  virtual bool readMagneticField(float &x, float &y, float &z) = 0;
+
+  // Number of samples in the FIFO.
+  virtual unsigned int availableMagneticField()   { return 1; }
+
+  // Sampling rate of the sensor.
+  virtual unsigned long sampleRateMagneticField() { return 0; }
+};
+
 struct Rotation {
   float yaw;
   float pitch;
