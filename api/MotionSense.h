@@ -20,16 +20,31 @@
 #ifndef ARDUINO_MOTION_SENSE_H
 #define ARDUINO_MOTION_SENSE_H
 
+// Sensors that doesn't implement a FIFO can use the default
+// implementation of availableXxx() and sampleRateXxx()
+
+// Base class for accelerometers
 class Accelerometer {
+  // read an acceleration sample from the FIFO or wait until one is available
   virtual bool readAcceleration(float &x, float &y, float &z) = 0;
-  virtual unsigned int availableAcceleration() = 0;
-  virtual unsigned long sampleRateAcceleration() = 0;
+
+  // number of samples in the FIFO
+  virtual unsigned int availableAcceleration()   { return 1; }
+
+  // sampling rate of the sensor
+  virtual unsigned long sampleRateAcceleration() { return 0; }
 };
 
+// Base class for gyro
 class Gyro {
+  // read a gyro sample from the FIFO or wait until one is available
   virtual bool readGyro(float &x, float &y, float &z) = 0;
-  virtual unsigned int availableGyro() = 0;
-  virtual unsigned long sampleRateGyro() = 0;
+
+  // number of samples in the FIFO
+  virtual unsigned int availableGyro()   { return 1; }
+
+  // sampling rate of the sensor
+  virtual unsigned long sampleRateGyro() { return 0; }
 };
 
 struct Rotation {
