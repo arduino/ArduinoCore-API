@@ -73,10 +73,10 @@ struct Quaternion {
   union {
     float q[4];
     struct {
+      float w;
       float x;
       float y;
       float z;
-      float w;
     };
   };
 };
