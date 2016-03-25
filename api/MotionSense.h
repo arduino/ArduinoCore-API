@@ -56,6 +56,12 @@ class Magnetometer {
   // Results are in uT (micro Tesla).
   virtual bool readMagneticField(float &x, float &y, float &z) = 0;
 
+  // Returns the expected field strength. Filter algorithms can use this value
+  // to detect and ignore when a strong magnetic field or nearby ferrous metal
+  // objects interfere with the magnetometer readings.
+  // Defaults to 50.0 uT for sensors that lacks this calibration info.
+  virtual float expectedMagneticFieldStrength()   { return 50.0f; }
+
   // Number of samples in the FIFO.
   virtual unsigned int availableMagneticField()   { return 1; }
 
