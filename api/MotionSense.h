@@ -20,11 +20,25 @@
 #ifndef ARDUINO_MOTION_SENSE_H
 #define ARDUINO_MOTION_SENSE_H
 
-// Sensors that doesn't implement a FIFO can use the default
-// implementation of availableXxx() and sampleRateXxx() and
-// always return the last valid sample.
+// Base class for gyroscope
+class Gyroscope {
+  // Read a gyro sample from the FIFO or wait until one is available.
+  // Results are in degrees/second.
+  virtual bool readGyroscope(float &x, float &y, float &z) = 0;
+
+  // Number of samples in the FIFO.
+  // Sensors without a FIFO should return 1 only if the sensor has
+  // produced a new measurement since the most recent read.
+  virtual unsigned int availableGyroscope() = 0;
+
+  // Sampling rate of the sensor.
+  virtual unsigned long sampleRateGyroscope() = 0;
+};
 
 // Base class for accelerometers
+// Sensors without a FIFO can use the default implementation of
+// availableXxx() and sampleRateXxx() and always return the last
+// valid measurement.
 class Accelerometer {
   // Read an acceleration sample from the FIFO or wait until one is available.
   // Results are in G (earth gravity).
@@ -37,20 +51,10 @@ class Accelerometer {
   virtual unsigned long sampleRateAcceleration() { return 0; }
 };
 
-// Base class for gyroscope
-class Gyroscope {
-  // Read a gyro sample from the FIFO or wait until one is available.
-  // Results are in degrees/second.
-  virtual bool readGyroscope(float &x, float &y, float &z) = 0;
-
-  // Number of samples in the FIFO.
-  virtual unsigned int availableGyroscope()   { return 1; }
-
-  // Sampling rate of the sensor.
-  virtual unsigned long sampleRateGyroscope() { return 0; }
-};
-
 // Base class for magnetometers
+// Sensors without a FIFO can use the default implementation of
+// availableXxx() and sampleRateXxx() and always return the last
+// valid measurement.
 class Magnetometer {
   // Read a magnetometer sample from the FIFO or wait until one is available.
   // Results are in uT (micro Tesla).
