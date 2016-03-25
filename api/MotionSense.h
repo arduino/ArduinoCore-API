@@ -21,35 +21,39 @@
 #define ARDUINO_MOTION_SENSE_H
 
 // Sensors that doesn't implement a FIFO can use the default
-// implementation of availableXxx() and sampleRateXxx()
+// implementation of availableXxx() and sampleRateXxx() and
+// always return the last valid sample.
 
 // Base class for accelerometers
 class Accelerometer {
-  // read an acceleration sample from the FIFO or wait until one is available
+  // Read an acceleration sample from the FIFO or wait until one is available.
+  // Results are in G (earth gravity).
   virtual bool readAcceleration(float &x, float &y, float &z) = 0;
 
-  // number of samples in the FIFO
+  // Number of samples in the FIFO.
   virtual unsigned int availableAcceleration()   { return 1; }
 
-  // sampling rate of the sensor
+  // Sampling rate of the sensor.
   virtual unsigned long sampleRateAcceleration() { return 0; }
 };
 
-// Base class for gyro
-class Gyro {
-  // read a gyro sample from the FIFO or wait until one is available
-  virtual bool readGyro(float &x, float &y, float &z) = 0;
+// Base class for gyroscope
+class Gyroscope {
+  // Read a gyro sample from the FIFO or wait until one is available.
+  // Results are in degrees/second.
+  virtual bool readGyroscope(float &x, float &y, float &z) = 0;
 
-  // number of samples in the FIFO
-  virtual unsigned int availableGyro()   { return 1; }
+  // Number of samples in the FIFO.
+  virtual unsigned int availableGyroscope()   { return 1; }
 
-  // sampling rate of the sensor
-  virtual unsigned long sampleRateGyro() { return 0; }
+  // Sampling rate of the sensor.
+  virtual unsigned long sampleRateGyroscope() { return 0; }
 };
 
 // Base class for magnetometers
 class Magnetometer {
-  // read a magnetometer sample from the FIFO or wait until one is available
+  // Read a magnetometer sample from the FIFO or wait until one is available.
+  // Results are in uT (micro Tesla).
   virtual bool readMagneticField(float &x, float &y, float &z) = 0;
 
   // Number of samples in the FIFO.
