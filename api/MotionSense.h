@@ -69,6 +69,11 @@ class Magnetometer {
   virtual unsigned long sampleRateMagneticField() { return 0; }
 };
 
+// EulerAngles represents a rotation in the most commonly accepted
+// NED (North, East, Down) right hand rule, with:
+//   yaw   from    0 to 360 degrees
+//   pitch from  -90 to  90 degrees
+//   roll  from -180 to 180 degrees
 struct EulerAngles {
   float yaw;
   float pitch;
