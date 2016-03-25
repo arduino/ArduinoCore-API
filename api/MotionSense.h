@@ -63,7 +63,7 @@ class Magnetometer {
   virtual unsigned long sampleRateMagneticField() { return 0; }
 };
 
-struct Rotation {
+struct EulerAngles {
   float yaw;
   float pitch;
   float roll;
