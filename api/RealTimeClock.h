@@ -22,6 +22,9 @@
 
 #define ARDUINO_REAL_TIME_CLOCK_API_VERSION 10000 // version 1.0.0
 
+class RealTimeClock;
+class TimeProvider;
+
 // Functions to get and set current time
 
 int year();   // current year as an integer
@@ -45,18 +48,36 @@ int day(unsigned long t);      // day of t as an integer (1 - 31)
 int hour(unsigned long t);     // hour of t as an integer (0 - 23)
 int minute(unsigned long t);   // minute of t as an integer (0 - 59)
 int second(unsigned long t);   // second of t as an integer (0 - 59)
-
 unsigned long convertTime(int hour, int minute, int second, int day, int month, int year);
 
+// Synchronize the clock with a time provider
+// Return true if the synchronization is successful, false otherwise.
+bool setTime(TimeProvider &provider);
+
 // Real Time Clock interface
-// Time sources should implement this interface
+// Clocks should implement this interface
 class RealTimeClock
 {
 public:
+  // Get the current time as unix-timestamp.
+  // Return 0 if time has not been set.
   virtual unsigned long getTime() = 0;
+
+  // Set the current time as unix-timestamp
   virtual bool setTime(unsigned long t) = 0;
 };
 
 extern RealTimeClock *arduinoSystemRTC;
+
+// Time Provider interface
+// Class that performs time synchronization with a master time (atomic clock, GPS,
+// NTP, etc.) should implement this interface.
+class TimeProvider
+{
+public:
+  // Query the time provider for the current real time and return it as unix-timestamp.
+  // Returns 0 if the query fails.
+  virtual unsigned long getTime() = 0;
+};
 
 #endif
