@@ -1,5 +1,5 @@
 /*
-  BLE Centrel API
+  BLE Remote Central API
   Copyright (c) 2016 Arduino LLC. All right reserved.
 
   This library is free software; you can redistribute it and/or
