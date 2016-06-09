@@ -20,8 +20,6 @@
 #ifndef ARDUINO_REAL_TIME_CLOCK_H
 #define ARDUINO_REAL_TIME_CLOCK_H
 
-#define ARDUINO_REAL_TIME_CLOCK_API_VERSION 10000 // version 1.0.0
-
 class RealTimeClock;
 class TimeProvider;
 
