@@ -42,5 +42,6 @@ bool SoftwareRTC::setTime(unsigned long t)
 {
   lastTimestamp = t;
   lastMillis = millis();
+  return true;
 }
 
