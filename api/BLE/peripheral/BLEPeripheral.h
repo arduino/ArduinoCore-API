@@ -28,7 +28,7 @@ enum BLEPeripheralEvent {
   BLEConnected = 0,
   BLEDisconnected = 1,
   BLEBonded = 2,
-  BLERemoteServicesDiscovered = 2
+  BLERemoteServicesDiscovered = 3
 };
 
 typedef void (*BLEPeripheralEventHandler)(BLERemoteCentral& central);

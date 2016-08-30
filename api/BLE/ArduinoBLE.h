@@ -24,4 +24,6 @@
 
 #include <BLEDevice.h>
 
+extern BLEDevice BLE;
+
 #endif

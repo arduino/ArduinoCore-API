@@ -39,7 +39,7 @@ class BLEAttribute
 {
 public:
   BLEAttribute(const char* uuid, enum BLEAttributeType type);
-  const char* uuid() const; // get the UUID as a string
+  String uuid() const; // get the UUID as a string
 
   enum BLEAttributeType type() const;
 };
