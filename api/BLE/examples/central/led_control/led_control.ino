@@ -91,6 +91,16 @@ void controlLed(BLEDevice peripheral) {
   // retrieve the LED characteristic
   BLECharacteristic ledCharacteristic = peripheral.characteristic("19b10001-e8f2-537e-4f6c-d104768a1214");
 
+  if (!ledCharacteristic) {
+    Serial.println("Peripheral does not have LED characteristic!");
+    peripheral.disconnect();
+    return;
+  } else if (!ledCharacteristic.canWrite()) {
+    Serial.println("Peripheral does not have a writable LED characteristic!");
+    peripheral.disconnect();
+    return;
+  }
+
   while (peripheral.connected()) {
     // while the peripheral is connection
 

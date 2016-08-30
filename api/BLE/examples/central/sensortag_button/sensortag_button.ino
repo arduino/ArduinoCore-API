@@ -83,12 +83,20 @@ void monitorSensorTagButtons(BLEPeripheral peripheral) {
 
   // subscribe to the simple key characteristic
   Serial.println("Subscribing to simple key characteristic ...");
-  if ( simpleKeyCharacteristic.subscribe()) {
-    Serial.println("Subscribed");
-  } else {
+  if (!simpleKeyCharacteristic) {
+    Serial.println("no simple key characteristic found!");
+    peripheral.disconnect();
+    return;
+  } else if (!simpleKeyCharacteristic.canSubscribe()) {
+    Serial.println("simple key characteristic is not subscribable!");
+    peripheral.disconnect();
+    return;
+  } else if (!simpleKeyCharacteristic.subscribe()) {
     Serial.println("subscription failed!");
     peripheral.disconnect();
     return;
+  } else {
+    Serial.println("Subscribed");
   }
 
   while (peripheral.connected()) {
