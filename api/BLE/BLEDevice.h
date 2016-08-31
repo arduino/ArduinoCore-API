@@ -49,6 +49,7 @@ class BLEDevice
 
     // peripheral mode
     void setAdvertisedServiceUuid(const char* advertisedServiceUuid); // set the service UUID that is advertised
+    void setAdvertisedService(const BLEService& service); // advertise the UUID of the provided service
     void setServiceSolicitationUuid(const char* serviceSolicitationUuid); // set the service that is solicited in the advertisement
     void setManufacturerData(const unsigned char manufacturerData[], unsigned char manufacturerDataLength); // set the manufacturer data that is advertised
     void setLocalName(const char *localName); // set the local name that is advertised
