@@ -38,6 +38,9 @@ void receiveDone(int samples) {
   Serial.println(" samples");
 
   while(I2S.samplesAvailable() >= 2) {
+    int32_t left;
+    int32_t right;
+
     I2S.readSample(left);
     I2S.readSample(right);
 

@@ -43,34 +43,34 @@ class AudioStream : public Stream
   virtual int samplesAvailableForWrite(); // returns the number of samples (of bitsPerSample) that can be written
 
   // read a sample, returns 1 on success, 0 if no samples available to read
-  virtual int readSample(uint8_t& sample); // 8-bit
-  virtual int readSample(uint16_t& sample); // 16-bit
-  virtual int readSample(uint32_t& sample); // 24-bit or 32-bit
-  virtual int readSample(uint64_t& sample); // 48-bit or 64-bit
+  virtual int readSample(int8_t& sample); // 8-bit
+  virtual int readSample(int16_t& sample); // 16-bit
+  virtual int readSample(int32_t& sample); // 24-bit or 32-bit
+  virtual int readSample(int64_t& sample); // 48-bit or 64-bit
 
   // peek a sample, returns 1 on success, 0 if no samples available to peek
-  virtual int peekSample(uint8_t& sample); // 8-bit
-  virtual int peekSample(uint16_t& sample); // 16-bit
-  virtual int peekSample(uint32_t& sample); // 24-bit or 32-bit
-  virtual int peekSample(uint64_t& sample); // 48-bit or 64-bit
+  virtual int peekSample(int8_t& sample); // 8-bit
+  virtual int peekSample(int16_t& sample); // 16-bit
+  virtual int peekSample(int32_t& sample); // 24-bit or 32-bit
+  virtual int peekSample(int64_t& sample); // 48-bit or 64-bit
 
   // read count samples, returns the number of samples read
-  virtual int readSamples(uint8_t[] samples, int count); // 8-bit
-  virtual int readSamples(uint16_t[] samples, int count); // 16-bit
-  virtual int readSamples(uint32_t[] samples, int count); // 24-bit or 32-bit
-  virtual int readSamples(uint64_t[] samples, int count); // 48-bit or 64-bit
+  virtual int readSamples(int8_t[] samples, int count); // 8-bit
+  virtual int readSamples(int16_t[] samples, int count); // 16-bit
+  virtual int readSamples(int32_t[] samples, int count); // 24-bit or 32-bit
+  virtual int readSamples(int64_t[] samples, int count); // 48-bit or 64-bit
 
   // write a sample, returns 1 on success, 0 if no sample written
-  virtual int writeSample(uint8_t sample); // 8-bit
-  virtual int writeSample(uint16_t sample); // 16-bit
-  virtual int writeSample(uint32_t sample); // 24-bit or 32-bit
-  virtual int writeSample(uint64_t sample); // 48-bit or 64-bit
+  virtual int writeSample(int8_t sample); // 8-bit
+  virtual int writeSample(int16_t sample); // 16-bit
+  virtual int writeSample(int32_t sample); // 24-bit or 32-bit
+  virtual int writeSample(int64_t sample); // 48-bit or 64-bit
 
   // write count samples, returns the number of samples written
-  virtual int writeSamples(const uint8_t[] samples, int count); // 8-bit
-  virtual int writeSamples(const uint16_t[] samples, int count); // 16-bit
-  virtual int writeSamples(const uint32_t[] samples, int count); // 24-bit or 32-bit
-  virtual int writeSamples(const uint64_t[] samples, int count); // 48-bit or 64-bit
+  virtual int writeSamples(const int8_t[] samples, int count); // 8-bit
+  virtual int writeSamples(const int16_t[] samples, int count); // 16-bit
+  virtual int writeSamples(const int32_t[] samples, int count); // 24-bit or 32-bit
+  virtual int writeSamples(const int64_t[] samples, int count); // 48-bit or 64-bit
 };
 
 #endif
