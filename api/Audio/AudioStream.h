@@ -38,6 +38,7 @@ class AudioStream : public Stream
   virtual size_t availableForWrite();
 
   virtual int bitsPerSample() = 0; // the number of bits in a sample (8, 16, 24, 32, 48, etc)
+  virtual int channels() = 0; // the number of audio channels (1 for mono, 2 for stereo, etc)
   virtual int samplesAvailable(); // returns the number of samples (of bitsPerSample) that are available for reading
   virtual int samplesAvailableForWrite(); // returns the number of samples (of bitsPerSample) that can be written
 
