@@ -23,10 +23,10 @@
 void setup() {
   Serial.begin(9600);
 
-  I2S.begin(PHILIPS_MODE, 44000, 32);
+  I2S.begin(PHILIPS_MODE, 32, 44000);
 
   I2S.onReceive(receiveDone);
-  I2S.beginReceive();
+  I2S.receiveEnable();
 }
 
 void loop() {
@@ -37,9 +37,9 @@ void receiveDone(int samples) {
   Serial.print(samples);
   Serial.println(" samples");
 
-  while(I2S.available() >= 2) {
-    long left = I2S.read();
-    long right = I2S.read();
+  while(I2S.samplesAvailable() >= 2) {
+    I2S.readSample(left);
+    I2S.readSample(right);
 
     // do something with data quickly
   }

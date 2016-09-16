@@ -23,7 +23,7 @@
 void setup() {
   Serial.begin(9600);
 
-  I2S.begin(PHILIPS_MODE, 44000, 32);
+  I2S.begin(PHILIPS_MODE, 32, 44000);
 
   I2S.onTransmit(transmitDone);
   I2S.onTransmitBufferEmpty(transmitBufferEmpty);
@@ -32,20 +32,19 @@ void setup() {
 void loop() {
   Serial.println("Sending I2S data");
 
-  I2S.beginTransmit(); // start the transmission process
+  I2S.transmitEnable(); // enable transmit mode
 
   // send 100ms of data, 44 words per channel
   // -> each loop iteration sends 2 words per channel
   for (int i = 0; i < 22; i++) {
-    I2S.write(0xFFFFFFFF); // left channel
-    I2S.write(0x00000000); // right channel
+    I2S.writeSample(0xFFFFFFFF); // left channel
+    I2S.writeSample(0x00000000); // right channel
 
-    I2S.write(0xDEADFACE); // left channel
-    I2S.write(0x10101010); // right channel
+    I2S.writeSample(0xDEADFACE); // left channel
+    I2S.writeSample(0x10101010); // right channel
   }
 
-  I2S.endTransmit(); // end the transmission process
-
+  I2S.transmitDisable(); // disable transmit mode
   delay(100);
 }
 
