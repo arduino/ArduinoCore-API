@@ -37,9 +37,9 @@ class AudioStream : public Stream
   // AudioStream specific
   virtual size_t availableForWrite();
 
-  virtual int sampleSize() = 0; // size of sample in bits (8, 16, 24, 32, 48, etc)
-  virtual int samplesAvailable(); // returns the number of samples (of sampleSize) that are available for reading
-  virtual int samplesAvailableForWrite(); // returns the number of samples (of sampleSize) that can be written
+  virtual int bitsPerSample() = 0; // the number of bits in a sample (8, 16, 24, 32, 48, etc)
+  virtual int samplesAvailable(); // returns the number of samples (of bitsPerSample) that are available for reading
+  virtual int samplesAvailableForWrite(); // returns the number of samples (of bitsPerSample) that can be written
 
   // read a sample, returns 1 on success, 0 if no samples available to read
   virtual int readSample(uint8_t& sample); // 8-bit
