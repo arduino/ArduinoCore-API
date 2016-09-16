@@ -55,10 +55,10 @@ class AudioStream : public Stream
   virtual int peekSample(int64_t& sample); // 48-bit or 64-bit
 
   // read count samples, returns the number of samples read
-  virtual int readSamples(int8_t[] samples, int count); // 8-bit
-  virtual int readSamples(int16_t[] samples, int count); // 16-bit
-  virtual int readSamples(int32_t[] samples, int count); // 24-bit or 32-bit
-  virtual int readSamples(int64_t[] samples, int count); // 48-bit or 64-bit
+  virtual int readSamples(int8_t samples[], int count); // 8-bit
+  virtual int readSamples(int16_t samples[], int count); // 16-bit
+  virtual int readSamples(int32_t samples[], int count); // 24-bit or 32-bit
+  virtual int readSamples(int64_t samples[], int count); // 48-bit or 64-bit
 
   // write a sample, returns 1 on success, 0 if no sample written
   virtual int writeSample(int8_t sample); // 8-bit
@@ -67,10 +67,10 @@ class AudioStream : public Stream
   virtual int writeSample(int64_t sample); // 48-bit or 64-bit
 
   // write count samples, returns the number of samples written
-  virtual int writeSamples(const int8_t[] samples, int count); // 8-bit
-  virtual int writeSamples(const int16_t[] samples, int count); // 16-bit
-  virtual int writeSamples(const int32_t[] samples, int count); // 24-bit or 32-bit
-  virtual int writeSamples(const int64_t[] samples, int count); // 48-bit or 64-bit
+  virtual int writeSamples(const int8_t samples[], int count); // 8-bit
+  virtual int writeSamples(const int16_t samples[], int count); // 16-bit
+  virtual int writeSamples(const int32_t samples[], int count); // 24-bit or 32-bit
+  virtual int writeSamples(const int64_t samples[], int count); // 48-bit or 64-bit
 };
 
 #endif
