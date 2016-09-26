@@ -20,13 +20,11 @@
 #include <SPI.h>
 #include <SD.h>
 
-#include <ArduinoI2S.h>
-#include <WaveFile.h>
+#include <Sound.h>
 
 // filename on SD card to read
 const char filename = "test.wav";
 
-File file;
 WaveFile waveFile;
 
 int sampleRate;
@@ -43,17 +41,6 @@ void setup() {
     while (1); // do nothing
   }
   Serial.println("initialization done.");
-
-  // open the file. note that only one file can be open at a time,
-  // so you have to close this one before opening another.
-  file = SD.open(filename);
-
-  // check if the file opened sucessfully
-  if (!file) {
-    Serial.print("error opening ");
-    Serial.println(filename);
-    while (1); // do nothing
-  }
 
   // use the file to create a WaveFile
   waveFile = WaveFile(file);
@@ -76,40 +63,25 @@ void setup() {
   Serial.print("Sample rate = ");
   Serial.println(sampleRate);
 
-  int mode;
-
-  if (channels == 1) {
-    // only one channel in wave file, use right mode
-    mode = RIGHT_JST_MODE;
-  } else if (channels == 2) {
-    // wave file has two channels, use philips mode
-    mode = PHILIPS_MODE;
-  } else {
-    Serial.print("Wave file contains more than two channels!");
+  // setup the I2S ouput
+  if (!I2SOutput.begin()) {
+    Serial.println("starting I2S output failed!");
     while (1); // do nothing
   }
 
-  // start I2S
-  if (!I2S.begin(mode, waveFile.bitsPerSample(), waveFile.sampleRate()) {
-    Serial.println("error starting I2S");
-    while(1); // do nothing
+  // check if playback can be done
+  if (!waveFile.canPlay(I2SOutput)) {
+    Serial.println("cannot play wave file on I2S output!");
+    while (1); // do nothing
   }
 
-  // enable transmit
-  I2S.transmitEnable();
+  // start playback
+  waveFile.play(I2SOutput);
 }
 
 void loop() {
-  if (!waveFile.available()) {
-    // no sample, go back to start
-    waveFile.seek(0);
-  }
-
-  if (I2S.availableForWrite() && waveFile.available()) {
-    // read a byte from the wave file
-    int b = waveFile.read();
-
-    // write the byte to I2S
-    I2S.write(b);
+  if (!waveFile.isPlaying()) {
+    Serial.println("Wave file is not playing anymore, restarting");
+    waveFile.play(I2SOutput);
   }
 }
