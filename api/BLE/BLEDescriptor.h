@@ -22,7 +22,7 @@
 
 #include "BLEAttributeWithValue.h"
 
-class BLEDescriptor : public BLEAttributeWithValue
+class BLEDescriptor
 {
   public:
     BLEDescriptor();
@@ -39,10 +39,50 @@ class BLEDescriptor : public BLEAttributeWithValue
 
     virtual operator bool() const;  // is the descriptor valid (discovered from peripheral)
 
-    // write the value of the characteristic
+    /**
+     * @brief   Write the value of the descriptor
+     *
+     * @param   value   The value buffer that want to write to descriptor
+     *
+     * @param   length  The value buffer's length
+     *
+     * @return  bool    true - Success, false - Failed
+     *
+     * @note  none
+     */
     virtual bool writeValue(const byte value[], int length);
+    
+    /**
+     * @brief   Write the value of the descriptor
+     *
+     * @param   value   The value buffer that want to write to descriptor
+     *
+     * @param   length  The value buffer's length
+     *
+     * @param   offset  The offset in the descriptor's data
+     *
+     * @return  bool    true - Success, false - Failed
+     *
+     * @note  none
+     */
     bool writeValue(const byte value[], int length, int offset);
+    
+    /**
+     * @brief   Write the value of the descriptor
+     *
+     * @param   value   The value string that want to write to descriptor
+     *
+     * @return  bool    true - Success, false - Failed
+     *
+     * @note  none
+     */
     bool writeValue(const char* value);
+
+    // GATT client Write the value of the descriptor
+    virtual bool write(const byte value[], int length);
+    bool write(const byte value[], int length, int offset);
+    bool write(const char* value);
+    bool read();
 };
 
 #endif
