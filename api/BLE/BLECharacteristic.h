@@ -27,7 +27,8 @@ enum BLECharacteristicEvent {
   BLEWritten = 0,
   BLESubscribed = 1,
   BLEUnsubscribed = 2,
-  BLEValueUpdated = 3
+  BLEValueUpdated = 3,
+  BLECharacteristicEventLast
 };
 
 enum BLEProperty {
@@ -44,215 +45,434 @@ typedef void (*BLECharacteristicEventHandler)(BLEDevice central, BLECharacterist
 class BLECharacteristic : public BLEAttributeWithValue
 {
 public:
-  BLECharacteristic();
-  BLECharacteristic(const char* uuid, unsigned char properties, unsigned char valueSize); // create a characteristic with specified value size
-  BLECharacteristic(const char* uuid, unsigned char properties, const char* value); // create a characteristic with string value
+    BLECharacteristic();
+    
+    /**
+     * @brief   Create a characteristic with specified value size
+     *
+     * @param   uuid        The UUID of the characteristic
+     *
+     * @param   properties  The properties of the characteristic
+     *
+     * @param   valueSize   The size of the characteristic data
+     *
+     * @return  none
+     *
+     * @note  none
+     */
+    BLECharacteristic(const char* uuid, 
+                      unsigned char properties, 
+                      unsigned char valueSize);
+    
+    /**
+     * @brief   Create a characteristic with string value
+     *
+     * @param   uuid        The UUID of the characteristic
+     *
+     * @param   properties  The properties of the characteristic
+     *
+     * @param   value       The string of the characteristic data
+     *
+     * @return  none
+     *
+     * @note  The data length is string's size. Can't set a string that is longger
+     *          than the this input
+     */
+    BLECharacteristic(const char* uuid, 
+                      unsigned char properties, 
+                      const char* value);
 
-  virtual ~BLECharacteristic();
+    /**
+     * @brief   Create a characteristic with specified value size
+     *
+     * @param   uuid        The UUID of the characteristic
+     *
+     * @param   properties  The properties of the characteristic
+     *
+     * @param   valueSize   The size of the characteristic data
+     *
+     * @param   bleDev      The peer BLE device
+     *
+     * @return  none
+     *
+     * @note  none
+     */
+    BLECharacteristic(const char* uuid, 
+                      unsigned char properties, 
+                      unsigned char valueSize,
+                      BLEDevice *bleDev);
+    
+    /**
+     * @brief   Create a characteristic with string value
+     *
+     * @param   uuid        The UUID of the characteristic
+     *
+     * @param   properties  The properties of the characteristic
+     *
+     * @param   value       The string of the characteristic data
+     *
+     * @param   bleDev      The peer BLE device
+     *
+     * @return  none
+     *
+     * @note  The data length is string's size. Can't set a string that is longger
+     *          than the this input
+     */
+    BLECharacteristic(const char* uuid, 
+                      unsigned char properties, 
+                      const char* value,
+                      BLEDevice *bleDev);
 
-  virtual operator bool() const; // is the characteristic valid
+    virtual ~BLECharacteristic();
 
-  const char* uuid() const;
+    /**
+     * @brief   Is the characteristic valid
+     *
+     * @param   none
+     *
+     * @return  bool    true/false
+     *
+     * @note  Invalid characteristic is NULL pointer or all zero with UUID
+     */
+    virtual operator bool() const; // 
 
-  unsigned char properties() const; // returns the property mask of the characteristic
+    /**
+     * @brief   Get the characteristic's UUID string
+     *
+     * @param   none
+     *
+     * @return  const char*     The UUID string
+     *
+     * @note  none
+     */
+    const char* uuid() const;
 
-  int valueSize() const; // returns the maximum size of the value
-  virtual const byte* value() const; // returns the value buffer
-  virtual int valueLength() const; // returns the current length of the value
-  virtual byte operator[] (int offset) const; // returns a byte of the value at the specified offset
+    /**
+     * @brief   Get the property mask of the characteristic
+     *
+     * @param   none
+     *
+     * @return  unsigned char       The property mask of the characteristic
+     *
+     * @note  none
+     */
+    unsigned char properties() const;
 
-  // write the value of the characteristic
-  virtual bool writeValue(const byte value[], int length);
-  bool writeValue(const byte value[], int length, int offset);
-  bool writeValue(const char* value);
+    /**
+     * @brief   Get the maximum size of the value
+     *
+     * @param   none
+     *
+     * @return  int     The maximum size of the value
+     *
+     * @note  none
+     */
+    int valueSize() const;
+    
+    /**
+     * @brief   Get the value buffer
+     *
+     * @param   none
+     *
+     * @return  const byte*     The value buffer
+     *
+     * @note  none
+     */
+    virtual const byte* value() const;
+    
+    /**
+     * @brief   Get the current length of the value
+     *
+     * @param   none
+     *
+     * @return  int     The current length of the value
+     *
+     * @note  none
+     */
+    virtual int valueLength() const;
+    
+    /**
+     * @brief   Get a byte of the value at the specified offset
+     *
+     * @param   none
+     *
+     * @return  byte    A byte of the value at the specified offset
+     *
+     * @note  none
+     */
+    virtual byte operator[] (int offset) const;
 
-  virtual bool read(); // read the characteristic value
-  virtual bool write(const unsigned char* value, int length); // write the charcteristic value
+    /**
+     * @brief   Write the value of the characteristic
+     *
+     * @param   value   The value buffer that want to write to characteristic
+     *
+     * @param   length  The value buffer's length
+     *
+     * @return  bool    true - Success, false - Failed
+     *
+     * @note  none
+     */
+    virtual bool writeValue(const byte value[], int length);
+    
+    /**
+     * @brief   Write the value of the characteristic
+     *
+     * @param   value   The value buffer that want to write to characteristic
+     *
+     * @param   length  The value buffer's length
+     *
+     * @param   offset  The offset in the characteristic's data
+     *
+     * @return  bool    true - Success, false - Failed
+     *
+     * @note  none
+     */
+    bool writeValue(const byte value[], int length, int offset);
+    
+    /**
+     * @brief   Write the value of the characteristic
+     *
+     * @param   value   The value string that want to write to characteristic
+     *
+     * @return  bool    true - Success, false - Failed
+     *
+     * @note  none
+     */
+    bool writeValue(const char* value);
 
-  // peripheral mode
-  bool broadcast(); // broadcast the characteristic value in the advertisement data
+    // peripheral mode
+    bool broadcast(); // broadcast the characteristic value in the advertisement data
+    
+    // GATT server
+    /**
+     * @brief   Has the GATT client written a new value
+     *
+     * @param   none
+     *
+     * @return  bool    true - Written, false - Not changed
+     *
+     * @note  GATT server only. Need comfirm the different with valueUpdated
+     */
+    bool written();
+    
+    /**
+     * @brief   Is the GATT client subscribed
+     *
+     * @param   none
+     *
+     * @return  bool    true - Subscribed, false - Not subscribed
+     *
+     * @note  GATT server and client
+     */
+    bool subscribed();
+    
+    /**
+     * @brief   Can a notification be sent to the GATT client
+     *
+     * @param   none
+     *
+     * @return  true - Yes, false - No
+     *
+     * @note  GATT server only
+     */
+    bool canNotify();
+    
+    /**
+     * @brief   Can a indication be sent to the GATT client
+     *
+     * @param   none
+     *
+     * @return  true - Yes, false - No
+     *
+     * @note  GATT server only
+     */
+    bool canIndicate();
+    
+    // GATT
+    /**
+     * @brief   Can the characteristic be read (based on properties)
+     *
+     * @param   none
+     *
+     * @return  true - readable, false - None
+     *
+     * @note  none
+     */
+    bool canRead();
+    
+    /**
+     * @brief   Can the characteristic be written (based on properties)
+     *
+     * @param   none
+     *
+     * @return  true - writable, false - None
+     *
+     * @note  none
+     */
+    bool canWrite();
+    
+    /**
+     * @brief   Can the characteristic be subscribed to (based on properties)
+     *
+     * @param   none
+     *
+     * @return  true - Can be subscribed, false - No
+     *
+     * @note  What different with canUnsubscribe?
+     */
+    bool canSubscribe();
+    
+    /**
+     * @brief   Can the characteristic be unsubscribed to (based on properties)
+     *
+     * @param   none
+     *
+     * @return  true - Can be unsubscribed, false - No
+     *
+     * @note  none
+     */
+    bool canUnsubscribe();
 
-  bool written(); // has the central written a new value
-  bool subscribed(); // is the central subscribed
-  bool canNotify(); // can a notification be sent to the central
-  bool canIndicate(); // can a indication be sent to the central
+    /**
+     * @brief   Read the characteristic value
+     *
+     * @param   none
+     *
+     * @return  bool    true - Success, false - Failed
+     *
+     * @note  Only for GATT client. Schedule read request to the GATT server
+     */
+    virtual bool read();
+    
+    /**
+     * @brief   Write the charcteristic value
+     *
+     * @param   value   The value buffer that want to write to characteristic
+     *
+     * @param   length  The value buffer's length
+     *
+     * @return  bool    true - Success, false - Failed
+     *
+     * @note  Only for GATT client. Schedule write request to the GATT server
+     */
+    virtual bool write(const unsigned char* value, int length);
+    
+    /**
+     * @brief   Subscribe to the characteristic
+     *
+     * @param   none
+     *
+     * @return  bool    true - Success, false - Failed
+     *
+     * @note  Only for GATT client. Schedule CCCD to the GATT server
+     */
+    bool subscribe();
+    
+    /**
+     * @brief   Unsubscribe to the characteristic
+     *
+     * @param   none
+     *
+     * @return  bool    true - Success, false - Failed
+     *
+     * @note  Only for GATT client. Schedule CCCD to the GATT server
+     */
+    bool unsubscribe();
 
+    bool valueUpdated(); // Read response updated the characteristic
 
-  // central mode
-  bool canRead(); // can the characteristic be read (based on properties)
-  bool canWrite(); // can the characteristic be written (based on properties)
-  bool canSubscribe(); // can the characteristic be subscribed to (based on properties)
-  bool canUnsubscribe(); // can the characteristic be unsubscribed to (based on properties)
+    /**
+     * @brief   Get the number of descriptors the characteristic has
+     *
+     * @param   none
+     *
+     * @return  int     the number of descriptors the characteristic has
+     *
+     * @note  none
+     */
+    int descriptorCount() const;
+    
+    /**
+     * @brief   Does the characteristic have a descriptor with the specified UUID
+     *
+     * @param   uuid        The descriptor's UUID
+     *
+     * @return  bool        true - Yes.     false - No
+     *
+     * @note  none
+     */
+    bool hasDescriptor(const char* uuid) const;
+    
+    /**
+     * @brief   Does the characteristic have an nth descriptor with the specified UUID
+     *
+     * @param   uuid        The descriptor's UUID
+     *
+     * @param   index       The index of descriptor
+     *
+     * @return  bool        true - Yes.     false - No
+     *
+     * @note  none
+     */
+    bool hasDescriptor(const char* uuid, int index) const;
+    
+    /**
+     * @brief   Get the nth descriptor of the characteristic
+     *
+     * @param   index   The index of descriptor
+     *
+     * @return  BLEDescriptor   The descriptor
+     *
+     * @note  none
+     */
+    BLEDescriptor descriptor(int index) const;
+    
+    /**
+     * @brief   Get the descriptor with the specified UUID
+     *
+     * @param   uuid        The descriptor's UUID
+     *
+     * @return  BLEDescriptor   The descriptor
+     *
+     * @note  none
+     */
+    BLEDescriptor descriptor(const char * uuid) const;
+    
+    /**
+     * @brief   Get the nth descriptor with the specified UUID
+     *
+     * @param   uuid        The descriptor's UUID
+     *
+     * @param   index       The index of descriptor
+     *
+     * @return  BLEDescriptor   The descriptor
+     *
+     * @note  none
+     */
+    BLEDescriptor descriptor(const char * uuid, int index) const;
 
-  bool read(); // read the characteristic value
-  bool subscribe(); // subscribe to the characteristic
-  bool unsubscribe(); // unsubscribe to the characteristic
+    /**
+     * @brief   Set an event handler (callback)
+     *
+     * @param   event           Characteristic event
+     *
+     * @param   eventHandler    The handler of characteristic
+     *
+     * @return  none
+     *
+     * @note  none
+     */
+    void setEventHandler(BLECharacteristicEvent event, 
+                         BLECharacteristicEventHandler eventHandler);
 
-  bool valueUpdated(); 
-
-  int descriptorCount() const; // returns the number of descriptors the characteristic has
-  bool hasDescriptor(const char* uuid) const; // does the characteristic have a descriptor with the specified UUID
-  bool hasDescriptor(const char* uuid, int index) const; // does the characteristic have an nth descriptor with the specified UUID
-  BLEDescriptor descriptor(int index) const; // return the nth descriptor of the characteristic
-  BLEDescriptor descriptor(const char * uuid) const; // return the descriptor with the specified UUID
-  BLEDescriptor descriptor(const char * uuid, int index) const; // return the nth descriptor with the specified UUIDb
-
-  void setEventHandler(BLECharacteristicEvent event, BLECharacteristicEventHandler eventHandler); // set an event handler (callback)
-};
-
-
-// Fixed length characteristic, value size is constant
-class BLEFixedLengthCharacteristic : public BLECharacteristic {
-public:
-  BLEFixedLengthCharacteristic(const char* uuid, unsigned char properties, unsigned char valueSize);
-  BLEFixedLengthCharacteristic(const char* uuid, unsigned char properties, const char* value);
+private:
+    uint16_t _handle;   // The characteristic handle in GATT server
+    BLEDevice *_bledev; // The GATT server BLE object. Only for GATT client to read/write
+    LinkNode<BLEDescriptor *>  _descriptors_header;
+    
+    BLECharacteristicEventHandler _event_handlers[BLECharacteristicEventLast];
 };
 
 #endif
 
-// Characteristic type to represent a bool type
-class BLEBoolCharacteristic : public BLEFixedLengthCharacteristic {
-public:
-  BLEBoolCharacteristic(const char* uuid, unsigned char properties);
-
-  bool writeValue(bool value);
-  bool value();
-};
-
-// Characteristic type to represent a char type
-class BLECharCharacteristic : public BLETypedCharacteristic<char> {
-public:
-  BLECharCharacteristic(const char* uuid, unsigned char properties);
-
-  bool writeValue(char value);
-  char value();
-};
-
-// Characteristic type to represent an unsigned char type
-class BLEUnsignedCharCharacteristic : BLEFixedLengthCharacteristic {
-public:
-  BLEUnsignedCharCharacteristic(const char* uuid, unsigned char properties);
-
-  bool writeValue(unsigned char value);
-  unsigned char value();
-};
-
-// Characteristic type to represent a short type
-class BLEShortCharacteristic : public BLEFixedLengthCharacteristic {
-public:
-  BLEShortCharacteristic(const char* uuid, unsigned char properties);
-
-  bool writeValue(short value);
-  short value();
-
-  bool writeValueLE(short value);
-  short valueLE();
-
-  bool writeValueBE(short value);
-  short valueBE();
-};
-
-// Characteristic type to represent a unsigned short type
-class BLEUnsignedShortCharacteristic : public BLEFixedLengthCharacteristic {
-public:
-  BLEUnsignedShortCharacteristic(const char* uuid, unsigned char properties);
-
-  bool writeValue(unsigned short value);
-  unsigned short value();
-
-  bool writeValueLE(unsigned short value);
-  unsigned short valueLE();
-
-  bool writeValueBE(unsigned short value);
-  unsigned short valueBE();
-};
-
-// Characteristic type to represent a int type
-class BLEIntCharacteristic : public BLEFixedLengthCharacteristic {
-public:
-  BLEIntCharacteristic(const char* uuid, unsigned char properties);
-
-  bool writeValue(int value);
-  int value();
-
-  bool writeValueLE(int value);
-  int valueLE();
-
-  bool writeValueBE(int value);
-  int valueBE();
-};
-
-// Characteristic type to represent a unsigned int type
-class BLEUnsignedIntCharacteristic : public BLEFixedLengthCharacteristic {
-public:
-  BLEUnsignedIntCharacteristic(const char* uuid, unsigned char properties);
-
-  bool writeValue(unsigned int value);
-  unsigned int value();
-
-  bool writeValueLE(unsigned int value);
-  unsigned int valueLE();
-
-  bool writeValueBE(unsigned int value);
-  unsigned int valueBE();
-};
-
-// Characteristic type to represent a long type
-class BLELongCharacteristic : public BLEFixedLengthCharacteristic {
-public:
-  BLELongCharacteristic(const char* uuid, unsigned char properties);
-
-  bool writeValue(long value);
-  long value();
-
-  bool writeValueLE(long value);
-  long valueLE();
-
-  bool writeValueBE(long value);
-  long valueBE();
-};
-
-// Characteristic type to represent a unsigned long type
-class BLEUnsignedLongCharacteristic : public BLEFixedLengthCharacteristic {
-public:
-  BLEUnsignedLongCharacteristic(const char* uuid, unsigned char properties);
-
-  bool writeValue(unsigned long value);
-  unsigned long value();
-
-  bool writeValueLE(unsigned long value);
-  unsigned long valueLE();
-
-  bool writeValueBE(unsigned long value);
-  unsigned long valueBE();
-};
-
-// Characteristic type to represent a float type
-class BLEFloatCharacteristic : public BLEFixedLengthCharacteristic {
-public:
-  BLEFloatCharacteristic(const char* uuid, unsigned char properties);
-
-  bool writeValue(float value);
-  float value();
-
-  bool writeValueLE(float value);
-  float valueLE();
-
-  bool writeValueBE(float value);
-  float valueBE();
-};
-
-// Characteristic type to represent a double type
-class BLEDoubleCharacteristic : public BLEFixedLengthCharacteristic {
-public:
-  BLEDoubleCharacteristic(const char* uuid, unsigned char properties);
-
-  bool writeValue(double value);
-  double value();
-
-  bool writeValueLE(double value);
-  double valueLE();
-
-  bool writeValueBE(double value);
-  double valueBE();
-};

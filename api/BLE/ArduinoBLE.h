@@ -24,6 +24,23 @@
 
 #include <BLEDevice.h>
 
+typedef enum 
+{
+    BLE_STATUS_SUCCESS = 0,
+    BLE_STATUS_FORBIDDEN, /**< The operation is forbidden. Central mode call peripheral API and vice versa */
+    BLE_STATUS_PENDING, /**< Request received and execution started, response pending */
+    BLE_STATUS_TIMEOUT, /**< Request timed out */
+    BLE_STATUS_NOT_SUPPORTED, /**< Request/feature/parameter not supported */
+    BLE_STATUS_NOT_ALLOWED, /**< Request not allowed */
+    BLE_STATUS_LINK_TIMEOUT, /**< Link timeout (link loss) */
+    BLE_STATUS_NOT_ENABLED, /**< BLE not enabled, @ref ble_enable */
+    BLE_STATUS_ERROR,   /**< Generic Error */
+    BLE_STATUS_ALREADY_REGISTERED, /**< BLE service already registered */
+    BLE_STATUS_WRONG_STATE, /**< Wrong state for request */
+    BLE_STATUS_ERROR_PARAMETER, /**< Parameter in request is wrong */
+    BLE_STATUS_NO_MEMORY, /**< System doesn't have memory */
+}BLE_STATUS_T;
+
 extern BLEDevice BLE;
 
 #endif
