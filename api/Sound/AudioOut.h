@@ -20,16 +20,21 @@
 #ifndef ARDUINO_AUDIO_OUT
 #define ARDUINO_AUDIO_OUT
 
-class AudioIn;
+#include "AudioIn.h"
 
 class AudioOut
 {
-protected:
-  friend class AudioIn;
+  virtual int canPlay(AudioIn& input) = 0; // can the output device play the input
+  virtual int play(AudioIn& input) = 0; // Starts playback of the input
+  virtual int loop(AudioIn& input) = 0; // Starts loop playback of the input
 
-  int canPlay(AudioIn* in);
-  int play(AudioIn* in);
-  int loop(AudioIn* in);
+  virtual int pause() = 0; // pause playback
+  virtual int stop() = 0; // stop playback
+
+  virtual int isPlaying(); // is the input playing now?
+  virtual int isPaused(); // is the input paused
+
+  virtual int volume(int level) = 0; // Changes the volume of playback, allowed values are between 0 and 100 (percent).
 };
 
 #endif

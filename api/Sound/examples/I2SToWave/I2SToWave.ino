@@ -77,6 +77,7 @@ void loop() {
     // use the file to create a WaveFile
     waveFile = WaveFile(file);
 
-    I2SInput.play(waveFile);
+    // start playing the I2S input to the wave file
+    waveFile.play(I2SInput);
   }
 }

@@ -70,18 +70,18 @@ void setup() {
   }
 
   // check if playback can be done
-  if (!waveFile.canPlay(I2SOutput)) {
+  if (!I2SOutput.canPlay(waveFile)) {
     Serial.println("cannot play wave file on I2S output!");
     while (1); // do nothing
   }
 
   // start playback
-  waveFile.play(I2SOutput);
+  I2SOutput.play(waveFile);
 }
 
 void loop() {
-  if (!waveFile.isPlaying()) {
+  if (!I2SOutput.isPlaying()) {
     Serial.println("Wave file is not playing anymore, restarting");
-    waveFile.play(I2SOutput);
+    I2SOutput.play(waveFile);
   }
 }
