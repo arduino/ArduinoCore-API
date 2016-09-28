@@ -39,7 +39,8 @@ enum BLEProperty {
   BLEIndicate             = 0x20
 };
 
-typedef void (*BLECharacteristicEventHandler)(BLECentral& central, BLECharacteristic& characteristic);
+typedef void (*BLECharacteristicEventHandler)(BLECentral central, BLECharacteristic characteristic);
+typedef void (*BLECharacteristicEventHandlerOld)(BLECentral &central, BLECharacteristic &characteristic); // deprecated
 
 class BLECharacteristic : public BLEAttributeWithValue
 {
@@ -65,6 +66,8 @@ public:
   virtual bool writeValue(const byte value[], int length);
   bool writeValue(const byte value[], int length, int offset);
   bool writeValue(const char* value);
+
+  bool setValue(const unsigned char value[], unsigned short length); // deprecated
 
   virtual bool read(); // read the characteristic value
   virtual bool write(const unsigned char* value, int length); // write the charcteristic value
@@ -98,6 +101,7 @@ public:
   BLEDescriptor descriptor(const char * uuid, int index) const; // return the nth descriptor with the specified UUIDb
 
   void setEventHandler(BLECharacteristicEvent event, BLECharacteristicEventHandler eventHandler); // set an event handler (callback)
+  void setEventHandler(BLECharacteristicEvent event, BLECharacteristicEventHandlerOld callback);
 };
 
 
@@ -125,7 +129,16 @@ public:
   BLECharCharacteristic(const char* uuid, unsigned char properties);
 
   bool writeValue(char value);
+  bool writeValueLE(char value);
+  bool writeValueBE(char value);
   char value();
+
+  // deprecated
+  bool setValue(char value);
+  bool setValueLE(char value);
+  char valueLE(void);
+  bool setValueBE(T value);
+  char valueBE(void);
 };
 
 // Characteristic type to represent an unsigned char type
@@ -134,7 +147,16 @@ public:
   BLEUnsignedCharCharacteristic(const char* uuid, unsigned char properties);
 
   bool writeValue(unsigned char value);
+  bool writeValueLE(unsigned char value);
+  bool writeValueBE(unsigned char value);
   unsigned char value();
+
+  // deprecated
+  bool setValue(unsigned char value);
+  bool setValueLE(unsigned char value);
+  unsigned char valueLE(void);
+  bool setValueBE(unsigned value);
+  unsigned char valueBE(void);
 };
 
 // Characteristic type to represent a short type
@@ -150,6 +172,11 @@ public:
 
   bool writeValueBE(short value);
   short valueBE();
+
+  // deprecated
+  bool setValue(short value);
+  bool setValueLE(short value);
+  bool setValueBE(short value);
 };
 
 // Characteristic type to represent a unsigned short type
@@ -165,6 +192,11 @@ public:
 
   bool writeValueBE(unsigned short value);
   unsigned short valueBE();
+
+  // deprecated
+  bool setValue(unsigned short value);
+  bool setValueLE(unsigned short value);
+  bool setValueBE(unsigned short value);
 };
 
 // Characteristic type to represent a int type
@@ -180,6 +212,11 @@ public:
 
   bool writeValueBE(int value);
   int valueBE();
+
+  // deprecated
+  bool setValue(int value);
+  bool setValueLE(int value);
+  bool setValueBE(int value);
 };
 
 // Characteristic type to represent a unsigned int type
@@ -195,6 +232,11 @@ public:
 
   bool writeValueBE(unsigned int value);
   unsigned int valueBE();
+
+  // deprecated
+  bool setValue(unsigned int value);
+  bool setValueLE(unsigned int value);
+  bool setValueBE(unsigned int value);
 };
 
 // Characteristic type to represent a long type
@@ -210,6 +252,11 @@ public:
 
   bool writeValueBE(long value);
   long valueBE();
+
+  // deprecated
+  bool setValue(long value);
+  bool setValueLE(long value);
+  bool setValueBE(long value);
 };
 
 // Characteristic type to represent a unsigned long type
@@ -225,6 +272,11 @@ public:
 
   bool writeValueBE(unsigned long value);
   unsigned long valueBE();
+
+  // deprecated
+  bool setValue(unsigned long value);
+  bool setValueLE(unsigned long value);
+  bool setValueBE(unsigned long value);
 };
 
 // Characteristic type to represent a float type
@@ -240,6 +292,11 @@ public:
 
   bool writeValueBE(float value);
   float valueBE();
+
+  // deprecated
+  bool setValue(float value);
+  bool setValueLE(float value);
+  bool setValueBE(float value);
 };
 
 // Characteristic type to represent a double type
@@ -255,4 +312,9 @@ public:
 
   bool writeValueBE(double value);
   double valueBE();
+
+  // deprecated
+  bool setValue(double value);
+  bool setValueLE(double value);
+  bool setValueBE(double value);
 };
