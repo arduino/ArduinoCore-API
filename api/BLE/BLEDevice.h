@@ -315,6 +315,17 @@ class BLEDevice
      */
     BLEDevice peripheral();
     
+    /**
+     * @brief   Release the resources when link lost
+     *
+     * @param   none
+     *
+     * @return  none
+     *
+     * @note  Peer devices only. Do nothing if local BLE device called.
+     */
+    void linkLost();
+    
     operator bool() const;
 
     // central mode
