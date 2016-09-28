@@ -39,7 +39,7 @@ enum BLEProperty {
   BLEIndicate             = 0x20
 };
 
-typedef void (*BLECharacteristicEventHandler)(BLECentral& central, BLECharacteristic& characteristic);
+typedef void (*BLECharacteristicEventHandler)(BLEDevice central, BLECharacteristic characteristic);
 
 class BLECharacteristic : public BLEAttributeWithValue
 {

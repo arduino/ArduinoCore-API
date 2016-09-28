@@ -18,7 +18,7 @@
 */
 
 #ifndef ARDUINO_BLE_DEVICE_H
-#define ARDUINO_BLE_CENTRAL_H
+#define ARDUINO_BLE_DEVICE_H
 
 #include <Arduino.h>
 
@@ -30,7 +30,7 @@ enum BLEDeviceEvent {
   BLEDisconnected = 2,
 };
 
-typedef void (*BLEDeviceEventHandler)(BLEDevice& device);
+typedef void (*BLEDeviceEventHandler)(BLEDevice device);
 
 class BLEDevice
 {
