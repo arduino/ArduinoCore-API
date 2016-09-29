@@ -25,11 +25,6 @@
 #include "BLECharacteristic.h"
 #include "BLEDescriptor.h"
 
-enum BLEPeripheralEvent {
-  BLEConnected = 0,
-  BLEDisconnected = 1
-};
-
 typedef void (*BLEPeripheralEventHandler)(BLECentral &central);
 
 class BLEPeripheral {
@@ -52,7 +47,7 @@ class BLEPeripheral {
     void addAttribute(BLECharacteristic& characteristic);
     void addAttribute(BLEDescriptor& descriptor);
 
-    void setEventHandler(BLEPeripheralEvent event, BLEPeripheralEventHandler callback); // register an event handler
+    void setEventHandler(BLEDeviceEvent event, BLEPeripheralEventHandler callback); // register an event handler
 
     bool begin(void); // Setup attributes and start advertising
 
