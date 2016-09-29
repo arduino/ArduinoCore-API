@@ -82,47 +82,6 @@ public:
                       unsigned char properties, 
                       const char* value);
 
-    /**
-     * @brief   Create a characteristic with specified value size
-     *
-     * @param   uuid        The UUID of the characteristic
-     *
-     * @param   properties  The properties of the characteristic
-     *
-     * @param   valueSize   The size of the characteristic data
-     *
-     * @param   bleDev      The peer BLE device
-     *
-     * @return  none
-     *
-     * @note  none
-     */
-    BLECharacteristic(const char* uuid, 
-                      unsigned char properties, 
-                      unsigned char valueSize,
-                      BLEDevice *bleDev);
-    
-    /**
-     * @brief   Create a characteristic with string value
-     *
-     * @param   uuid        The UUID of the characteristic
-     *
-     * @param   properties  The properties of the characteristic
-     *
-     * @param   value       The string of the characteristic data
-     *
-     * @param   bleDev      The peer BLE device
-     *
-     * @return  none
-     *
-     * @note  The data length is string's size. Can't set a string that is longger
-     *          than the this input
-     */
-    BLECharacteristic(const char* uuid, 
-                      unsigned char properties, 
-                      const char* value,
-                      BLEDevice *bleDev);
-
     virtual ~BLECharacteristic();
 
     /**
@@ -465,7 +424,52 @@ public:
      */
     void setEventHandler(BLECharacteristicEvent event, 
                          BLECharacteristicEventHandler eventHandler);
-
+    
+protected:
+    
+    /**
+     * @brief   Create a characteristic with specified value size
+     *
+     * @param   uuid        The UUID of the characteristic
+     *
+     * @param   properties  The properties of the characteristic
+     *
+     * @param   valueSize   The size of the characteristic data
+     *
+     * @param   bleDev      The peer BLE device
+     *
+     * @return  none
+     *
+     * @note  none
+     */
+    BLECharacteristic(const char* uuid, 
+                      unsigned char properties, 
+                      unsigned char valueSize,
+                      BLEDevice *bleDev);
+    
+    /**
+     * @brief   Create a characteristic with string value
+     *
+     * @param   uuid        The UUID of the characteristic
+     *
+     * @param   properties  The properties of the characteristic
+     *
+     * @param   value       The string of the characteristic data
+     *
+     * @param   bleDev      The peer BLE device
+     *
+     * @return  none
+     *
+     * @note  The data length is string's size. Can't set a string that is longger
+     *          than the this input
+     */
+    BLECharacteristic(const char* uuid, 
+                      unsigned char properties, 
+                      const char* value,
+                      BLEDevice *bleDev);
+    
+    void setBLECharacteristicImp(BLECharacteristicImp *characteristicImp);
+    
 private:
     uint16_t _handle;   // The characteristic handle in GATT server
     BLEDevice *_bledev; // The GATT server BLE object. Only for GATT client to read/write
