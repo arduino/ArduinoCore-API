@@ -38,7 +38,17 @@ typedef void (*BLEDeviceEventHandler)(BLEDevice device);
 class BLEDevice
 {
   public:
-    BLEDevice();
+    /**
+     * @brief   The BLE device constructure
+     *
+     * @param   bleaddress  BLE device address
+     *
+     * @return  none
+     *
+     * @note  none
+     */
+    BLEDevice(String bleaddress);
+    
     virtual ~BLEDevice();
 
     
