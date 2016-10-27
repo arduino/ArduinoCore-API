@@ -1,5 +1,5 @@
 /*
-  BLE API
+  BLE Central API (deprecated)
   Copyright (c) 2016 Arduino LLC. All right reserved.
 
   This library is free software; you can redistribute it and/or
@@ -17,30 +17,45 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#ifndef ARDUINO_BLE_H
-#define ARDUINO_BLE_H
+#include "ArduinoBLE.h"
 
-#define ARDUINO_BLE_API_VERSION 10000 // version 1.0.0
+BLECentral::BLECentral(BLEDevice& device) :
+  _device(&device)
+{
 
-class BLEDevice;
-class BLECharacteristic;
-class BLEDescriptor;
-class BLEService;
-class BLECharacteristicImp;
+}
 
-#include "BLECommon.h"
+bool BLECentral::connected(void)
+{
+    return _device.connected();
+}
 
-#include "BLEDevice.h"
+const char* BLECentral::address(void) const
+{
+    return _device.address().c_str();
+}
 
-#include "BLECharacteristic.h"
-#include "BLEDescriptor.h"
-#include "BLEService.h"
+bool BLECentral::disconnect(void)
+{
+    return _device.disconnect();
+}
 
-#include "BLETypedCharacteristics.h"
+void BLECentral::poll(void)
+{
+  _device.poll();
+}
 
-#include "BLECentral.h"
-#include "BLEPeripheral.h"
+BLECentral::operator bool(void) const
+{
+  return _device;
+}
 
-extern BLEDevice BLE;
+bool BLECentral::operator==(const BLECentral& rhs) const
+{
+  return (_device == rhs._device);
+}
 
-#endif
+bool BLECentral::operator!=(const BLECentral& rhs) const
+{
+  return (_device != rhs._device);
+}

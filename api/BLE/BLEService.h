@@ -25,23 +25,98 @@
 class BLEService
 {
 public:
-  BLEService();
-  BLEService(const char* uuid);
+    BLEService();
+    BLEService(const char* uuid);
+    virtual ~BLEService();
+    
+    virtual operator bool() const;  // is the service valid
 
-  virtual ~BLEService();
+    const char* uuid() const;
 
-  virtual operator bool() const;  // is the service valid
+    /**
+     * @brief   Add a characteristic in service
+     *
+     * @param   characteristic  The characteristic want to be added to service
+     *
+     * @return  none
+     *
+     * @note  none
+     */
+    void addCharacteristic(BLECharacteristic& characteristic);
 
-  const char* uuid() const;
-
-  void addCharacteristic(BLECharacteristic& characteristic);
-
-  int characteristicCount() const; // returns the number of characteristics the service has
-  bool hasCharacteristic(const char* uuid) const; // does the service have a characteristic with the specified UUID
-  bool hasCharacteristic(const char* uuid, int index) const; // does the service have an nth characteristic with the specified UUID
-  BLECharacteristic characteristic(int index) const;  // return the nth characteristic of the service
-  BLECharacteristic characteristic(const char * uuid) const; // return the characteristic with the specified UUID
-  BLECharacteristic characteristic(const char * uuid, int index) const; // return the nth characteristic with the specified UUID
+    /**
+     * @brief   Get the number of characteristics the service has
+     *
+     * @param   none
+     *
+     * @return  none
+     *
+     * @note  none
+     */
+    int characteristicCount() const;
+    
+    /**
+     * @brief   Does the service have a characteristic with the specified UUID
+     *
+     * @param   uuid    The UUID of the characteristic
+     *
+     * @return  bool    true - Yes.     false - No
+     *
+     * @note  none
+     */
+    bool hasCharacteristic(const char* uuid) const;
+    
+    /**
+     * @brief   Does the service have an nth characteristic with the 
+     *           specified UUID
+     *
+     * @param   uuid    The UUID of the characteristic
+     *
+     * @param   index   The index of characteristic
+     *
+     * @return  bool    true - Yes.     false - No
+     *
+     * @note  none
+     */
+    bool hasCharacteristic(const char* uuid, int index) const;
+    
+    /**
+     * @brief   Return the nth characteristic of the service
+     *
+     * @param   index   The index of characteristic
+     *
+     * @return  BLECharacteristic   The characteristic
+     *
+     * @note  none
+     */
+    BLECharacteristic characteristic(int index) const;
+    
+    /**
+     * @brief   Return the characteristic with the specified UUID
+     *
+     * @param   uuid    The UUID of the characteristic
+     *
+     * @return  BLECharacteristic   The characteristic
+     *
+     * @note  none
+     */
+    BLECharacteristic characteristic(const char * uuid) const;
+    
+    /**
+     * @brief   return the nth characteristic with the specified UUID
+     *
+     * @param   uuid    The UUID of the characteristic
+     *
+     * @param   index   The index of characteristic
+     *
+     * @return  BLECharacteristic   The characteristic
+     *
+     * @note  none
+     */
+    BLECharacteristic characteristic(const char * uuid, int index) const;
+    
+private:
+    LinkNode<BLECharacteristic *> _characteristics_header;
 }
 
 #endif
