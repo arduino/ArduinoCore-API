@@ -62,7 +62,7 @@ public:
      */
     BLECharacteristic(const char* uuid, 
                       unsigned char properties, 
-                      unsigned char valueSize);
+                      unsigned short valueSize);
     
     /**
      * @brief   Create a characteristic with string value
@@ -144,9 +144,9 @@ public:
      *
      * @param   none
      *
-     * @return  int     The current length of the value
+     * @return  int     The current length of the value string
      *
-     * @note  none
+     * @note  TODO: How to handle if the data is RAW data? This API is danger
      */
     virtual int valueLength() const;
     
@@ -160,6 +160,18 @@ public:
      * @note  none
      */
     virtual byte operator[] (int offset) const;
+
+    /**
+     * Set the current value of the Characteristic
+     *
+     * @param[in] value  New value to set, as a byte array.  Data is stored in internal copy.
+     * @param[in] length Length, in bytes, of valid data in the array to write.
+     *               Must not exceed maxLength set for this characteristic.
+     *
+     * @return bool true set value success, false on error
+     * @note    GATT Server only
+     */
+    bool setValue(const unsigned char value[], unsigned short length);
 
     /**
      * @brief   Write the value of the characteristic
@@ -211,7 +223,7 @@ public:
      *
      * @return  bool    true - Written, false - Not changed
      *
-     * @note  GATT server only. Need comfirm the different with valueUpdated
+     * @note  GATT server only. GATT client always return false.
      */
     bool written();
     
@@ -339,8 +351,29 @@ public:
      */
     bool unsubscribe();
 
-    bool valueUpdated(); // Read response updated the characteristic
 
+    /**
+     * @brief   Read response or notification updated the characteristic
+     *
+     * @param   none
+     *
+     * @return  bool    true - Written, false - Not changed
+     *
+     * @note  GATT client only. GATT server always return false.
+     */
+    bool valueUpdated();
+    
+    /**
+     * @brief   Add the characteristic's descriptor
+     *
+     * @param   descriptor  The descriptor for characteristic
+     *
+     * @return  none
+     *
+     * @note  none
+     */
+    int addDescriptor(BLEDescriptor& descriptor);
+    
     /**
      * @brief   Get the number of descriptors the characteristic has
      *
@@ -425,57 +458,6 @@ public:
     void setEventHandler(BLECharacteristicEvent event, 
                          BLECharacteristicEventHandler eventHandler);
     
-protected:
-    
-    /**
-     * @brief   Create a characteristic with specified value size
-     *
-     * @param   uuid        The UUID of the characteristic
-     *
-     * @param   properties  The properties of the characteristic
-     *
-     * @param   valueSize   The size of the characteristic data
-     *
-     * @param   bleDev      The peer BLE device
-     *
-     * @return  none
-     *
-     * @note  none
-     */
-    BLECharacteristic(const char* uuid, 
-                      unsigned char properties, 
-                      unsigned char valueSize,
-                      BLEDevice *bleDev);
-    
-    /**
-     * @brief   Create a characteristic with string value
-     *
-     * @param   uuid        The UUID of the characteristic
-     *
-     * @param   properties  The properties of the characteristic
-     *
-     * @param   value       The string of the characteristic data
-     *
-     * @param   bleDev      The peer BLE device
-     *
-     * @return  none
-     *
-     * @note  The data length is string's size. Can't set a string that is longger
-     *          than the this input
-     */
-    BLECharacteristic(const char* uuid, 
-                      unsigned char properties, 
-                      const char* value,
-                      BLEDevice *bleDev);
-    
-    void setBLECharacteristicImp(BLECharacteristicImp *characteristicImp);
-    
-private:
-    uint16_t _handle;   // The characteristic handle in GATT server
-    BLEDevice *_bledev; // The GATT server BLE object. Only for GATT client to read/write
-    LinkNode<BLEDescriptor *>  _descriptors_header;
-    
-    BLECharacteristicEventHandler _event_handlers[BLECharacteristicEventLast];
 };
 
 #endif
