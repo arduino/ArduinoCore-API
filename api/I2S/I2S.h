@@ -49,14 +49,14 @@ class I2SClass : public Stream
   virtual size_t availableForWrite();
 
   // read an array of data
-  int read(uint8_t data[], int size);
-  int read(uint16_t data[], int size);
-  int read(uint32_t data[], int size);
+  int read(int8_t data[], int size);
+  int read(int16_t data[], int size);
+  int read(int32_t data[], int size);
 
   // write an array of data
-  int write(const uint8_t data[], int size);
-  int write(const uint16_t data[], int size);
-  int write(const uint32_t data[], int size);
+  int write(const int8_t data[], int size);
+  int write(const int16_t data[], int size);
+  int write(const int32_t data[], int size);
 
   // call backs
   void onReceive(void(*)(int)); // add an event handler for when data is received
