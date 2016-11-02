@@ -23,21 +23,16 @@
 #include <Stream.h>
 
 typedef enum {
-  PHILIPS_MODE,
-  RIGHT_JST_MODE,
-  LEFT_JST_MODE,
-  DSP_MODE
+  I2S_PHILIPS_MODE,
+  I2S_RIGHT_JUSTIFIED_MODE,
+  I2S_LEFT_JUSTIFIED_MODE,
+  I2S_DSP_MODE
 } i2s_mode_t;
 
 class I2SClass : public Stream
 {
-  int begin(int mode, long sampleRate, int bitsPerSample); // setup the I2S hardware in the specified mode, sample rate, and bits per sample
-
-  // alternative to above
-  int beginPhilips(long sampleRate, int bitsPerSample); 
-  int beginRightJustified(long sampleRate, int bitsPerSample); 
-  int beginLeftJustified(long sampleRate, int bitsPerSample);
-  int beginDsp(long sampleRate, int bitsPerSample);
+  // setup the I2S hardware in the specified mode, bits per sample, and sample rate
+  int begin(int mode, int bitsPerSample,long sampleRate, int driveClock = 1);
 
   void end(); // stop the I2S hardware
 
@@ -57,21 +52,15 @@ class I2SClass : public Stream
   int read(uint8_t data[], int size);
   int read(uint16_t data[], int size);
   int read(uint32_t data[], int size);
-  int read(uint64_t data[], int size);
 
   // write an array of data
   int write(const uint8_t data[], int size);
   int write(const uint16_t data[], int size);
   int write(const uint32_t data[], int size);
-  int write(const uint64_t data[], int size);
 
   // call backs
   void onReceive(void(*)(int)); // add an event handler for when data is received
-  void onTransmit(void(*)(int)); // add an event handler for when data is transmitted
-
-  // override default pins, must be called before begin(...) (optional)
-  void setTxPins(int clock, int wordSelect, int data);
-  void setRxPins(int clock, int wordSelect, int data);
+  void onTransmit(void(*)(void)); // add an event handler for when data is transmitted
 };
 
 extern I2SClass I2S;
