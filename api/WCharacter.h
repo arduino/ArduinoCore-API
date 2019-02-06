@@ -22,6 +22,12 @@
 
 #include <ctype.h>
 
+// This Mentions that the following code is
+// Compatible with Standard C
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // WCharacter.h prototypes
 inline bool isAlphaNumeric(int c) __attribute__((always_inline));
 inline bool isAlpha(int c) __attribute__((always_inline));
@@ -45,7 +51,7 @@ inline int toUpperCase(int c)__attribute__((always_inline));
 // It is equivalent to (isalpha(c) || isdigit(c)).
 inline bool isAlphaNumeric(int c) 
 {
-  return ( isalnum(c) == 0 ? false : true);
+  return isalnum(c) != 0;
 }
 
 
@@ -53,7 +59,7 @@ inline bool isAlphaNumeric(int c)
 // It is equivalent to (isupper(c) || islower(c)).
 inline bool isAlpha(int c)
 {
-  return ( isalpha(c) == 0 ? false : true);
+  return isalpha(c) != 0;
 }
 
 
@@ -61,49 +67,49 @@ inline bool isAlpha(int c)
 // that fits into the ASCII character set.
 inline bool isAscii(int c)
 {
-  return ( isascii (c) == 0 ? false : true);
+  return isascii(c) != 0;
 }
 
 
 // Checks for a blank character, that is, a space or a tab.
 inline bool isWhitespace(int c)
 {
-  return ( isblank (c) == 0 ? false : true);
+  return isblank(c) != 0;
 }
 
 
 // Checks for a control character.
 inline bool isControl(int c)
 {
-  return ( iscntrl (c) == 0 ? false : true);
+  return iscntrl(c) != 0;
 }
 
 
 // Checks for a digit (0 through 9).
 inline bool isDigit(int c)
 {
-  return ( isdigit (c) == 0 ? false : true);
+  return isdigit(c) != 0;
 }
 
 
 // Checks for any printable character except space.
 inline bool isGraph(int c)
 {
-  return ( isgraph (c) == 0 ? false : true);
+  return isgraph(c) != 0;
 }
 
 
 // Checks for a lower-case character.
 inline bool isLowerCase(int c)
 {
-  return (islower (c) == 0 ? false : true);
+  return islower(c) != 0;
 }
 
 
 // Checks for any printable character including space.
 inline bool isPrintable(int c)
 {
-  return ( isprint (c) == 0 ? false : true);
+  return isprint(c) != 0;
 }
 
 
@@ -111,7 +117,7 @@ inline bool isPrintable(int c)
 // or an alphanumeric character.
 inline bool isPunct(int c)
 {
-  return ( ispunct (c) == 0 ? false : true);
+  return ispunct(c) != 0;
 }
 
 
@@ -120,14 +126,14 @@ inline bool isPunct(int c)
 // return ('\r'), horizontal tab ('\t'), and vertical tab ('\v').
 inline bool isSpace(int c)
 {
-  return ( isspace (c) == 0 ? false : true);
+  return isspace(c) != 0;
 }
 
 
 // Checks for an uppercase letter.
 inline bool isUpperCase(int c)
 {
-  return ( isupper (c) == 0 ? false : true);
+  return isupper(c) != 0;
 }
 
 
@@ -135,7 +141,7 @@ inline bool isUpperCase(int c)
 // 8 9 a b c d e f A B C D E F.
 inline bool isHexadecimalDigit(int c)
 {
-  return ( isxdigit (c) == 0 ? false : true);
+  return isxdigit(c) != 0;
 }
 
 
@@ -164,5 +170,10 @@ inline int toUpperCase(int c)
 {
   return toupper (c);
 }
+
+// End extern C
+#ifdef __cplusplus
+}
+#endif
 
 #endif
