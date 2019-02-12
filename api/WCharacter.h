@@ -65,10 +65,12 @@ inline bool isAscii(int c)
 }
 
 
-// Checks for a blank character, that is, a space or a tab.
+// Checks for white-space characters. For the avr-libc library,
+// these are: space, formfeed ('\f'), newline ('\n'), carriage
+// return ('\r'), horizontal tab ('\t'), and vertical tab ('\v').
 inline bool isWhitespace(int c)
 {
-  return ( isblank (c) == 0 ? false : true);
+  return ( isspace (c) == 0 ? false : true);
 }
 
 
@@ -115,12 +117,10 @@ inline bool isPunct(int c)
 }
 
 
-// Checks for white-space characters. For the avr-libc library, 
-// these are: space, formfeed ('\f'), newline ('\n'), carriage 
-// return ('\r'), horizontal tab ('\t'), and vertical tab ('\v').
+// Checks for a blank character, that is, a space or a tab.
 inline bool isSpace(int c)
 {
-  return ( isspace (c) == 0 ? false : true);
+  return ( isblank (c) == 0 ? false : true);
 }
 
 
