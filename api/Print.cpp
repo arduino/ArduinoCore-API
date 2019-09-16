@@ -144,6 +144,15 @@ size_t Print::print(const Printable& x)
   return x.printTo(*this);
 }
 
+size_t Print::printf(char const * fmt, ...)
+{
+  va_list args;
+  va_start(args, fmt);
+  size_t const n = vprintf(fmt, args);
+  va_end(args);
+  return n;
+}
+
 size_t Print::println(void)
 {
   return write("\r\n");
@@ -229,6 +238,16 @@ size_t Print::println(double num, int digits)
 size_t Print::println(const Printable& x)
 {
   size_t n = print(x);
+  n += println();
+  return n;
+}
+
+size_t Print::printfln(char const * fmt, ...)
+{
+  va_list args;
+  va_start(args, fmt);
+  size_t n = vprintf(fmt, args);
+  va_end(args);
   n += println();
   return n;
 }
@@ -373,4 +392,14 @@ size_t Print::printFloat(double number, uint8_t digits)
   }
 
   return n;
+}
+
+size_t Print::vprintf(char const * fmt, va_list args)
+{
+  static size_t const MSG_BUF_SIZE = 64;
+  char msg_buf[MSG_BUF_SIZE] = {0};
+
+  int const length = vsnprintf(msg_buf, MSG_BUF_SIZE, fmt, args);
+
+  return write(msg_buf, length);
 }

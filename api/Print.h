@@ -36,6 +36,7 @@ class Print
     size_t printNumber(unsigned long, uint8_t);
     size_t printULLNumber(unsigned long long, uint8_t);
     size_t printFloat(double, uint8_t);
+    size_t vprintf(char const * fmt, va_list args);
   protected:
     void setWriteError(int err = 1) { write_error = err; }
   public:
@@ -67,6 +68,7 @@ class Print
     size_t print(unsigned long long, int = DEC);
     size_t print(double, int = 2);
     size_t print(const Printable&);
+    size_t printf(char const * fmt, ...);
 
     size_t println(const __FlashStringHelper *);
     size_t println(const String &s);
@@ -82,5 +84,6 @@ class Print
     size_t println(double, int = 2);
     size_t println(const Printable&);
     size_t println(void);
+    size_t printfln(char const * fmt, ...);
 };
 
