@@ -36,23 +36,6 @@ size_t Print::write(const uint8_t *buffer, size_t size)
   return n;
 }
 
-size_t Print::print(const __FlashStringHelper *ifsh)
-{
-#if defined(__AVR__)
-  PGM_P p = reinterpret_cast<PGM_P>(ifsh);
-  size_t n = 0;
-  while (1) {
-    unsigned char c = pgm_read_byte(p++);
-    if (c == 0) break;
-    if (write(c)) n++;
-    else break;
-  }
-  return n;
-#else
-  return print(reinterpret_cast<const char *>(ifsh));
-#endif
-}
-
 size_t Print::print(const String &s)
 {
   return write(s.c_str(), s.length());
@@ -130,13 +113,6 @@ size_t Print::print(unsigned long long n, int base)
 size_t Print::print(double n, int digits)
 {
   return printFloat(n, digits);
-}
-
-size_t Print::println(const __FlashStringHelper *ifsh)
-{
-  size_t n = print(ifsh);
-  n += println();
-  return n;
 }
 
 size_t Print::print(const Printable& x)
@@ -330,15 +306,15 @@ size_t Print::printULLNumber(unsigned long long n64, uint8_t base)
   return bytes;
 }
 
-size_t Print::printFloat(double number, uint8_t digits)
-{
+size_t Print::printFloat(double number, uint8_t digits) 
+{ 
   size_t n = 0;
-
+  
   if (isnan(number)) return print("nan");
   if (isinf(number)) return print("inf");
   if (number > 4294967040.0) return print ("ovf");  // constant determined empirically
   if (number <-4294967040.0) return print ("ovf");  // constant determined empirically
-
+  
   // Handle negative numbers
   if (number < 0.0)
   {
@@ -350,7 +326,7 @@ size_t Print::printFloat(double number, uint8_t digits)
   double rounding = 0.5;
   for (uint8_t i=0; i<digits; ++i)
     rounding /= 10.0;
-
+  
   number += rounding;
 
   // Extract the integer part of the number and print it
@@ -360,7 +336,7 @@ size_t Print::printFloat(double number, uint8_t digits)
 
   // Print the decimal point, but only if there are digits beyond
   if (digits > 0) {
-    n += print(".");
+    n += print('.'); 
   }
 
   // Extract digits from the remainder one at a time
@@ -369,8 +345,8 @@ size_t Print::printFloat(double number, uint8_t digits)
     remainder *= 10.0;
     unsigned int toPrint = (unsigned int)remainder;
     n += print(toPrint);
-    remainder -= toPrint;
-  }
-
+    remainder -= toPrint; 
+  } 
+  
   return n;
 }

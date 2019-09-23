@@ -23,14 +23,11 @@
 
 #ifdef __cplusplus
 
+#include "Printable.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#if defined(__AVR__)
-#include "avr/pgmspace.h"
-#else
-#include "deprecated-avr-comp/avr/pgmspace.h"
-#endif
 
 // When compiling programs with this class, the following gcc parameters
 // dramatically increase performance and memory (RAM) efficiency, typically
@@ -38,8 +35,25 @@
 //     -felide-constructors
 //     -std=c++0x
 
-class __FlashStringHelper;
-#define F(string_literal) (reinterpret_cast<const __FlashStringHelper *>(PSTR(string_literal)))
+class String;
+
+// Default implemtation of 'F' macro for cores than can use
+//   string literals directly as (const char *).
+// For cores that require special interface to program memory,
+//   the default 'F' macro can be undefined at core 
+//   implementation level and redefined as needed.
+#define F(string_literal) (string_literal)
+
+// Base Class for strings stored in program memory.
+// For cores that require special interface to program memory,
+//   this class can be extended at the core implementation
+//   level in order to support String and Print operations from
+//   program memory.
+class FlashString : public Printable
+{ 
+  public:
+    virtual String toString() const = 0;
+};
 
 // An inherited class for holding the result of a concatenation.  These
 // result objects are assumed to be writable by subsequent concatenations.
@@ -62,7 +76,7 @@ public:
 	// be false).
 	String(const char *cstr = "");
 	String(const String &str);
-	String(const __FlashStringHelper *str);
+	String(const FlashString &fstr);
 	#if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 	String(String &&rval);
 	String(StringSumHelper &&rval);
@@ -89,7 +103,7 @@ public:
 	// marked as invalid ("if (s)" will be false).
 	String & operator = (const String &rhs);
 	String & operator = (const char *cstr);
-	String & operator = (const __FlashStringHelper *str);
+	String & operator = (const FlashString &fstr);
 	#if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 	String & operator = (String &&rval);
 	String & operator = (StringSumHelper &&rval);
@@ -110,7 +124,7 @@ public:
 	unsigned char concat(unsigned long num);
 	unsigned char concat(float num);
 	unsigned char concat(double num);
-	unsigned char concat(const __FlashStringHelper * str);
+	unsigned char concat(const FlashString &fstr);
 
 	// if there's not enough memory for the concatenated value, the string
 	// will be left unchanged (but this isn't signalled in any way)
@@ -124,7 +138,7 @@ public:
 	String & operator += (unsigned long num)	{concat(num); return (*this);}
 	String & operator += (float num)		{concat(num); return (*this);}
 	String & operator += (double num)		{concat(num); return (*this);}
-	String & operator += (const __FlashStringHelper *str){concat(str); return (*this);}
+	String & operator += (const FlashString &fstr){concat(fstr); return (*this);}
 
 	friend StringSumHelper & operator + (const StringSumHelper &lhs, const String &rhs);
 	friend StringSumHelper & operator + (const StringSumHelper &lhs, const char *cstr);
@@ -136,7 +150,7 @@ public:
 	friend StringSumHelper & operator + (const StringSumHelper &lhs, unsigned long num);
 	friend StringSumHelper & operator + (const StringSumHelper &lhs, float num);
 	friend StringSumHelper & operator + (const StringSumHelper &lhs, double num);
-	friend StringSumHelper & operator + (const StringSumHelper &lhs, const __FlashStringHelper *rhs);
+	friend StringSumHelper & operator + (const StringSumHelper &lhs, const FlashString &rhs);
 
 	// comparison (only works w/ Strings and "strings")
 	operator StringIfHelperType() const { return buffer ? &String::StringIfHelper : 0; }
@@ -222,7 +236,6 @@ protected:
 
 	// copy and move
 	String & copy(const char *cstr, unsigned int length);
-	String & copy(const __FlashStringHelper *pstr, unsigned int length);
 	#if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 	void move(String &rhs);
 	#endif

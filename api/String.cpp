@@ -39,10 +39,10 @@ String::String(const String &value)
 	*this = value;
 }
 
-String::String(const __FlashStringHelper *pstr)
+String::String(const FlashString &fstr)
 {
-	init();
-	*this = pstr;
+  init();
+	*this = fstr;
 }
 
 #if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__)
@@ -180,17 +180,6 @@ String & String::copy(const char *cstr, unsigned int length)
 	return *this;
 }
 
-String & String::copy(const __FlashStringHelper *pstr, unsigned int length)
-{
-	if (!reserve(length)) {
-		invalidate();
-		return *this;
-	}
-	len = length;
-	strcpy_P(buffer, (PGM_P)pstr);
-	return *this;
-}
-
 #if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 void String::move(String &rhs)
 {
@@ -245,11 +234,9 @@ String & String::operator = (const char *cstr)
 	return *this;
 }
 
-String & String::operator = (const __FlashStringHelper *pstr)
+String & String::operator = (const FlashString &fstr)
 {
-	if (pstr) copy(pstr, strlen_P((PGM_P)pstr));
-	else invalidate();
-
+	*this = fstr.toString();
 	return *this;
 }
 
@@ -336,16 +323,9 @@ unsigned char String::concat(double num)
 	return concat(string, strlen(string));
 }
 
-unsigned char String::concat(const __FlashStringHelper * str)
+unsigned char String::concat(const FlashString &fstr)
 {
-	if (!str) return 0;
-	int length = strlen_P((const char *) str);
-	if (length == 0) return 1;
-	unsigned int newlen = len + length;
-	if (!reserve(newlen)) return 0;
-	strcpy_P(buffer + len, (const char *) str);
-	len = newlen;
-	return 1;
+  return concat(fstr.toString());
 }
 
 /*********************************************/
@@ -422,7 +402,7 @@ StringSumHelper & operator + (const StringSumHelper &lhs, double num)
 	return a;
 }
 
-StringSumHelper & operator + (const StringSumHelper &lhs, const __FlashStringHelper *rhs)
+StringSumHelper & operator + (const StringSumHelper &lhs, const FlashString &rhs)
 {
 	StringSumHelper &a = const_cast<StringSumHelper&>(lhs);
 	if (!a.concat(rhs))	a.invalidate();
@@ -592,7 +572,7 @@ int String::lastIndexOf(const String &s2) const
 
 int String::lastIndexOf(const String &s2, unsigned int fromIndex) const
 {
-	if (s2.len == 0 || len == 0 || s2.len > len) return -1;
+  	if (s2.len == 0 || len == 0 || s2.len > len) return -1;
 	if (fromIndex >= len) fromIndex = len - 1;
 	int found = -1;
 	for (char *p = buffer; p <= buffer + fromIndex; p++) {
