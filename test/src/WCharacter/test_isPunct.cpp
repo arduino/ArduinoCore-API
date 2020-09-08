@@ -1,0 +1,38 @@
+/*
+ * Copyright (c) 2020 Arduino.  All rights reserved.
+ */
+
+/**************************************************************************************
+ * INCLUDE
+ **************************************************************************************/
+
+#include <catch.hpp>
+
+#include <vector>
+
+#include <WCharacter.h>
+
+/**************************************************************************************
+ * CONSTANTS
+ **************************************************************************************/
+
+std::vector<char> const VALID_PUNCT_VECT = {'!','"','#','$','%','&','\'','(',')','*','+',',','-','.','/',':',';','<','=','>','?','@','[','\\',']','^','_','`','{','|','}','~'};
+
+/**************************************************************************************
+ * TEST CODE
+ **************************************************************************************/
+
+TEST_CASE ("isPunct('.') is called with a valid punct character", "[isPunct-01]")
+{
+  std::for_each(std::begin(VALID_PUNCT_VECT),
+                std::end  (VALID_PUNCT_VECT),
+                [](char const c)
+                {
+                  REQUIRE(arduino::isPunct(c) == true);
+                });
+}
+
+TEST_CASE ("isPunct(...) is called with a invalid punct character", "[isPunct-02]")
+{
+  REQUIRE(arduino::isPunct('a') == false);
+}
