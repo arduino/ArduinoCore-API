@@ -34,6 +34,7 @@ set(TEST_SRCS
   src/WCharacter/test_isPunct.cpp
   src/WCharacter/test_isSpace.cpp
   src/WCharacter/test_isUpperCase.cpp
+  src/WCharacter/test_isWhitespace.cpp
 )
 
 set(TEST_DUT_SRCS
