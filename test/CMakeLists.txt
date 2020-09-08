@@ -24,6 +24,7 @@ set(TEST_TARGET ${CMAKE_PROJECT_NAME})
 ##########################################################################
 
 set(TEST_SRCS
+  src/WCharacter/test_isHexadecimalDigit.cpp
 )
 
 set(TEST_DUT_SRCS
