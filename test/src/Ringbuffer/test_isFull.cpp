@@ -20,7 +20,14 @@ TEST_CASE ("'isFull' should return false for empty ring buffer", "[Ringbuffer-is
   REQUIRE(ringbuffer.isFull() == false);
 }
 
-TEST_CASE ("'isFull' should return true for full ring buffer", "[Ringbuffer-isFull-02]")
+TEST_CASE ("'isFull' should return false for a partial full ring buffer", "[Ringbuffer-isFull-02]")
+{
+  arduino::RingBufferN<2> ringbuffer;
+  ringbuffer.store_char('A');
+  REQUIRE(ringbuffer.isFull() == false);
+}
+
+TEST_CASE ("'isFull' should return true for full ring buffer", "[Ringbuffer-isFull-03]")
 {
   arduino::RingBufferN<2> ringbuffer;
   ringbuffer.store_char('A');
