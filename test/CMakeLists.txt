@@ -25,6 +25,7 @@ set(TEST_TARGET ${CMAKE_PROJECT_NAME})
 
 set(TEST_SRCS
   src/WCharacter/test_isHexadecimalDigit.cpp
+  src/WCharacter/test_isSpace.cpp
   src/WCharacter/test_isUpperCase.cpp
 )
 
