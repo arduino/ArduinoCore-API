@@ -27,6 +27,7 @@ set(TEST_SRCS
   src/Common/test_makeWord.cpp
   src/Common/test_max.cpp
   src/Common/test_min.cpp
+  src/WCharacter/test_isControl.cpp
   src/WCharacter/test_isDigit.cpp
   src/WCharacter/test_isHexadecimalDigit.cpp
   src/WCharacter/test_isLowerCase.cpp
