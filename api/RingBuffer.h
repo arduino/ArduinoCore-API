@@ -22,6 +22,7 @@
 #define _RING_BUFFER_
 
 #include <stdint.h>
+#include <string.h>
 
 namespace arduino {
 
