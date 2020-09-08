@@ -29,6 +29,7 @@ set(TEST_SRCS
   src/Common/test_min.cpp
   src/Ringbuffer/test_available.cpp
   src/Ringbuffer/test_availableForStore.cpp
+  src/Ringbuffer/test_clear.cpp
   src/Ringbuffer/test_isFull.cpp
   src/WCharacter/test_isControl.cpp
   src/WCharacter/test_isDigit.cpp
