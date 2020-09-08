@@ -24,6 +24,7 @@ set(TEST_TARGET ${CMAKE_PROJECT_NAME})
 ##########################################################################
 
 set(TEST_SRCS
+  src/Common/test_makeWord.cpp
   src/Common/test_max.cpp
   src/Common/test_min.cpp
   src/WCharacter/test_isHexadecimalDigit.cpp
