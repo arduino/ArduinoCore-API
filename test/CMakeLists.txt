@@ -31,6 +31,7 @@ set(TEST_SRCS
   src/Ringbuffer/test_availableForStore.cpp
   src/Ringbuffer/test_clear.cpp
   src/Ringbuffer/test_isFull.cpp
+  src/Ringbuffer/test_peek.cpp
   src/Ringbuffer/test_read_char.cpp
   src/Ringbuffer/test_store_char.cpp
   src/WCharacter/test_isControl.cpp
