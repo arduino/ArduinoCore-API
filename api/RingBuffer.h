@@ -53,6 +53,7 @@ class RingBufferN
 
   private:
     int nextIndex(int index);
+    inline bool isEmpty() const { return (_numElems == 0); }
 };
 
 typedef RingBufferN<SERIAL_BUFFER_SIZE> RingBuffer;
@@ -91,7 +92,7 @@ void RingBufferN<N>::clear()
 template <int N>
 int RingBufferN<N>::read_char()
 {
-  if(_iTail == _iHead)
+  if (isEmpty())
     return -1;
 
   uint8_t value = _aucBuffer[_iTail];
@@ -116,7 +117,7 @@ int RingBufferN<N>::availableForStore()
 template <int N>
 int RingBufferN<N>::peek()
 {
-  if(_iTail == _iHead)
+  if (isEmpty())
     return -1;
 
   return _aucBuffer[_iTail];
