@@ -27,6 +27,7 @@ set(TEST_SRCS
   src/Common/test_makeWord.cpp
   src/Common/test_max.cpp
   src/Common/test_min.cpp
+  src/Print/test_print.cpp
   src/Ringbuffer/test_available.cpp
   src/Ringbuffer/test_availableForStore.cpp
   src/Ringbuffer/test_clear.cpp
@@ -47,6 +48,7 @@ set(TEST_SRCS
 set(TEST_DUT_SRCS
   ../api/Common.cpp
   ../api/String.cpp
+  ../api/Print.cpp
 )
 
 ##########################################################################
