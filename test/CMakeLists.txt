@@ -46,12 +46,15 @@ set(TEST_SRCS
 
 set(TEST_DUT_SRCS
   ../api/Common.cpp
+  ../api/String.cpp
 )
 
 ##########################################################################
 
 set(TEST_TARGET_SRCS
   src/main.cpp
+  src/dtostrf.cpp
+  src/itoa.cpp
   ${TEST_SRCS}
   ${TEST_UTIL_SRCS}
   ${TEST_DUT_SRCS}
