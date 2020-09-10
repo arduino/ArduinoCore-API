@@ -12,20 +12,7 @@
 
 #include <Print.h>
 
-/**************************************************************************************
- * TEST HELPER
- **************************************************************************************/
-
-class PrintMock : public Print
-{
-public:
-  std::string _str;
-  virtual size_t write(uint8_t b)
-  {
-    _str.append(1, static_cast<char>(b));
-    return 1;
-  }
-};
+#include <PrintMock.h>
 
 /**************************************************************************************
  * TEST CODE
