@@ -28,6 +28,7 @@ set(TEST_SRCS
   src/Common/test_makeWord.cpp
   src/Common/test_max.cpp
   src/Common/test_min.cpp
+  src/IPAddress/test_IPAddress.cpp
   src/Print/test_clearWriteError.cpp
   src/Print/test_getWriteError.cpp
   src/Print/test_print.cpp
@@ -50,6 +51,7 @@ set(TEST_SRCS
 
 set(TEST_DUT_SRCS
   ../api/Common.cpp
+  ../api/IPAddress.cpp
   ../api/String.cpp
   ../api/Print.cpp
 )
