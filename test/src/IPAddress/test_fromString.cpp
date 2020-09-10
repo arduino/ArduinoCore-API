@@ -41,7 +41,6 @@ TEST_CASE ("Extract valid IP address 'fromString(const String &)'", "[IPAddress-
   REQUIRE(ip[3] == 2);
 }
 
-
 TEST_CASE ("Extract invalid IP address 'fromString(const char *)'", "[IPAddress-fromString-03]")
 {
   arduino::IPAddress ip;
@@ -53,6 +52,7 @@ TEST_CASE ("Extract invalid IP address 'fromString(const char *)'", "[IPAddress-
   REQUIRE(ip.fromString("1.1.")      == false);
   REQUIRE(ip.fromString("1.1.1")     == false);
   REQUIRE(ip.fromString("1.1.1.")    == false);
+  REQUIRE(ip.fromString("...")       == false);
   REQUIRE(ip.fromString("256.1.1.1") == false);
   REQUIRE(ip.fromString("a.1.1.1")   == false);
   REQUIRE(ip.fromString("-.1.1.1")   == false);

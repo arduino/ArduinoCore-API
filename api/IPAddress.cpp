@@ -49,7 +49,7 @@ bool IPAddress::fromString(const char *address)
 {
     // TODO: add support for "a", "a.b", "a.b.c" formats
 
-    uint16_t acc = 0; // Accumulator
+    int16_t acc = -1; // Accumulator
     uint8_t dots = 0;
 
     while (*address)
@@ -57,7 +57,7 @@ bool IPAddress::fromString(const char *address)
         char c = *address++;
         if (c >= '0' && c <= '9')
         {
-            acc = acc * 10 + (c - '0');
+            acc = (acc < 0) ? (c - '0') : acc * 10 + (c - '0');
             if (acc > 255) {
                 // Value out of [0..255] range
                 return false;
@@ -69,8 +69,12 @@ bool IPAddress::fromString(const char *address)
                 // Too much dots (there must be 3 dots)
                 return false;
             }
+            if (acc < 0) {
+                /* No value between dots, e.g. '1..' */
+                return false;
+            }
             _address.bytes[dots++] = acc;
-            acc = 0;
+            acc = -1;
         }
         else
         {
@@ -81,6 +85,10 @@ bool IPAddress::fromString(const char *address)
 
     if (dots != 3) {
         // Too few dots (there must be 3 dots)
+        return false;
+    }
+    if (acc < 0) {
+        /* No value between dots, e.g. '1..' */
         return false;
     }
     _address.bytes[3] = acc;
