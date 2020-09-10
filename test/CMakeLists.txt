@@ -28,6 +28,7 @@ set(TEST_SRCS
   src/Common/test_makeWord.cpp
   src/Common/test_max.cpp
   src/Common/test_min.cpp
+  src/Print/test_clearWriteError.cpp
   src/Print/test_getWriteError.cpp
   src/Print/test_print.cpp
   src/Ringbuffer/test_available.cpp
