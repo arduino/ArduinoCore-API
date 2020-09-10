@@ -9,6 +9,7 @@ project(test-ArduinoCore-API)
 ##########################################################################
 
 include_directories(../api)
+include_directories(include)
 include_directories(external/catch/v2.13.1/include)
 
 ##########################################################################
@@ -57,8 +58,8 @@ set(TEST_TARGET_SRCS
   src/main.cpp
   src/dtostrf.cpp
   src/itoa.cpp
+  src/PrintMock.cpp
   ${TEST_SRCS}
-  ${TEST_UTIL_SRCS}
   ${TEST_DUT_SRCS}
 )
 
