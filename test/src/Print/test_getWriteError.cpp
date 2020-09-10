@@ -2,28 +2,29 @@
  * Copyright (c) 2020 Arduino.  All rights reserved.
  */
 
-#ifndef PRINT_MOCK_H_
-#define PRINT_MOCK_H_
-
 /**************************************************************************************
  * INCLUDE
  **************************************************************************************/
 
-#include <string>
+#include <catch.hpp>
 
 #include <Print.h>
 
+#include <PrintMock.h>
+
 /**************************************************************************************
- * CLASS DECLARATION
+ * TEST CODE
  **************************************************************************************/
 
-class PrintMock : public Print
+TEST_CASE ("No write error has been set", "[Print-getWriteError-01]")
 {
-public:
-  std::string _str;
-  virtual size_t write(uint8_t b) override;
-  void mock_setWriteError() { setWriteError(); }
-  void mock_setWriteError(int err) { setWriteError(err); }
-};
+  PrintMock mock;
+  REQUIRE(mock.getWriteError() == 0);
+}
 
-#endif /* PRINT_MOCK_H_ */
+TEST_CASE ("A write error has been set", "[Print-getWriteError-02]")
+{
+  PrintMock mock;
+  mock.mock_setWriteError(5);
+  REQUIRE(mock.getWriteError() == 5);
+}

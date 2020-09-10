@@ -8,8 +8,6 @@
 
 #include <catch.hpp>
 
-#include <string>
-
 #include <Print.h>
 
 #include <PrintMock.h>
