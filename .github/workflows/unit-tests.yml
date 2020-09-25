@@ -1,0 +1,60 @@
+name: Unit Tests
+
+on:
+  pull_request:
+    # Only run workflow if a file in these paths are modified
+    paths:
+      - ".github/workflows/unit-tests.yml"
+      - "test/**"
+      - "api/**"
+
+  push:
+    paths:
+      - ".github/workflows/unit-tests.yml"
+      - "test/**"
+      - "api/**"
+
+jobs:
+  test:
+    name: Run unit tests
+    runs-on: ubuntu-latest
+
+    env:
+      BUILD_PATH: ${{ github.workspace }}/test/build
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install valgrind
+        run: sudo apt-get --assume-yes install valgrind
+
+      - name: Run unit tests
+        run: |
+          mkdir "$BUILD_PATH"
+          cd "$BUILD_PATH"
+          # Generate makefile
+          cmake ..
+          # Compile tests
+          make
+          # Run tests and check for memory leaks
+          valgrind --leak-check=yes --error-exitcode=1 bin/test-ArduinoCore-API
+
+      - name: Install lcov
+        run: sudo apt-get --assume-yes install lcov
+
+      - name: Report code coverage
+        run: |
+          cd "$BUILD_PATH"
+          lcov --directory . --capture --output-file coverage.info
+          # Remove external files from coverage data
+          lcov --quiet --remove coverage.info '*/test/*' '/usr/*' --output-file coverage.info
+          # Print coverage report in the workflow log
+          lcov --list coverage.info
+
+      # See: https://github.com/codecov/codecov-action/blob/master/README.md
+      - name: Upload coverage report to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: ${{ env.BUILD_PATH }}/coverage.info
+          fail_ci_if_error: true
