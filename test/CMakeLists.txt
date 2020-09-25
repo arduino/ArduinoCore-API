@@ -30,6 +30,7 @@ set(TEST_SRCS
   src/Common/test_min.cpp
   src/IPAddress/test_fromString.cpp
   src/IPAddress/test_IPAddress.cpp
+  src/IPAddress/test_operator_assignment.cpp
   src/IPAddress/test_operator_comparison.cpp
   src/Print/test_clearWriteError.cpp
   src/Print/test_getWriteError.cpp
