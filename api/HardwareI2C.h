@@ -36,8 +36,8 @@ class HardwareI2C : public Stream
     virtual uint8_t endTransmission(bool stopBit) = 0;
     virtual uint8_t endTransmission(void) = 0;
 
-    virtual uint8_t requestFrom(uint8_t address, size_t len, bool stopBit) = 0;
-    virtual uint8_t requestFrom(uint8_t address, size_t len) = 0;
+    virtual size_t requestFrom(uint8_t address, size_t len, bool stopBit) = 0;
+    virtual size_t requestFrom(uint8_t address, size_t len) = 0;
 
     virtual void onReceive(void(*)(int)) = 0;
     virtual void onRequest(void(*)(void)) = 0;
