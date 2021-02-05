@@ -44,22 +44,22 @@ typedef enum {
 #ifdef __cplusplus
 
   template<class T, class L> 
-  auto min(const T& a, const L& b) -> decltype((b < a) ? b : a)
+  auto min(const T& a, const L& b) -> decltype(b < a ? b : a)
   {
     return (b < a) ? b : a;
   }
 
   template<class T, class L> 
-  auto max(const T& a, const L& b) -> decltype((b < a) ? b : a)
+  auto max(const T& a, const L& b) -> decltype(b < a ? b : a)
   {
     return (a < b) ? b : a;
   }
 
 
   template<class T, class U, class V> 
-  auto constrain(const T& amt, const U& low, const V& high) -> decltype((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
+  auto constrain(const T& amt, const U& low, const V& high) -> decltype(amt < low ? low : (amt > high ? high : amt))
   {
-      return (amt)<(low)?(low):((amt)>(high)?(high):(amt));
+      return amt < low ? low : (amt > high ? high : amt);
   }
   
   template<class T> 
@@ -81,19 +81,29 @@ typedef enum {
   }
 #else
   #ifndef constrain
-  #define constrain(amt,low,high) ((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
+  #define constrain(amt,low,high) \
+     ({ __typeof__ (amt) _amt = (amt); \
+         __typeof__ (low) _low = (low); \
+         __typeof__ (high) _high = (high); \
+       _amt < _low ? _low : (_amt > _high ? _high :_amt); }
   #endif
   
   #ifndef radians
-  #define radians(deg) ((deg)*DEG_TO_RAD)
+  #define radians(deg) \
+      ({ __typeof__ (deg) _deg = deg; \
+       _deg * DEG_TO_RAD; })
   #endif
   
   #ifndef degrees
-  #define degrees(rad) ((rad)*RAD_TO_DEG)
+  #define degrees(rad) \
+      ({ __typeof__ (rad) _rad = rad; \
+       _rad * RAD_TO_DEG; })
   #endif
   
   #ifndef sq
-  #define sq(x) ((x)*(x))
+  #define sq(x) \
+      ({ __typeof__ (x) _x = x; \
+       _x * _x; })
   #endif
 
   #ifndef min
