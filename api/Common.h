@@ -208,4 +208,3 @@ void randomSeed(unsigned long);
 long map(long, long, long, long, long);
 
 #endif // __cplusplus
-
