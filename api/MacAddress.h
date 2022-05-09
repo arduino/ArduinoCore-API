@@ -19,12 +19,11 @@
 #define MacAddress_h
 
 #include <stdint.h>
-#include "String.h"
-
-namespace arduino {
+#include <WString.h>
+#include <Printable.h>
 
 // A class to make it easier to handle and pass around 6-byte BSSID and MAC addresses.
-class MacAddress {
+class MacAddress : public Printable {
 private:
     union {
         struct {
@@ -38,6 +37,7 @@ public:
     MacAddress();
     MacAddress(uint64_t mac);
     MacAddress(const uint8_t *macbytearray);
+    MacAddress(uint8_t b1, uint8_t b2, uint8_t b3, uint8_t b4, uint8_t b5, uint8_t b6);
     virtual ~MacAddress() {}
     bool fromCStr(const char *buf);
     bool fromString(const String &macstr);
@@ -46,14 +46,28 @@ public:
     String toString() const;
     uint64_t Value();
 
-    operator uint64_t() const;
-    MacAddress& operator=(const uint8_t *mac);
+    uint8_t operator[](int index) const;
+    uint8_t& operator[](int index);
+    MacAddress& operator=(const uint8_t *macbytearray);
     MacAddress& operator=(uint64_t macval);
-    bool operator==(const uint8_t *mac) const;
+    bool operator==(const uint8_t *macbytearray) const;
     bool operator==(const MacAddress& mac2) const;
-};
+    operator uint64_t() const;
+    operator const uint8_t*() const;
+    operator const uint64_t*() const;
 
-}
-using arduino::MacAddress;
+    virtual size_t printTo(Print& p) const;
+
+    // future use in Arduino Networking 
+    friend class EthernetClass;
+    friend class UDP;
+    friend class Client;
+    friend class Server;
+    friend class DhcpClass;
+    friend class DNSClient;
+
+private:
+    int EnforceIndexBounds(int i) const;
+};
 
 #endif

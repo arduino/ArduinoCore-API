@@ -19,12 +19,11 @@
 #define MacAddress8_h
 
 #include <stdint.h>
-#include "String.h"
-
-namespace arduino {
+#include <WString.h>
+#include <Printable.h>
 
 // A class to make it easier to handle and pass around 8-byte EUI-64(used for IEEE 802.15.4) addresses. See <esp_mac.h>.
-class MacAddress8 {
+class MacAddress8 : public Printable {
 private:
     union {
         uint8_t bytes[8];
@@ -35,22 +34,37 @@ public:
     MacAddress8();
     MacAddress8(uint64_t mac);
     MacAddress8(const uint8_t *macbytearray);
+    MacAddress8(uint8_t b1, uint8_t b2, uint8_t b3, uint8_t b4, uint8_t b5, uint8_t b6, uint8_t b7, uint8_t b8);
     virtual ~MacAddress8() {}
     bool fromCStr(const char *buf);
     bool fromString(const String &macstr);
     void toBytes(uint8_t *buf);
-    int toCStr(char *buf);
+    int  toCStr(char *buf);
     String toString() const;
     uint64_t Value();
 
-    operator uint64_t() const;
-    MacAddress8& operator=(const uint8_t *mac);
+    uint8_t operator[](int index) const;
+    uint8_t& operator[](int index);
+    MacAddress8& operator=(const uint8_t *macbytearray);
     MacAddress8& operator=(uint64_t macval);
-    bool operator==(const uint8_t *mac) const;
+    bool operator==(const uint8_t *macbytearray) const;
     bool operator==(const MacAddress8& mac2) const;
-};
+    operator uint64_t() const;
+    operator const uint8_t*() const;
+    operator const uint64_t*() const;
 
-}
-using arduino::MacAddress8;
+    virtual size_t printTo(Print& p) const;
+
+    // future use in Arduino Networking 
+    friend class EthernetClass;
+    friend class UDP;
+    friend class Client;
+    friend class Server;
+    friend class DhcpClass;
+    friend class DNSClient;
+
+private:
+    int EnforceIndexBounds(int i) const;
+};
 
 #endif
