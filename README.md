@@ -4,28 +4,59 @@
 [![codecov](https://codecov.io/gh/arduino/ArduinoCore-API/branch/master/graph/badge.svg)](https://codecov.io/gh/arduino/ArduinoCore-API)
 [![Spell Check status](https://github.com/arduino/ArduinoCore-API/actions/workflows/spell-check.yml/badge.svg)](https://github.com/arduino/ArduinoCore-API/actions/workflows/spell-check.yml)
 
-This repository hosts the hardware independent layer of Arduino core.
+This repository hosts the hardware independent layer of Arduino core. In other words it contains the abstract definition of the Arduino core API, consisting of hardware-independent header files that are then included and implemented by the various platform-specific cores.
 
-All Arduino official cores are being ported to the new structure so they take advantage of this single repo.
+Having a single place where the Arduino API is defined means that there is no longer a String implementation within every Arduino core (a String module within ArduinoCore-avr, a String module within ArduinoCore-samd, a String module within ArduinoCore-megaavr …) but rather one String implementation within ArduinoCore-API which all other cores utilise. This has the pleasant side effects that bugs fixed or features added within the ArduinoCore-API String implementation are automatically propagated to all cores utilizing ArduinoCore-API.
 
-Including this repo in your existing Arduino core will allow the language to grow and include new features.
-For backwards compatibility, every revision of this repo will increase the `ARDUINO_API_VERSION` define.
+As of now, the following official cores are utilising ArduinoCore-API:
 
-Some cores have been ported to the new structure, for example:
-* megaAVR (https://github.com/arduino/ArduinoCore-megaAVR) 
-* nRF52-mbedos (https://github.com/arduino/ArduinoCore-nRF528x-mbedos)
-* classic AVR (https://github.com/arduino/ArduinoCore-avr/tree/api) 
-* SAMD (https://github.com/arduino/ArduinoCore-samd)
+* [megaavr](https://github.com/arduino/ArduinoCore-megaAVR)
+* [mbed](https://github.com/arduino/ArduinoCore-mbed)
+* [samd](https://github.com/arduino/ArduinoCore-samd)
 
-These repositories **don't** contain the needed `api` subfolder; to "complete" the core you need to copy or symlink the `api` folder from this repo to the target's `cores/arduino` folder.
+There's an ongoing effort to port the others, while maintainers of third-party cores are strongly invited to follow the same route in order to stay up-to-date with the new language features. For backwards compatibility, every revision of this repo will increase the `ARDUINO_API_VERSION` define.
 
-### Porting tips
+## Documentation
 
-In the future, core APIs will be updated independently from the core, so all the compatible cores will seamlessly adopt new features.
-This requires support from all the IDEs, so in the meantime we suggest to release the core by copying a snapshot of this `api` folder.
+The Arduino API is documented in the official [language reference](https://www.arduino.cc/reference/en/), whose sources are located in [this repository](https://github.com/arduino/reference-en) and are open to contributions from the community.
 
-The most elegant and effective solution is to develop the core with `api` symlinked and produce the distributable archive by telling `tar` to follow symlinks. 
-Example command:
+## Support
+
+This repository is not directly usable by final users. If you need assistance with Arduino, see the [Help Center](https://support.arduino.cc/) and browse the [forum](https://forum.arduino.cc).
+
+## Development
+
+### Bugs & Issues
+
+If you want to report an issue with this core, you can submit it to the [issue tracker](https://github.com/arduino/ArduinoCore-API/issues) of this repository. Some rules apply:
+
+* If your issue is about a specific hardware platform, report it to its repository. This one is only about discussing the generic API.
+* Before posting, please check if the same problem has been already reported by someone else to avoid duplicates.
+* Remember to include as much detail as you can about your hardware set-up, code and steps for reproducing the issue. Make sure you're using an original Arduino board.
+
+### Contributions
+
+Contributions are always welcome! You can submit them directly to this repository as Pull Requests. Please provide a detailed description of the problem you're trying to solve. We also appreciate any help in testing issues and patches contributed by other users.
+
+### Unit testing
+
+This repository includes a test suite that covers most of the API and that is designed to run on generic hardware, thus not requiring a development board. We call this _host-based unit-testing_. In order to test the features that are only defined but not implemented in this repository, mock implementations are included.
+
+Please help us improve the coverage of the test suite!
+
+### Implementing ArduinoCore-API
+
+In order to compile a core which is implementing ArduinoCore-API you'll need to copy/symlink the `api` directory to the target's `cores/arduino` directory as part of your development and release workflow. The most elegant and effective solution is to develop your core with `api` symlinked and produce the distributable archive by telling `tar` to follow symlinks. Example:
+
 ```
 tar --exclude='*.git*' -cjhvf $yourcore-$version.tar.bz2 $yourcore/
 ```
+
+## Donations
+
+This open source code is maintained by Arduino with the help of the community. We invest a considerable amount of time in testing code, optimizing it and introducing new features. Please consider [donating](https://www.arduino.cc/en/donate/) or [sponsoring](https://github.com/sponsors/arduino) to support our work, as well as [buying original Arduino boards](https://store.arduino.cc) which is the best way to make sure our effort can continue in the long term.
+
+## License and credits
+
+This code is licensed under the terms of the GNU LGPL 2.1. If you have questions about licensing please contact us at [license@arduino.cc](mailto:license@arduino.cc).
+
