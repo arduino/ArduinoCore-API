@@ -15,7 +15,7 @@ Some cores have been ported to the new structure, for example:
 * megaAVR (https://github.com/arduino/ArduinoCore-megaAVR) 
 * nRF52-mbedos (https://github.com/arduino/ArduinoCore-nRF528x-mbedos)
 * classic AVR (https://github.com/arduino/ArduinoCore-avr/tree/api) 
-* SAMD (https://github.com/arduino/ArduinoCore-samd/tree/api)
+* SAMD (https://github.com/arduino/ArduinoCore-samd)
 
 These repositories **don't** contain the needed `api` subfolder; to "complete" the core you need to copy or symlink the `api` folder from this repo to the target's `cores/arduino` folder.
 
