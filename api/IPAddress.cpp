@@ -89,6 +89,11 @@ IPAddress::IPAddress(IPType ip_type, const uint8_t *address)
     }
 }
 
+IPAddress::IPAddress(const char *address)
+{
+    fromString(address);
+}
+
 bool IPAddress::fromString(const char *address) {
     if (!fromString4(address)) {
         return fromString6(address);
@@ -222,6 +227,12 @@ IPAddress& IPAddress::operator=(const uint8_t *address)
     _type = IPv4;
     memset(_address.bytes, 0, sizeof(_address.bytes));
     memcpy(&_address.bytes[IPADDRESS_V4_BYTES_INDEX], address, sizeof(uint32_t));
+    return *this;
+}
+
+IPAddress& IPAddress::operator=(const char *address)
+{
+    fromString(address);
     return *this;
 }
 

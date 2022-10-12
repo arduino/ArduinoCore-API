@@ -67,6 +67,8 @@ public:
      // Default IPv4
     IPAddress(const uint8_t *address);
     IPAddress(IPType ip_type, const uint8_t *address);
+    // If IPv4 fails tries IPv6 see fromSting function
+    IPAddress(const char *address);
 
     bool fromString(const char *address);
     bool fromString(const String &address) { return fromString(address.c_str()); }
@@ -90,6 +92,8 @@ public:
     IPAddress& operator=(const uint8_t *address);
     // NOTE: IPv4 only; see implementation note
     IPAddress& operator=(uint32_t address);
+    // If IPv4 fails tries IPv6 see fromSting function
+    IPAddress& operator=(const char *address);
 
     virtual size_t printTo(Print& p) const;
 
