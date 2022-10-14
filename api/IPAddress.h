@@ -92,7 +92,7 @@ public:
     IPAddress& operator=(const uint8_t *address);
     // NOTE: IPv4 only; see implementation note
     IPAddress& operator=(uint32_t address);
-    // If IPv4 fails tries IPv6 see fromSting function
+    // If IPv4 fails tries IPv6 see fromString function
     IPAddress& operator=(const char *address);
 
     virtual size_t printTo(Print& p) const;
