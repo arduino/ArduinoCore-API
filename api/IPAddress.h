@@ -67,7 +67,7 @@ public:
      // Default IPv4
     IPAddress(const uint8_t *address);
     IPAddress(IPType ip_type, const uint8_t *address);
-    // If IPv4 fails tries IPv6 see fromSting function
+    // If IPv4 fails tries IPv6 see fromString function
     IPAddress(const char *address);
 
     bool fromString(const char *address);
