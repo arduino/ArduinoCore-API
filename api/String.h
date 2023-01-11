@@ -218,6 +218,7 @@ public:
 	long toInt(void) const;
 	float toFloat(void) const;
 	double toDouble(void) const;
+	String fromUtf8ToEAscii(void) const;
 
 protected:
 	char *buffer;	        // the actual char array
