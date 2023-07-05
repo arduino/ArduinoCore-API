@@ -3,6 +3,11 @@
 #include <stdbool.h>
 
 #ifdef __cplusplus
+#define pHIGH ((bool)0x1)
+#define pLOW  ((bool)0x0)
+#endif
+
+#ifdef __cplusplus
 extern "C"{
 #endif
 
@@ -94,6 +99,12 @@ typedef uint8_t pin_size_t;
 #endif
 
 void pinMode(pin_size_t pinNumber, PinMode pinMode);
+__inline int digitalToggle(uint8_t pin)
+{
+	int sat = digitalRead(pin);
+	digitalWrite(pin, (PinStatus)!sat);
+	return !sat;
+}
 void digitalWrite(pin_size_t pinNumber, PinStatus status);
 PinStatus digitalRead(pin_size_t pinNumber);
 int analogRead(pin_size_t pinNumber);
