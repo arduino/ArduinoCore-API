@@ -3,11 +3,6 @@
 #include <stdbool.h>
 
 #ifdef __cplusplus
-#define pHIGH ((bool)0x1)
-#define pLOW  ((bool)0x0)
-#endif
-
-#ifdef __cplusplus
 extern "C"{
 #endif
 

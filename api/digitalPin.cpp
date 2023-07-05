@@ -11,12 +11,12 @@ digitalPin::digitalPin(const digitalPin& dig_pin)
 : pin(dig_pin.pin), sat(dig_pin.sat) {}
 
 
-int digitalPin::get()
+PinStatus digitalPin::get()
 {
     return digitalRead(pin);
 }
 
-void digitalPin::set(bool sat)
+void digitalPin::set(PinStatus sat)
 {
     digitalWrite(pin, (PinStatus)sat);
 }
@@ -26,7 +26,7 @@ digitalPin::operator bool()
     return get();
 }
 
-digitalPin::operator int()
+digitalPin::operator PinStatus()
 {
     return get();
 }
@@ -46,12 +46,7 @@ void digitalPin::PWMset(int val)
     analogWrite(pin, val);
 }
 
-void digitalPin::operator()(bool v)
+void digitalPin::operator()(PinStatus v)
 {
     set(v);
-}
-
-void digitalPin::operator()(int av)
-{
-    PWMset(av);
 }
