@@ -94,17 +94,17 @@ typedef uint8_t pin_size_t;
 #endif
 
 void pinMode(pin_size_t pinNumber, PinMode pinMode);
+void digitalWrite(pin_size_t pinNumber, PinStatus status);
+PinStatus digitalRead(pin_size_t pinNumber);
+int analogRead(pin_size_t pinNumber);
+void analogReference(uint8_t mode);
+void analogWrite(pin_size_t pinNumber, int value);
 __inline int digitalToggle(uint8_t pin)
 {
 	int sat = digitalRead(pin);
 	digitalWrite(pin, (PinStatus)!sat);
 	return !sat;
 }
-void digitalWrite(pin_size_t pinNumber, PinStatus status);
-PinStatus digitalRead(pin_size_t pinNumber);
-int analogRead(pin_size_t pinNumber);
-void analogReference(uint8_t mode);
-void analogWrite(pin_size_t pinNumber, int value);
 
 unsigned long millis(void);
 unsigned long micros(void);
