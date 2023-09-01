@@ -206,7 +206,9 @@ public:
 	String substring( unsigned int beginIndex, unsigned int endIndex ) const;
 
 	// modification
-	void replace(char find, char replace);
+	void insert(char c, unsigned int index) { return insert(&c, index, 1); };
+    void insert(const String &str, unsigned int index, unsigned int length);
+    void replace(char find, char replace);
 	void replace(const String& find, const String& replace);
 	void remove(unsigned int index);
 	void remove(unsigned int index, unsigned int count);

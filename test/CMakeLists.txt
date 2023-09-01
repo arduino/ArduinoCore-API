@@ -72,6 +72,7 @@ set(TEST_SRCS
   src/String/test_indexOf.cpp
   src/String/test_lastIndexOf.cpp
   src/String/test_length.cpp
+  src/String/test_insert.cpp
   src/String/test_move.cpp
   src/String/test_remove.cpp
   src/String/test_replace.cpp
