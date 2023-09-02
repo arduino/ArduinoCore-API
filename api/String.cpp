@@ -636,8 +636,8 @@ void String::insert(const String &str, unsigned int index, unsigned int length)
     if (index > len) return;
     length = length < str.len ? length : str.len;
     unsigned int size = len + length;
-    if (size > capacity && !changeBuffer(size)) return; // XXX: tell user!
-    memmove(buffer + index + length, buffer + index, len - index + length);
+    if (size > capacity && !reserve(size)) return; // XXX: tell user!
+    memmove(buffer + index + length, buffer + index, len - index + 1);
     memcpy(buffer + index, str.buffer, length);
     len += length;
     return;
