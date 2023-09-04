@@ -38,8 +38,9 @@ jobs:
           coverage-data-path: ${{ env.COVERAGE_DATA_PATH }}
 
       # See: https://github.com/codecov/codecov-action/blob/master/README.md
-      - name: Upload coverage report to Codecov
-        uses: codecov/codecov-action@v1
+      - name: Code coverage
+        uses: codecov/codecov-action@v3
         with:
-          file: ${{ env.COVERAGE_DATA_PATH }}
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ${{ env.COVERAGE_DATA_PATH }}
           fail_ci_if_error: true

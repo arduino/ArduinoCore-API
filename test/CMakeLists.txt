@@ -25,6 +25,14 @@ set(TEST_TARGET ${CMAKE_PROJECT_NAME})
 ##########################################################################
 
 set(TEST_SRCS
+  src/CanMsg/test_CanMsg.cpp
+  src/CanMsg/test_CanMsg_CopyCtor.cpp
+  src/CanMsg/test_CanExtendedId.cpp
+  src/CanMsg/test_CanStandardId.cpp
+  src/CanMsg/test_isExtendedId.cpp
+  src/CanMsg/test_isStandardId.cpp
+  src/CanMsg/test_operator_assignment.cpp
+  src/CanMsg/test_printTo.cpp
   src/Common/test_makeWord.cpp
   src/Common/test_map.cpp
   src/Common/test_max.cpp
@@ -97,6 +105,7 @@ set(TEST_SRCS
 )
 
 set(TEST_DUT_SRCS
+  ../api/CanMsg.cpp
   ../api/Common.cpp
   ../api/IPAddress.cpp
   ../api/String.cpp
