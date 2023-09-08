@@ -16,8 +16,6 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include <string.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -26,19 +24,19 @@ char* ltoa( long value, char *string, int radix )
 {
   char tmp[33];
   char *tp = tmp;
-  long i;
+  unsigned long i;
   unsigned long v;
   int sign;
   char *sp;
 
-  if ( string == NULL )
+  if ( string == nullptr )
   {
-    return 0 ;
+    return nullptr ;
   }
 
   if (radix > 36 || radix <= 1)
   {
-    return 0 ;
+    return nullptr ;
   }
 
   sign = (radix == 10 && value < 0);
@@ -56,9 +54,9 @@ char* ltoa( long value, char *string, int radix )
     i = v % radix;
     v = v / radix;
     if (i < 10)
-      *tp++ = i+'0';
+      *tp++ = static_cast<char>(i+'0');
     else
-      *tp++ = i + 'a' - 10;
+      *tp++ = static_cast<char>(i + 'a' - 10);
   }
 
   sp = string;
@@ -76,18 +74,18 @@ char* ultoa( unsigned long value, char *string, int radix )
 {
   char tmp[33];
   char *tp = tmp;
-  long i;
+  unsigned long i;
   unsigned long v = value;
   char *sp;
 
-  if ( string == NULL )
+  if ( string == nullptr )
   {
-    return 0;
+    return nullptr;
   }
 
   if (radix > 36 || radix <= 1)
   {
-    return 0;
+    return nullptr;
   }
 
   while (v || tp == tmp)
@@ -95,9 +93,9 @@ char* ultoa( unsigned long value, char *string, int radix )
     i = v % radix;
     v = v / radix;
     if (i < 10)
-      *tp++ = i+'0';
+      *tp++ = static_cast<char>(i+'0');
     else
-      *tp++ = i + 'a' - 10;
+      *tp++ = static_cast<char>(i + 'a' - 10);
   }
 
   sp = string;
