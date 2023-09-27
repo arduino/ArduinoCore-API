@@ -43,6 +43,8 @@ class Print
     void setWriteError(int err = 1) { write_error = err; }
   public:
     Print() : write_error(0) {}
+    virtual ~Print() {}
+
 
     int getWriteError() { return write_error; }
     void clearWriteError() { setWriteError(0); }
