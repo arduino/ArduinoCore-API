@@ -259,7 +259,7 @@ String Stream::readLine()
 {
   String ret = readStringUntil('\n');
   if (ret.endsWith("\r"))
-      ret = ret.substring(0, ret.length() - 1);
+      ret.remove(ret.length()-1);
   return ret;
 }
 
