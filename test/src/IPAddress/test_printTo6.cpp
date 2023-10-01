@@ -8,7 +8,7 @@
 
 #include <catch.hpp>
 
-#include <IPAddress.h>
+#include <api/IPAddress.h>
 #include <PrintMock.h>
 
 /**************************************************************************************

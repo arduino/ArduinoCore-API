@@ -40,7 +40,7 @@ void CanMsgRingbuffer::enqueue(CanMsg const & msg)
 
   _buf[_head] = msg;
   _head = next(_head);
-  _num_elems++;
+  _num_elems = _num_elems + 1;
 }
 
 CanMsg CanMsgRingbuffer::dequeue()
@@ -50,7 +50,7 @@ CanMsg CanMsgRingbuffer::dequeue()
 
   CanMsg const msg = _buf[_tail];
   _tail = next(_tail);
-  _num_elems--;
+  _num_elems = _num_elems - 1;
 
   return msg;
 }

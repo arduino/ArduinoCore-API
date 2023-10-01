@@ -45,7 +45,8 @@ public:
   , data_length{min(can_data_len, MAX_DATA_LENGTH)}
   , data{0}
   {
-    memcpy(data, can_data_ptr, data_length);
+    if (data_length && can_data_ptr)
+      memcpy(data, can_data_ptr, data_length);
   }
 
   CanMsg() : CanMsg(0, 0, nullptr) { }
@@ -54,7 +55,8 @@ public:
   {
     this->id          = other.id;
     this->data_length = other.data_length;
-    memcpy(this->data, other.data, this->data_length);
+    if (this->data_length && other.data)
+      memcpy(this->data, other.data, this->data_length);
   }
 
   virtual ~CanMsg() { }
@@ -65,7 +67,8 @@ public:
     {
       this->id          = other.id;
       this->data_length = other.data_length;
-      memcpy(this->data, other.data, this->data_length);
+      if (this->data_length && other.data)
+        memcpy(this->data, other.data, this->data_length);
     }
     return (*this);
   }

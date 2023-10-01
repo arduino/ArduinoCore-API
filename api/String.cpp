@@ -63,7 +63,6 @@ String::String(const __FlashStringHelper *pstr)
 	*this = pstr;
 }
 
-#if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 String::String(String &&rval)
 	: buffer(rval.buffer)
 	, capacity(rval.capacity)
@@ -73,7 +72,6 @@ String::String(String &&rval)
 	rval.capacity = 0;
 	rval.len = 0;
 }
-#endif
 
 String::String(char c)
 {
@@ -213,7 +211,6 @@ String & String::copy(const __FlashStringHelper *pstr, unsigned int length)
 	return *this;
 }
 
-#if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 void String::move(String &rhs)
 {
 	if (this != &rhs)
@@ -229,7 +226,6 @@ void String::move(String &rhs)
 		rhs.capacity = 0;
 	}
 }
-#endif
 
 String & String::operator = (const String &rhs)
 {
@@ -241,13 +237,11 @@ String & String::operator = (const String &rhs)
 	return *this;
 }
 
-#if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 String & String::operator = (String &&rval)
 {
 	move(rval);
 	return *this;
 }
-#endif
 
 String & String::operator = (const char *cstr)
 {

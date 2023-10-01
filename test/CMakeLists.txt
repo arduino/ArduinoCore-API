@@ -8,7 +8,7 @@ project(test-ArduinoCore-API)
 
 ##########################################################################
 
-include_directories(../api)
+include_directories(..)
 include_directories(include)
 include_directories(external/catch/v2.13.9/include)
 
@@ -33,6 +33,7 @@ set(TEST_SRCS
   src/CanMsg/test_isStandardId.cpp
   src/CanMsg/test_operator_assignment.cpp
   src/CanMsg/test_printTo.cpp
+  src/CanMsgRingbuffer/test_available.cpp
   src/Common/test_makeWord.cpp
   src/Common/test_map.cpp
   src/Common/test_max.cpp
@@ -106,6 +107,7 @@ set(TEST_SRCS
 
 set(TEST_DUT_SRCS
   ../api/CanMsg.cpp
+  ../api/CanMsgRingbuffer.cpp
   ../api/Common.cpp
   ../api/IPAddress.cpp
   ../api/String.cpp

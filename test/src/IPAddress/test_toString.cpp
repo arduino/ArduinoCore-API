@@ -8,8 +8,8 @@
 
 #include <catch.hpp>
 
-#include <String.h>
-#include <IPAddress.h>
+#include <api/String.h>
+#include <api/IPAddress.h>
 
 /**************************************************************************************
  * TEST CODE

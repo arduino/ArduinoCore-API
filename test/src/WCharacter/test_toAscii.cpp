@@ -6,13 +6,11 @@
  * INCLUDE
  **************************************************************************************/
 
-#undef _GNU_SOURCE
-
 #include <catch.hpp>
 
 #include <vector>
 
-#include <WCharacter.h>
+#include <api/WCharacter.h>
 
 /**************************************************************************************
  * CONSTANTS
