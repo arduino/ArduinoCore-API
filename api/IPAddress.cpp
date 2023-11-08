@@ -259,7 +259,7 @@ bool IPAddress::operator==(const uint8_t* addr) const
 {
     // IPv4 only comparison to byte pointer
     // Can't support IPv6 as we know our type, but not the length of the pointer
-    return _type == IPv4 && std::equal(_address.begin(), _address.end(), addr);
+    return _type == IPv4 && std::equal(_address.begin() + IPADDRESS_V4_BYTES_INDEX, _address.end(), addr);
 }
 
 uint8_t IPAddress::operator[](int index) const {
