@@ -19,12 +19,12 @@
 
 #pragma once
 
+#include <array>
 #include <stdint.h>
 #include "Printable.h"
 #include "String.h"
 
 #define IPADDRESS_V4_BYTES_INDEX 12
-#define IPADDRESS_V4_DWORD_INDEX 3
 
 // forward declarations of global name space friend classes
 class EthernetClass;
@@ -42,17 +42,14 @@ enum IPType {
 
 class IPAddress : public Printable {
 private:
-    union {
-        uint8_t bytes[16];
-        uint32_t dword[4];
-    } _address;
-    IPType _type;
+    alignas(alignof(uint32_t)) std::array<uint8_t, 16> _address{};
+    IPType _type{IPv4};
 
     // Access the raw byte array containing the address.  Because this returns a pointer
     // to the internal structure rather than a copy of the address this function should only
     // be used when you know that the usage of the returned uint8_t* will be transient and not
     // stored.
-    uint8_t* raw_address() { return _type == IPv4 ? &_address.bytes[IPADDRESS_V4_BYTES_INDEX] : _address.bytes; }
+    uint8_t* raw_address() { return _type == IPv4 ? &_address[IPADDRESS_V4_BYTES_INDEX] : _address.data(); }
 
 public:
     // Constructors
@@ -75,7 +72,7 @@ public:
 
     // Overloaded cast operator to allow IPAddress objects to be used where a uint32_t is expected
     // NOTE: IPv4 only; see implementation note
-    operator uint32_t() const { return _type == IPv4 ? _address.dword[IPADDRESS_V4_DWORD_INDEX] : 0; };
+    operator uint32_t() const { return _type == IPv4 ? *reinterpret_cast<const uint32_t*>(&_address[IPADDRESS_V4_BYTES_INDEX]) : 0; };
 
     bool operator==(const IPAddress& addr) const;
     bool operator!=(const IPAddress& addr) const { return !(*this == addr); };
