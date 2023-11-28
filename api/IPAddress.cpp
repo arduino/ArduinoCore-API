@@ -19,8 +19,6 @@
 
 #include "IPAddress.h"
 #include "Print.h"
-#include <algorithm>
-#include <cstdint>
 
 using namespace arduino;
 
@@ -58,9 +56,9 @@ IPAddress::IPAddress(const uint8_t *address) : IPAddress(IPv4, address) {}
 IPAddress::IPAddress(IPType ip_type, const uint8_t *address) : _type(ip_type)
 {
     if (ip_type == IPv4) {
-        std::copy(address, address + 4, &_address[IPADDRESS_V4_BYTES_INDEX]);
+        memcpy(&_address[IPADDRESS_V4_BYTES_INDEX], address, sizeof(uint32_t));
     } else {
-        std::copy(address, address + _address.size(), _address.begin());
+        memcpy(_address, address, sizeof(_address));
     }
 }
 
@@ -110,7 +108,7 @@ bool IPAddress::fromString4(const char *address)
     int16_t acc = -1; // Accumulator
     uint8_t dots = 0;
 
-    _address.fill(0);
+    memset(_address, 0, sizeof(_address));
     while (*address)
     {
         char c = *address++;
@@ -228,8 +226,8 @@ IPAddress& IPAddress::operator=(const uint8_t *address)
     // IPv4 only conversion from byte pointer
     _type = IPv4;
 
-    _address.fill(0);
-    std::copy(address, address + 4, &_address[IPADDRESS_V4_BYTES_INDEX]);
+    memset(_address, 0, sizeof(_address));
+    memcpy(&_address[IPADDRESS_V4_BYTES_INDEX], address, sizeof(uint32_t));
 
     return *this;
 }
@@ -245,21 +243,22 @@ IPAddress& IPAddress::operator=(uint32_t address)
     // IPv4 conversion
     // See note on conversion/comparison and uint32_t
     _type = IPv4;
-    _address.fill(0);
+    memset(_address, 0, sizeof(_address));
     uint32_t& addressRef = reinterpret_cast<uint32_t&>(_address[IPADDRESS_V4_BYTES_INDEX]);
     addressRef = address;
     return *this;
 }
 
 bool IPAddress::operator==(const IPAddress& addr) const {
-    return addr._type == _type && std::equal(addr._address.begin(), addr._address.end(), _address.begin());
+    return (addr._type == _type)
+        && (memcmp(addr._address, _address, sizeof(_address)) == 0);
 }
 
 bool IPAddress::operator==(const uint8_t* addr) const
 {
     // IPv4 only comparison to byte pointer
     // Can't support IPv6 as we know our type, but not the length of the pointer
-    return _type == IPv4 && std::equal(_address.begin() + IPADDRESS_V4_BYTES_INDEX, _address.end(), addr);
+    return _type == IPv4 && memcmp(addr, &_address[IPADDRESS_V4_BYTES_INDEX], sizeof(uint32_t)) == 0;
 }
 
 uint8_t IPAddress::operator[](int index) const {

@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <array>
 #include <stdint.h>
 #include "Printable.h"
 #include "String.h"
@@ -42,14 +41,14 @@ enum IPType {
 
 class IPAddress : public Printable {
 private:
-    alignas(alignof(uint32_t)) std::array<uint8_t, 16> _address{};
+    alignas(alignof(uint32_t)) uint8_t _address[16]{};
     IPType _type{IPv4};
 
     // Access the raw byte array containing the address.  Because this returns a pointer
     // to the internal structure rather than a copy of the address this function should only
     // be used when you know that the usage of the returned uint8_t* will be transient and not
     // stored.
-    uint8_t* raw_address() { return _type == IPv4 ? &_address[IPADDRESS_V4_BYTES_INDEX] : _address.data(); }
+    uint8_t* raw_address() { return _type == IPv4 ? &_address[IPADDRESS_V4_BYTES_INDEX] : _address; }
 
 public:
     // Constructors
