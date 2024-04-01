@@ -9,11 +9,12 @@ extern "C"{
 void yield(void);
 
 typedef enum {
-  LOW     = 0,
-  HIGH    = 1,
-  CHANGE  = 2,
-  FALLING = 3,
-  RISING  = 4,
+  LOW       = 0,
+  HIGH      = 1,
+  CHANGE    = 2,
+  FALLING   = 3,
+  RISING    = 4,
+  UNDEFINED = 5,
 } PinStatus;
 
 typedef enum {
