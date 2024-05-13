@@ -8,7 +8,7 @@
 
 #include <catch.hpp>
 
-#include <Print.h>
+#include <api/Print.h>
 
 #include <PrintMock.h>
 #include <PrintableMock.h>
@@ -110,12 +110,24 @@ TEST_CASE ("Print::print(unsigned long long, int = DEC|HEX|OCT|BIN)", "[Print-pr
 {
   PrintMock mock;
 
-  unsigned long long const val = 17;
+  GIVEN("a value of zero ...")
+  {
+    unsigned long long const val = 0;
 
-  WHEN("DEC") { mock.print(val, DEC); REQUIRE(mock._str  == "17"); }
-  WHEN("HEX") { mock.print(val, HEX); REQUIRE(mock._str  == "11"); }
-  WHEN("OCT") { mock.print(val, OCT); REQUIRE(mock._str  == "21"); }
-  WHEN("BIN") { mock.print(val, BIN); REQUIRE(mock._str  == "10001"); }
+    WHEN("DEC") { mock.print(val, DEC); REQUIRE(mock._str  == "0"); }
+    WHEN("HEX") { mock.print(val, HEX); REQUIRE(mock._str  == "0"); }
+    WHEN("OCT") { mock.print(val, OCT); REQUIRE(mock._str  == "0"); }
+    WHEN("BIN") { mock.print(val, BIN); REQUIRE(mock._str  == "0"); }
+  }
+  GIVEN("a non-zero value ...")
+  {
+    unsigned long long const val = 17;
+
+    WHEN("DEC") { mock.print(val, DEC); REQUIRE(mock._str  == "17"); }
+    WHEN("HEX") { mock.print(val, HEX); REQUIRE(mock._str  == "11"); }
+    WHEN("OCT") { mock.print(val, OCT); REQUIRE(mock._str  == "21"); }
+    WHEN("BIN") { mock.print(val, BIN); REQUIRE(mock._str  == "10001"); }
+  }
 }
 
 TEST_CASE ("Print::print(double, int = 2)", "[Print-print-10]")

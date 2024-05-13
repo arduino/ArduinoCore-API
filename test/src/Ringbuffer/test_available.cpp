@@ -8,7 +8,7 @@
 
 #include <catch.hpp>
 
-#include <RingBuffer.h>
+#include <api/RingBuffer.h>
 
 /**************************************************************************************
  * TEST CODE

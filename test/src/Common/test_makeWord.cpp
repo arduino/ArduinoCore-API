@@ -8,7 +8,7 @@
 
 #include <catch.hpp>
 
-#include <Common.h>
+#include <api/Common.h>
 
 /**************************************************************************************
  * TEST CODE

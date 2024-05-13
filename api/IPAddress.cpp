@@ -94,6 +94,33 @@ IPAddress::IPAddress(const char *address)
     fromString(address);
 }
 
+String IPAddress::toString4() const
+{
+    char szRet[16];
+    snprintf(szRet, sizeof(szRet), "%u.%u.%u.%u", _address.bytes[IPADDRESS_V4_BYTES_INDEX], _address.bytes[IPADDRESS_V4_BYTES_INDEX + 1], _address.bytes[IPADDRESS_V4_BYTES_INDEX + 2], _address.bytes[IPADDRESS_V4_BYTES_INDEX + 3]);
+    return String(szRet);
+}
+
+String IPAddress::toString6() const
+{
+    char szRet[40];
+    snprintf(szRet, sizeof(szRet), "%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x",
+            _address.bytes[0], _address.bytes[1], _address.bytes[2], _address.bytes[3],
+            _address.bytes[4], _address.bytes[5], _address.bytes[6], _address.bytes[7],
+            _address.bytes[8], _address.bytes[9], _address.bytes[10], _address.bytes[11],
+            _address.bytes[12], _address.bytes[13], _address.bytes[14], _address.bytes[15]);
+    return String(szRet);
+}
+
+String IPAddress::toString() const
+{
+    if (_type == IPv4) {
+        return toString4();
+    } else {
+        return toString6();
+    }
+}
+
 bool IPAddress::fromString(const char *address) {
     if (!fromString4(address)) {
         return fromString6(address);

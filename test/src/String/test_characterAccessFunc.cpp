@@ -8,7 +8,7 @@
 
 #include <catch.hpp>
 
-#include <String.h>
+#include <api/String.h>
 
 #include "StringPrinter.h"
 
@@ -45,10 +45,11 @@ TEST_CASE ("Testing String::getBytes(unsigned char, unsigned int, unsigned int)"
 
   WHEN("Valid operation") {
     arduino::String str("Hello");
-    unsigned char buf[2];
+    unsigned char buf[3];
     str.getBytes(buf, 5, 3);
     REQUIRE(buf[0] == 'l');
     REQUIRE(buf[1] == 'o');
+    REQUIRE(buf[2] == '\0');
   }
 }
 

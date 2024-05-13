@@ -8,7 +8,7 @@
 
 #include <catch.hpp>
 
-#include <Common.h>
+#include <api/Common.h>
 
 /**************************************************************************************
  * TEST CODE
@@ -53,7 +53,7 @@ TEST_CASE ("Calling 'max(a,b)' with type(a) != type(b)", "[max-04]")
   {
     uint32_t const a = 32;
     uint64_t const b = 10;
-    REQUIRE(typeid(max(a,b)) == typeid(unsigned long));
+    REQUIRE(typeid(max(a,b)) == typeid(uint64_t));
   }
   WHEN("type(A) = int8_t, type(b) = int16_t")
   {
@@ -71,6 +71,6 @@ TEST_CASE ("Calling 'max(a,b)' with type(a) != type(b)", "[max-04]")
   {
     int32_t const a = -32;
     int64_t const b = -10;
-    REQUIRE(typeid(max(a,b)) == typeid(long));
+    REQUIRE(typeid(max(a,b)) == typeid(int64_t));
   }
 }

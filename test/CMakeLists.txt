@@ -8,7 +8,7 @@ project(test-ArduinoCore-API)
 
 ##########################################################################
 
-include_directories(../api)
+include_directories(..)
 include_directories(include)
 include_directories(external/catch/v2.13.9/include)
 
@@ -25,10 +25,20 @@ set(TEST_TARGET ${CMAKE_PROJECT_NAME})
 ##########################################################################
 
 set(TEST_SRCS
+  src/CanMsg/test_CanMsg.cpp
+  src/CanMsg/test_CanMsg_CopyCtor.cpp
+  src/CanMsg/test_CanExtendedId.cpp
+  src/CanMsg/test_CanStandardId.cpp
+  src/CanMsg/test_isExtendedId.cpp
+  src/CanMsg/test_isStandardId.cpp
+  src/CanMsg/test_operator_assignment.cpp
+  src/CanMsg/test_printTo.cpp
+  src/CanMsgRingbuffer/test_available.cpp
   src/Common/test_makeWord.cpp
   src/Common/test_map.cpp
   src/Common/test_max.cpp
   src/Common/test_min.cpp
+  src/IPAddress/test_toString.cpp
   src/IPAddress/test_fromString.cpp
   src/IPAddress/test_fromString6.cpp
   src/IPAddress/test_IPAddress.cpp
@@ -94,6 +104,8 @@ set(TEST_SRCS
 )
 
 set(TEST_DUT_SRCS
+  ../api/CanMsg.cpp
+  ../api/CanMsgRingbuffer.cpp
   ../api/Common.cpp
   ../api/IPAddress.cpp
   ../api/String.cpp
@@ -120,8 +132,8 @@ add_compile_definitions(HOST)
 add_compile_options(-Wall -Wextra -Wpedantic -Werror)
 add_compile_options(-Wno-cast-function-type)
 
-set(CMAKE_C_FLAGS   ${CMAKE_C_FLAGS}   "--coverage")
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "--coverage -Wno-deprecated-copy")
+set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} --coverage")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage -Wno-deprecated-copy")
 
 ##########################################################################
 

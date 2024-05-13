@@ -30,7 +30,9 @@
 #include <inttypes.h>
 
 #define PROGMEM
+#define __ATTR_PROGMEM__ 
 #define PGM_P  const char *
+#define PGM_VOID_P const void *
 #define PSTR(str) (str)
 
 #define _SFR_BYTE(n) (n)

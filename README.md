@@ -13,6 +13,7 @@ As of now, the following official cores are utilising ArduinoCore-API:
 * [megaavr](https://github.com/arduino/ArduinoCore-megaAVR)
 * [mbed](https://github.com/arduino/ArduinoCore-mbed)
 * [samd](https://github.com/arduino/ArduinoCore-samd)
+* [renesas](https://github.com/arduino/ArduinoCore-renesas)
 
 There's an ongoing effort to port the others, while maintainers of third-party cores are strongly invited to follow the same route in order to stay up-to-date with the new language features. For backwards compatibility, every revision of this repo will increase the `ARDUINO_API_VERSION` define.
 
@@ -76,6 +77,8 @@ In order to compile a core which is implementing ArduinoCore-API you'll need to 
 ```bash
 tar --exclude='*.git*' -cjhvf $yourcore-$version.tar.bz2 $yourcore/
 ```
+
+The API is coded to the C++11 standard and the core's compiler must be able to support that version of the language.
 
 Documentation for how to integrate with a Arduino core (which is necessary if you do not download the Arduino core via the Boards Manager) can be found here:
 * [ArduinoCore-megaavr](https://github.com/arduino/ArduinoCore-megaavr#developing)

@@ -77,7 +77,7 @@ void RingBufferN<N>::store_char( uint8_t c )
   {
     _aucBuffer[_iHead] = c ;
     _iHead = nextIndex(_iHead);
-    _numElems++;
+    _numElems = _numElems + 1;
   }
 }
 
@@ -97,7 +97,7 @@ int RingBufferN<N>::read_char()
 
   uint8_t value = _aucBuffer[_iTail];
   _iTail = nextIndex(_iTail);
-  _numElems--;
+  _numElems = _numElems - 1;
 
   return value;
 }

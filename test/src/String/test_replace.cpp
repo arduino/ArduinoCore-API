@@ -8,7 +8,7 @@
 
 #include <catch.hpp>
 
-#include <String.h>
+#include <api/String.h>
 
 #include "StringPrinter.h"
 
@@ -65,4 +65,25 @@ TEST_CASE ("Testing String::replace(String, String) substr 'find' smaller than '
   arduino::String str("Hello Arduino!");
   str.replace(arduino::String("ll"), arduino::String("111"));
   REQUIRE(str == "He111o Arduino!");
+}
+
+TEST_CASE ("Testing String::replace(String, String) substr 'find' smaller than 'replace' multiple occurencies", "[String-replace-08]")
+{
+  arduino::String str("Hello Arduino! Hello, Hello, Hello");
+  str.replace(arduino::String("ll"), arduino::String("lll"));
+  REQUIRE(str == "Helllo Arduino! Helllo, Helllo, Helllo");
+}
+
+TEST_CASE ("Testing String::replace(String, String) substr 'find' same length as 'replace' multiple occurencies", "[String-replace-09]")
+{
+  arduino::String str("Hello Arduino! Hello, Hello, Hello");
+  str.replace(arduino::String("ll"), arduino::String("11"));
+  REQUIRE(str == "He11o Arduino! He11o, He11o, He11o");
+}
+
+TEST_CASE ("Testing String::replace(String, String) substr 'find' larger than 'replace' multiple occurencies", "[String-replace-10]")
+{
+  arduino::String str("Helllo Arduino! Helllo, Helllo, Helllo");
+  str.replace(arduino::String("lll"), arduino::String("ll"));
+  REQUIRE(str == "Hello Arduino! Hello, Hello, Hello");
 }

@@ -8,7 +8,7 @@
 
 #include <catch.hpp>
 
-#include <Common.h>
+#include <api/Common.h>
 
 /**************************************************************************************
  * TEST CODE
@@ -53,7 +53,7 @@ TEST_CASE ("Calling 'min(a,b)' with type(a) != type(b)", "[min-04]")
   {
     uint32_t const a = 32;
     uint64_t const b = 10;
-    REQUIRE(typeid(min(a,b)) == typeid(unsigned long));
+    REQUIRE(typeid(min(a,b)) == typeid(uint64_t));
   }
   WHEN("type(A) = int8_t, type(b) = int16_t")
   {
@@ -71,6 +71,6 @@ TEST_CASE ("Calling 'min(a,b)' with type(a) != type(b)", "[min-04]")
   {
     int32_t const a = -32;
     int64_t const b = -10;
-    REQUIRE(typeid(min(a,b)) == typeid(long));
+    REQUIRE(typeid(min(a,b)) == typeid(int64_t));
   }
 }

@@ -11,7 +11,7 @@
 
 #include <deque>
 
-#include <Stream.h>
+#include <api/Stream.h>
 
 /**************************************************************************************
  * CLASS DECLARATION
