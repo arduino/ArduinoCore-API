@@ -61,6 +61,8 @@ class Stream : public Print
     virtual int read() = 0;
     virtual int peek() = 0;
 
+    virtual void clear(); // clears the receive buffer
+
     Stream() {_timeout=1000;}
 
 // parsing methods
