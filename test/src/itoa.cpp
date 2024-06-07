@@ -1,62 +1,123 @@
 /*
- * Copyright (c) 2020 Arduino.  All rights reserved.
- */
+  Copyright (c) 2014 Arduino LLC.  All right reserved.
 
-/**************************************************************************************
- * INCLUDE
- **************************************************************************************/
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
 
-#include <api/itoa.h>
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  See the GNU Lesser General Public License for more details.
 
-#include <string>
-#include <stdexcept>
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
 
-#include <stdio.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-/**************************************************************************************
- * FUNCTION IMPLEMENTATION
- **************************************************************************************/
-
-std::string radixToFmtString(int const radix)
+char* ltoa( long value, char *string, int radix )
 {
-  if      (radix == 8)  return std::string("%o");
-  else if (radix == 10) return std::string("%d");
-  else if (radix == 16) return std::string("%X");
-  else throw std::runtime_error("Invalid radix.");
+  char tmp[33];
+  char *tp = tmp;
+  unsigned long i;
+  unsigned long v;
+  int sign;
+  char *sp;
+
+  if ( string == nullptr )
+  {
+    return nullptr ;
+  }
+
+  if (radix > 36 || radix <= 1)
+  {
+    return nullptr ;
+  }
+
+  sign = (radix == 10 && value < 0);
+  if (sign)
+  {
+    v = -value;
+  }
+  else
+  {
+    v = (unsigned long)value;
+  }
+
+  while (v || tp == tmp)
+  {
+    i = v % radix;
+    v = v / radix;
+    if (i < 10)
+      *tp++ = static_cast<char>(i+'0');
+    else
+      *tp++ = static_cast<char>(i + 'a' - 10);
+  }
+
+  sp = string;
+
+  if (sign)
+    *sp++ = '-';
+  while (tp > tmp)
+    *sp++ = *--tp;
+  *sp = 0;
+
+  return string;
 }
 
-char * itoa(int value, char * str, int radix)
+char* ultoa( unsigned long value, char *string, int radix )
 {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-  sprintf(str, radixToFmtString(radix).c_str(), value);
-#pragma GCC diagnostic pop
-  return str;
+  char tmp[33];
+  char *tp = tmp;
+  unsigned long i;
+  unsigned long v = value;
+  char *sp;
+
+  if ( string == nullptr )
+  {
+    return nullptr;
+  }
+
+  if (radix > 36 || radix <= 1)
+  {
+    return nullptr;
+  }
+
+  while (v || tp == tmp)
+  {
+    i = v % radix;
+    v = v / radix;
+    if (i < 10)
+      *tp++ = static_cast<char>(i+'0');
+    else
+      *tp++ = static_cast<char>(i + 'a' - 10);
+  }
+
+  sp = string;
+
+
+  while (tp > tmp)
+    *sp++ = *--tp;
+  *sp = 0;
+
+  return string;
 }
 
-char * ltoa(long value, char * str, int radix)
+char* itoa( int value, char *string, int radix )
 {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-  sprintf(str, radixToFmtString(radix).c_str(), value);
-#pragma GCC diagnostic pop
-  return str;
+  return ltoa( value, string, radix ) ;
 }
 
-char * utoa(unsigned value, char *str, int radix)
+char* utoa( unsigned int value, char *string, int radix )
 {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-  sprintf(str, radixToFmtString(radix).c_str(), value);
-#pragma GCC diagnostic pop
-  return str;
+  return ultoa( value, string, radix ) ;
 }
 
-char * ultoa(unsigned long value, char * str, int radix)
-{
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-  sprintf(str, radixToFmtString(radix).c_str(), value);
-#pragma GCC diagnostic pop
-  return str;
-}
+#ifdef __cplusplus
+} // extern "C"
+#endif
