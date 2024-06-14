@@ -29,6 +29,15 @@ typedef enum {
   MSBFIRST = 1,
 } BitOrder;
 
+typedef enum {
+  AR_DEFAULT,
+  AR_INTERNAL,
+  AR_EXTERNAL,
+  AR_INTERNAL1V0,
+  AR_INTERNAL1V65,
+  AR_INTERNAL2V23
+} AnalogReference;
+
 #define PI          3.1415926535897932384626433832795
 #define HALF_PI     1.5707963267948966192313216916398
 #define TWO_PI      6.283185307179586476925286766559
@@ -97,7 +106,7 @@ void pinMode(pin_size_t pinNumber, PinMode pinMode);
 void digitalWrite(pin_size_t pinNumber, PinStatus status);
 PinStatus digitalRead(pin_size_t pinNumber);
 int analogRead(pin_size_t pinNumber);
-void analogReference(uint8_t mode);
+void analogReference(AnalogReference mode);
 void analogWrite(pin_size_t pinNumber, int value);
 
 unsigned long millis(void);
