@@ -71,6 +71,7 @@ set(TEST_SRCS
   src/Stream/test_parseInt.cpp
   src/Stream/test_readBytes.cpp
   src/Stream/test_readBytesUntil.cpp
+  src/Stream/test_readLine.cpp
   src/Stream/test_readString.cpp
   src/Stream/test_readStringUntil.cpp
   src/Stream/test_setTimeout.cpp
@@ -83,6 +84,7 @@ set(TEST_SRCS
   src/String/test_indexOf.cpp
   src/String/test_lastIndexOf.cpp
   src/String/test_length.cpp
+  src/String/test_insert.cpp
   src/String/test_move.cpp
   src/String/test_remove.cpp
   src/String/test_replace.cpp

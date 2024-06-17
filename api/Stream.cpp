@@ -255,6 +255,14 @@ String Stream::readStringUntil(char terminator)
   return ret;
 }
 
+String Stream::readLine()
+{
+  String ret = readStringUntil('\n');
+  if (ret.endsWith("\r"))
+      ret.remove(ret.length()-1);
+  return ret;
+}
+
 int Stream::findMulti( struct Stream::MultiTarget *targets, int tCount) {
   // any zero length target string automatically matches and would make
   // a mess of the rest of the algorithm.
