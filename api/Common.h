@@ -58,20 +58,63 @@ typedef enum {
 #define SERIAL      0x0
 #define DISPLAY     0x1
 
-#ifndef constrain
-#define constrain(amt,low,high) ((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
+
+#ifdef __cplusplus
+} // extern "C"
+
+  template<class T, class U, class V>
+  auto constrain(const T& amt, const U& low, const V& high) -> decltype(amt < low ? low : (amt > high ? high : amt))
+  {
+      return amt < low ? low : (amt > high ? high : amt);
+  }
+
+  template<class T>
+  auto radians(const T& deg) -> decltype(deg * DEG_TO_RAD)
+  {
+      return deg * DEG_TO_RAD;
+  }
+
+  template<class T>
+  auto degrees(const T& rad) -> decltype(rad * RAD_TO_DEG)
+  {
+      return rad * RAD_TO_DEG;
+  }
+
+  template<class T>
+  auto sq(const T& x) -> decltype(x*x)
+  {
+      return x*x;
+  }
+#else
+  #ifndef constrain
+  #define constrain(amt,low,high) \
+   ({ __typeof__ (amt) _amt = (amt); \
+       __typeof__ (low) _low = (low); \
+       __typeof__ (high) _high = (high); \
+     _amt < _low ? _low : (_amt > _high ? _high :_amt); })
+  #endif
+
+  #ifndef radians
+  #define radians(deg) \
+    ({ __typeof__ (deg) _deg = deg; \
+     _deg * DEG_TO_RAD; })
+  #endif
+
+  #ifndef degrees
+  #define degrees(rad) \
+    ({ __typeof__ (rad) _rad = rad; \
+     _rad * RAD_TO_DEG; })
+  #endif
+
+  #ifndef sq
+  #define sq(x) \
+    ({ __typeof__ (x) _x = x; \
+     _x * _x; })
+  #endif
 #endif
 
-#ifndef radians
-#define radians(deg) ((deg)*DEG_TO_RAD)
-#endif
-
-#ifndef degrees
-#define degrees(rad) ((rad)*RAD_TO_DEG)
-#endif
-
-#ifndef sq
-#define sq(x) ((x)*(x))
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 typedef void (*voidFuncPtr)(void);
@@ -138,33 +181,31 @@ void loop(void);
 
 #ifdef __cplusplus
 } // extern "C"
-#endif
 
-#ifdef __cplusplus
-  template<class T, class L> 
+  template<class T, class L>
   auto min(const T& a, const L& b) -> decltype((b < a) ? b : a)
   {
     return (b < a) ? b : a;
   }
 
-  template<class T, class L> 
+  template<class T, class L>
   auto max(const T& a, const L& b) -> decltype((b < a) ? b : a)
   {
     return (a < b) ? b : a;
   }
 #else
-#ifndef min
-#define min(a,b) \
-   ({ __typeof__ (a) _a = (a); \
-       __typeof__ (b) _b = (b); \
-     _a < _b ? _a : _b; })
-#endif
-#ifndef max
-#define max(a,b) \
-   ({ __typeof__ (a) _a = (a); \
-       __typeof__ (b) _b = (b); \
-     _a > _b ? _a : _b; })
-#endif
+  #ifndef min
+  #define min(a,b) \
+     ({ __typeof__ (a) _a = (a); \
+         __typeof__ (b) _b = (b); \
+       _a < _b ? _a : _b; })
+  #endif
+  #ifndef max
+  #define max(a,b) \
+     ({ __typeof__ (a) _a = (a); \
+         __typeof__ (b) _b = (b); \
+       _a > _b ? _a : _b; })
+  #endif
 #endif
 
 #ifdef __cplusplus
