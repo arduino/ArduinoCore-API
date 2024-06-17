@@ -25,9 +25,15 @@
 extern "C"{
 #endif
 
+#ifdef __cplusplus
+  #define ARD_CHAR_ENUM_XWEZPiBoACuGnH : char
+#else
+  #define ARD_CHAR_ENUM_XWEZPiBoACuGnH __attribute__ ((__packed__))
+#endif
+
 void yield(void);
 
-typedef enum {
+typedef enum ARD_CHAR_ENUM_XWEZPiBoACuGnH{
   LOW     = 0,
   HIGH    = 1,
   CHANGE  = 2,
@@ -35,7 +41,7 @@ typedef enum {
   RISING  = 4,
 } PinStatus;
 
-typedef enum {
+typedef enum ARD_CHAR_ENUM_XWEZPiBoACuGnH{
   INPUT            = 0x0,
   OUTPUT           = 0x1,
   INPUT_PULLUP     = 0x2,
@@ -43,7 +49,7 @@ typedef enum {
   OUTPUT_OPENDRAIN = 0x4,
 } PinMode;
 
-typedef enum {
+typedef enum ARD_CHAR_ENUM_XWEZPiBoACuGnH{
   LSBFIRST = 0,
   MSBFIRST = 1,
 } BitOrder;
