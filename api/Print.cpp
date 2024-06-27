@@ -27,6 +27,11 @@
 using namespace arduino;
 
 // Public Methods //////////////////////////////////////////////////////////////
+#ifdef __VERY_MINIMAL_LIBC__
+// These functions should be implemented in the user code (C++)
+bool isnan(float x);
+bool isinf(float x);
+#endif
 
 /* default implementation: may be overridden */
 size_t Print::write(const uint8_t *buffer, size_t size)
