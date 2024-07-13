@@ -128,6 +128,35 @@ class Stream : public Print
 
 #undef NO_IGNORE_CHAR
 
+// Structure to store a value and a modifier.
+template <class T>
+struct Format {
+  T data;
+  int modifier;
+};
+
+// Helper function that creates a `Format` object.
+template <class T>
+Format<T> format(T const data, int const modifier) {
+  Format<T> fmt {data, modifier};
+  return fmt;
+}
+
+// Stream insertion operator for plain data types.
+template <class T>
+Stream& operator <<(Stream& stream, T const data) {
+  stream.print(data);
+  return stream;
+}
+
+// Stream insertion operator with modifiers (e.g., BIN, HEX, number of digits, etc.).
+template <class T>
+Stream& operator <<(Stream& stream, Format<T> const& parameters) {
+  stream.print(parameters.data, parameters.modifier);
+  return stream;
+}
+
 }
 
 using arduino::Stream;
+using arduino::operator <<;
