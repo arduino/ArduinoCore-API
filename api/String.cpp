@@ -747,4 +747,38 @@ double String::toDouble(void) const
 	return 0;
 }
 
+String String::fromUtf8ToEAscii(void) const
+{
+	/*
+     * references : 
+	 * https://www.ime.usp.br/~pf/algoritmos/apend/unicode.html
+     * https://www.utf8-chartable.de/unicode-utf8-table.pl
+     * https://bjoern.hoehrmann.de/utf-8/decoder/dfa/
+	 */
+    String eAsciiString;
+    for (uint8_t i=0; i< length(); i++)
+    {
+        uint8_t byteScope = (uint8_t)buffer[i];
+        if (byteScope < 0x7F)
+        {
+            eAsciiString += buffer[i];
+        }
+        else if (byteScope == 0xC3)
+        {
+            i++;
+            byteScope = (uint8_t)buffer[i];
+            if (byteScope > 0x7F)
+                eAsciiString += (char)(byteScope+0x40);
+        }
+        else if (byteScope == 0xC2)
+        {
+            i++;
+            byteScope = (uint8_t)buffer[i];
+            if (byteScope > 0x7F)
+                eAsciiString += (char)(byteScope);
+        }
+    }
+    return eAsciiString;
+}
+
 } // namespace arduino
