@@ -39,8 +39,34 @@ IPAddress::IPAddress(uint8_t o1, uint8_t o2, uint8_t o3, uint8_t o4, uint8_t o5,
 // IPv4 only
 IPAddress::IPAddress(uint32_t address) 
 {
-    uint32_t& addressRef = reinterpret_cast<uint32_t&>(_address[IPADDRESS_V4_BYTES_INDEX]);
-    addressRef = address;
+    memcpy(&_address[IPADDRESS_V4_BYTES_INDEX], &address, 4); // This method guarantees a defined behavior. Any pointer conversions to write to ADDRESS storage (as a multibyte integer) are undefined behavior when the lifetime of the multibyte type has not previously started.
+
+    // C++ standard draft [basic.life#7](https://eel.is/c++draft/basic.life#7)
+// Before the lifetime of an object has started but after the storage which the object 
+// will occupy has been allocated or, after the lifetime of an object has ended and 
+// before the storage which the object occupied is reused or released, any pointer that 
+// represents the address of the storage location where the object will be or was 
+// located may be used but only in limited ways. For an object under construction or 
+// destruction, see [class.cdtor]. Otherwise, such a pointer refers to allocated storage 
+// ([basic.stc.dynamic.allocation]), and using the pointer as if the pointer were of 
+// type void* is well-defined. Indirection through such a pointer is permitted but the 
+// resulting lvalue may only be used in limited ways, as described below. 
+// The program has undefined behavior if
+//  --the pointer is used as the operand of a delete-expression,
+//  --the pointer is used as the operand of a static_cast ([expr.static.cast]), except 
+//  when the conversion is to pointer to cv void, or to pointer to cv void and subsequently 
+//  to pointer to cv char, cv unsigned char, or cv std::byte ([cstddef.syn]), or
+
+    // C++ standard draft [basic.life#8](https://eel.is/c++draft/basic.life#8)
+// Similarly, before the lifetime of an object has started but after the storage which 
+// the object will occupy has been allocated or, after the lifetime of an object has 
+// ended and before the storage which the object occupied is reused or released, any 
+// glvalue that refers to the original object may be used but only in limited ways. 
+// For an object under construction or destruction, see [class.cdtor]. Otherwise, such 
+// a glvalue refers to allocated storage ([basic.stc.dynamic.allocation]), and using 
+// the properties of the glvalue that do not depend on its value is well-defined. 
+// The program has undefined behavior if
+//  -- the glvalue is used to access the object, or
 
     // NOTE on conversion/comparison and uint32_t:
     // These conversions are host platform dependent.
@@ -244,8 +270,7 @@ IPAddress& IPAddress::operator=(uint32_t address)
     // See note on conversion/comparison and uint32_t
     _type = IPv4;
     memset(_address, 0, sizeof(_address));
-    uint32_t& addressRef = reinterpret_cast<uint32_t&>(_address[IPADDRESS_V4_BYTES_INDEX]);
-    addressRef = address;
+    memcpy(&_address[IPADDRESS_V4_BYTES_INDEX], &address, 4); 
     return *this;
 }
 
