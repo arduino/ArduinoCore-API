@@ -52,7 +52,10 @@ private:
     // to the internal structure rather than a copy of the address this function should only
     // be used when you know that the usage of the returned uint8_t* will be transient and not
     // stored.
+    const uint8_t* raw_address() const { return _type == IPv4 ? &_address[IPADDRESS_V4_BYTES_INDEX] : _address; }
     uint8_t* raw_address() { return _type == IPv4 ? &_address[IPADDRESS_V4_BYTES_INDEX] : _address; }
+    // NOTE: If IPADDRESS_V4_BYTES_INDEX region can be initialized with a multibyte int, then a cast to unsigned char is required.
+
 
 public:
     // Constructors
@@ -80,8 +83,9 @@ public:
     //       The user is responsible for ensuring that the value is converted to BigEndian.
     operator uint32_t() const {
         uint32_t ret;
-        memcpy(&ret, &_address[IPADDRESS_V4_BYTES_INDEX], 4);
-        // NOTE: maybe use the placement-new for starting of the integer type lifetime in the storage when constructing an IPAddress?
+        memcpy(&ret, raw_address(), 4);
+        // NOTE: maybe use the placement-new (or standard initialisation of uint32_t since C++20)
+        // for starting of the integer type lifetime in the storage when constructing an IPAddress?
         // FIXME: need endianness checking? how do this with the arduino-api?
         return _type == IPv4 ? ret : 0;
     };

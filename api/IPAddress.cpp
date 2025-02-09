@@ -19,6 +19,8 @@
 
 #include "IPAddress.h"
 #include "Print.h"
+#include <cstdint>
+#include <new>
 
 using namespace arduino;
 
@@ -39,9 +41,40 @@ IPAddress::IPAddress(uint8_t o1, uint8_t o2, uint8_t o3, uint8_t o4, uint8_t o5,
 // IPv4 only
 IPAddress::IPAddress(uint32_t address) 
 {
-    memcpy(&_address[IPADDRESS_V4_BYTES_INDEX], &address, 4); // This method guarantees a defined behavior. Any pointer conversions to write to ADDRESS storage (as a multibyte integer) are undefined behavior when the lifetime of the multibyte type has not previously started.
+    // memcpy(raw_address(), &address, 4); // This method guarantees a defined behavior. 
+                                           // But lifetime started when:
+                                           // [basic.life#2] https://eel.is/c++draft/basic.life#2
+                                           //(2.1) -- storage with the proper alignment and size for type T is obtained, and
+                                           //(2.2) -- its initialization (if any) is complete (including vacuous initialization) ([dcl.init]),
+                                           //
+                                           // The statement: {#Any pointer conversions to write to ADDRESS storage (as a multibyte integer) 
+                                           // are undefined behavior when the lifetime of the multibyte type has not previously started.#} 
+                                           // only apply to c++17 and earlier. Since C++20 array of bytes implicitly creates the inner objects.
 
-    // C++ standard draft [basic.life#7](https://eel.is/c++draft/basic.life#7)
+// C++20: https://timsong-cpp.github.io/cppwp/n4861/intro.object#13
+// 13 An operation that begins the lifetime of an array of char, unsigned char, or std::byte implicitly creates objects within 
+// the region of storage occupied by the array. [ Note: The array object provides storage for these objects. — end note ]
+
+// C++23: https://timsong-cpp.github.io/cppwp/n4950/intro.object#13
+// 13 An operation that begins the lifetime of an array of unsigned char or std::byte implicitly creates objects within the 
+// region of storage occupied by the array.
+// [Note 5: The array object provides storage for these objects. — end note]
+
+// Current draft: https://eel.is/c++draft/intro.object#14
+// 14 Except during constant evaluation, an operation that begins the lifetime of an array of unsigned char or std::byte implicitly 
+// creates objects within the region of storage occupied by the array.
+// [Note 5: The array object provides storage for these objects. — end note]
+
+// *reinterpret_cast<uint32_t*>(_address[IPADDRESS_V4_BYTES_INDEX]) = address; // This valid initialization in the `_address` storage since C++20.
+                                                                            // now the pointer `_address[IPADDRESS_V4_BYTES_INDEX]` points to a multibyte int.
+
+    new (&_address[IPADDRESS_V4_BYTES_INDEX]) uint32_t (address); // But the new-expression is better for understanding and looks nicer (for trivial types, the 
+                                                                  // new expression only begins its lifetime and does not perform any other actions).
+    // NOTE: https://en.cppreference.com/w/cpp/language/new#Notes
+
+    // NOTE: new-expression and reinterpret_cast require alignment of the storage, but memcpy does not.
+
+// C++ standard draft [basic.life#7](https://eel.is/c++draft/basic.life#7)
 // Before the lifetime of an object has started but after the storage which the object 
 // will occupy has been allocated or, after the lifetime of an object has ended and 
 // before the storage which the object occupied is reused or released, any pointer that 
@@ -57,7 +90,7 @@ IPAddress::IPAddress(uint32_t address)
 //  when the conversion is to pointer to cv void, or to pointer to cv void and subsequently 
 //  to pointer to cv char, cv unsigned char, or cv std::byte ([cstddef.syn]), or
 
-    // C++ standard draft [basic.life#8](https://eel.is/c++draft/basic.life#8)
+// C++ standard draft [basic.life#8](https://eel.is/c++draft/basic.life#8)
 // Similarly, before the lifetime of an object has started but after the storage which 
 // the object will occupy has been allocated or, after the lifetime of an object has 
 // ended and before the storage which the object occupied is reused or released, any 
@@ -81,11 +114,8 @@ IPAddress::IPAddress(const uint8_t *address) : IPAddress(IPv4, address) {}
 
 IPAddress::IPAddress(IPType ip_type, const uint8_t *address) : _type(ip_type)
 {
-    if (ip_type == IPv4) {
-        memcpy(&_address[IPADDRESS_V4_BYTES_INDEX], address, sizeof(uint32_t));
-    } else {
-        memcpy(_address, address, sizeof(_address));
-    }
+    const size_t copy_size = (ip_type == IPv4) ? sizeof(uint32_t) : sizeof(_address);
+    memcpy(raw_address(), address, copy_size);
 }
 
 IPAddress::IPAddress(const char *address)
@@ -253,7 +283,7 @@ IPAddress& IPAddress::operator=(const uint8_t *address)
     _type = IPv4;
 
     memset(_address, 0, sizeof(_address));
-    memcpy(&_address[IPADDRESS_V4_BYTES_INDEX], address, sizeof(uint32_t));
+    memcpy(raw_address(), address, sizeof(uint32_t));
 
     return *this;
 }
@@ -270,7 +300,7 @@ IPAddress& IPAddress::operator=(uint32_t address)
     // See note on conversion/comparison and uint32_t
     _type = IPv4;
     memset(_address, 0, sizeof(_address));
-    memcpy(&_address[IPADDRESS_V4_BYTES_INDEX], &address, 4); 
+    new (raw_address()) uint32_t (address); // See the comments in corresponding constructor.
     return *this;
 }
 
@@ -283,21 +313,15 @@ bool IPAddress::operator==(const uint8_t* addr) const
 {
     // IPv4 only comparison to byte pointer
     // Can't support IPv6 as we know our type, but not the length of the pointer
-    return _type == IPv4 && memcmp(addr, &_address[IPADDRESS_V4_BYTES_INDEX], sizeof(uint32_t)) == 0;
+    return _type == IPv4 && memcmp(addr, raw_address(), sizeof(uint32_t)) == 0;
 }
 
 uint8_t IPAddress::operator[](int index) const {
-    if (_type == IPv4) {
-        return _address[IPADDRESS_V4_BYTES_INDEX + index];
-    }
-    return _address[index];
+    return *(raw_address() + index);
 }
 
 uint8_t& IPAddress::operator[](int index) {
-    if (_type == IPv4) {
-        return _address[IPADDRESS_V4_BYTES_INDEX + index];
-    }
-    return _address[index];
+    return *(raw_address() + index);
 }
 
 size_t IPAddress::printTo(Print& p) const
