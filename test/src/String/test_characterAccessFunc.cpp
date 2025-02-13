@@ -55,14 +55,14 @@ TEST_CASE ("Testing String::getBytes(unsigned char, unsigned int, unsigned int)"
   }
 }
 
-TEST_CASE ("Testing & String::operator[]", "[String-&operator[]-03]")
+TEST_CASE ("Testing & String::operator[]", "[String-&operator subscript-03]")
 {
   arduino::String str("Hello");
   str[0] = 'M';
   REQUIRE(str == "Mello");
 }
 
-TEST_CASE ("Testing & String::operator[] with invalid buffer", "[String-&operator[]-04]")
+TEST_CASE ("Testing & String::operator[] with invalid buffer", "[String-&operator subscript-04]")
 {
   char *buffer = NULL;
   arduino::String str(buffer);
