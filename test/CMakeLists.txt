@@ -112,6 +112,7 @@ set(TEST_SRCS
   src/WCharacter/test_isUpperCase.cpp
   src/WCharacter/test_isWhitespace.cpp
   src/WCharacter/test_toAscii.cpp
+  src/Interfaces/test_virtualDestructor.cpp
 )
 
 set(TEST_DUT_SRCS
