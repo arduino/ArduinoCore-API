@@ -34,6 +34,9 @@
   #define DEPRECATED(x)
 #endif
 
+void intToBinaryArray(unsigned char n, int *arr);
+unsigned char binaryArrayToInt(int *arr);
+
 enum {
   B0        DEPRECATED(0b0       ) = 0,
   B00       DEPRECATED(0b00      ) = 0,
