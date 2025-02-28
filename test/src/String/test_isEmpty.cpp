@@ -1,5 +1,7 @@
 /*
  * Copyright (c) 2023 Arduino.  All rights reserved.
+ *
+ * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
 /**************************************************************************************

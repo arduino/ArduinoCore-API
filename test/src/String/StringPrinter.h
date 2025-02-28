@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2020 Arduino.  All rights reserved.
+ *
+ * SPDX-License-Identifier: LGPL-2.1-or-later
+ */
+
 #pragma once
 
 #include <catch.hpp>
