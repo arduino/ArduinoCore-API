@@ -90,14 +90,14 @@ enum : error_t {
 };
 
 /* Error Codes:
- * In Arduino if a function returns 1 is considered to have run successfully,
- * any value different from 1 is considered an error.
+ * In Arduino if a function returns 0 is considered to have failed,
+ * while any value different from 0 is considered success.
  * Errors are generally represented with an int type that may vary in size depending on the platform.
  * For this reason in this representation error_t type is defined with an integer type with a defined size.
  */
 class ErrorCode {
 public:
-    constexpr ErrorCode(int value): error(value == 1? ArduinoSuccess : ArduinoError) {}
+    constexpr ErrorCode(int value): error(value != 0? ArduinoSuccess : ArduinoError) {}
     constexpr ErrorCode(error_t value): error(value) {}
     const error_t error;
 
