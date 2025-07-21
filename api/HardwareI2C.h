@@ -27,8 +27,8 @@ namespace arduino {
 class HardwareI2C : public Stream
 {
   public:
-    virtual void begin() = 0;
-    virtual void begin(uint8_t address) = 0;
+    virtual ErrorCode begin() = 0;
+    virtual ErrorCode begin(uint8_t address) = 0;
     virtual void end() = 0;
 
     virtual void setClock(uint32_t freq) = 0;

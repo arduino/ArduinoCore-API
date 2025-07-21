@@ -23,6 +23,7 @@
 
 #include <inttypes.h>
 #include "Print.h"
+#include "ErrorCodes.h"
 
 // compatibility macros for testing
 /*
