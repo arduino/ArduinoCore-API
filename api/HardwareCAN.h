@@ -54,7 +54,7 @@ namespace arduino
 class HardwareCAN
 {
 public:
-  virtual ~HardwareCAN() {}
+  virtual ~HardwareCAN() = default;
 
 
   /**
