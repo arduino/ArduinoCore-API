@@ -21,17 +21,17 @@ void StreamMock::operator << (char const * str)
 }
 
 size_t StreamMock::write(uint8_t ch)
-{ 
+{
   _stream.push_back(static_cast<char>(ch));
   return 1;
 }
 
-int StreamMock::available()
+arduino::ReturnValue StreamMock::available()
 {
   return _stream.size();
 }
 
-int StreamMock::read()
+arduino::ReturnValue StreamMock::read()
 {
   if (available() == 0)
     return -1;
@@ -44,7 +44,7 @@ int StreamMock::read()
   return c;
 }
 
-int StreamMock::peek()
+arduino::ReturnValue StreamMock::peek()
 {
   if (available() == 0)
     return -1;
