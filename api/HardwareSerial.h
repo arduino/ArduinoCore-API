@@ -92,8 +92,8 @@ class HardwareSerial : public Stream
     virtual ErrorCode begin(unsigned long baudrate, uint16_t config) = 0;
     virtual void end() = 0;
     virtual int available(void) = 0;
-    virtual int peek(void) = 0;
-    virtual int read(void) = 0;
+    virtual ReturnValue peek(void) = 0;
+    virtual ReturnValue read(void) = 0;
     virtual void flush(void) = 0;
     virtual size_t write(uint8_t) = 0;
     using Print::write; // pull in write(str) and write(buf, size) from Print
