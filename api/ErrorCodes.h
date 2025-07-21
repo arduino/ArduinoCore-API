@@ -7,7 +7,7 @@ typedef int_fast32_t error_t;
 
 enum : error_t {
     ArduinoSuccess  = 0,
-    ArduinoError    = 1,
+    ArduinoError    = -1,
 
     // TODO better names
     ArduinoEPERM           = -1,                /**< Not owner */
