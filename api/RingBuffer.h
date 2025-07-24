@@ -1,5 +1,4 @@
 /*
-  RingBuffer.h - Ring buffer implementation
   Copyright (c) 2014 Arduino.  All right reserved.
 
   This library is free software; you can redistribute it and/or
@@ -9,8 +8,8 @@
 
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  See the GNU Lesser General Public License for more details.
 
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
@@ -56,7 +55,7 @@ class RingBufferN
 
   private:
     int nextIndex(int index);
-    inline bool isEmpty() const { return (_numElems == 0); }
+    inline bool isEmpty() const { return (0 == available()); }
 };
 
 typedef RingBufferN<SERIAL_BUFFER_SIZE> RingBuffer;
