@@ -1,5 +1,4 @@
 /*
-  RingBuffer.h - Ring buffer implementation
   Copyright (c) 2014 Arduino.  All right reserved.
 
   This library is free software; you can redistribute it and/or
@@ -9,8 +8,8 @@
 
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  See the GNU Lesser General Public License for more details.
 
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
@@ -37,10 +36,12 @@ template <int N>
 class RingBufferN
 {
   public:
-    uint8_t _aucBuffer[N] ;
+    uint8_t _aucBuffer[N + 1] ; // we need one extra byte for the empty/full distinction
     volatile int _iHead ;
     volatile int _iTail ;
-    volatile int _numElems;
+    // Instead of using a counter, we use the head and tail markers to determine the number of elements
+    // this makes it thread-safe, as the head and tail are only modified by one thread 
+    //volatile int _numElems;
 
   public:
     RingBufferN( void ) ;
@@ -54,7 +55,7 @@ class RingBufferN
 
   private:
     int nextIndex(int index);
-    inline bool isEmpty() const { return (_numElems == 0); }
+    inline bool isEmpty() const { return (_iHead == _iTail); }
 };
 
 typedef RingBufferN<SERIAL_BUFFER_SIZE> RingBuffer;
@@ -63,7 +64,7 @@ typedef RingBufferN<SERIAL_BUFFER_SIZE> RingBuffer;
 template <int N>
 RingBufferN<N>::RingBufferN( void )
 {
-    memset( _aucBuffer, 0, N ) ;
+    memset( _aucBuffer, 0, N + 1) ;
     clear();
 }
 
@@ -78,7 +79,7 @@ void RingBufferN<N>::store_char( uint8_t c )
   {
     _aucBuffer[_iHead] = c ;
     _iHead = nextIndex(_iHead);
-    _numElems = _numElems + 1;
+    //_numElems++;
   }
 }
 
@@ -87,7 +88,7 @@ void RingBufferN<N>::clear()
 {
   _iHead = 0;
   _iTail = 0;
-  _numElems = 0;
+  //_numElems = 0;
 }
 
 template <int N>
@@ -98,7 +99,7 @@ int RingBufferN<N>::read_char()
 
   uint8_t value = _aucBuffer[_iTail];
   _iTail = nextIndex(_iTail);
-  _numElems = _numElems - 1;
+  //_numElems--;
 
   return value;
 }
@@ -106,13 +107,16 @@ int RingBufferN<N>::read_char()
 template <int N>
 int RingBufferN<N>::available()
 {
-  return _numElems;
+  return ((_iHead >= _iTail) ?  _iHead - _iTail : (N - _iTail + 1 + _iHead));
+  // return _numElems;
 }
 
 template <int N>
 int RingBufferN<N>::availableForStore()
 {
-  return (N - _numElems);
+  return (N - available());
+  // return ((_iHead >= _iTail) ?  N - (_iHead - _iTail) : (_iTail - 1 - _iHead));
+  // return (N - _numElems);
 }
 
 template <int N>
@@ -127,13 +131,14 @@ int RingBufferN<N>::peek()
 template <int N>
 int RingBufferN<N>::nextIndex(int index)
 {
-  return (uint32_t)(index + 1) % N;
+  return (uint32_t)(index + 1) % (N + 1);
 }
 
 template <int N>
 bool RingBufferN<N>::isFull()
 {
-  return (_numElems == N);
+  return (0 == availableForStore());
+  // return (_numElems == N);
 }
 
 }
