@@ -55,7 +55,7 @@ class RingBufferN
 
   private:
     int nextIndex(int index);
-    inline bool isEmpty() const { return (_iHead == iTail); }
+    inline bool isEmpty() const { return (_iHead == _iTail); }
 };
 
 typedef RingBufferN<SERIAL_BUFFER_SIZE> RingBuffer;
