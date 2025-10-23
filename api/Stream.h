@@ -23,6 +23,7 @@
 
 #include <inttypes.h>
 #include "Print.h"
+#include "ErrorCodes.h"
 
 // compatibility macros for testing
 /*
@@ -57,9 +58,9 @@ class Stream : public Print
     int peekNextDigit(LookaheadMode lookahead, bool detectDecimal); // returns the next numeric digit in the stream or -1 if timeout
 
   public:
-    virtual int available() = 0;
-    virtual int read() = 0;
-    virtual int peek() = 0;
+    virtual ReturnValue available() = 0;
+    virtual ReturnValue read() = 0;
+    virtual ReturnValue peek() = 0;
 
     Stream() {_timeout=1000;}
 
@@ -67,7 +68,7 @@ class Stream : public Print
 
   void setTimeout(unsigned long timeout);  // sets maximum milliseconds to wait for stream data, default is 1 second
   unsigned long getTimeout(void) { return _timeout; }
-  
+
   bool find(const char *target);   // reads data from the stream until the target string is found
   bool find(const uint8_t *target) { return find ((const char *)target); }
   // returns true if target string is found, false if timed out (see setTimeout)

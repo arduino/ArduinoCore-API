@@ -26,6 +26,7 @@
 
 #include "CanMsg.h"
 #include "CanMsgRingbuffer.h"
+#include "ErrorCodes.h"
 
 /**************************************************************************************
  * TYPEDEF
@@ -53,7 +54,7 @@ namespace arduino
 class HardwareCAN
 {
 public:
-  virtual ~HardwareCAN() {}
+  virtual ~HardwareCAN() = default;
 
 
   /**
@@ -62,7 +63,7 @@ public:
    * @param can_bitrate the bus bit rate
    * @return true if initialization succeeded and the controller is operational
    */
-  virtual bool begin(CanBitRate const can_bitrate) = 0;
+  virtual ErrorCode begin(CanBitRate const can_bitrate) = 0;
 
   /**
    * Disable the CAN controller.

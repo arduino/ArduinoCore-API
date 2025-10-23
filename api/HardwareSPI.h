@@ -135,7 +135,7 @@ class HardwareSPI
     virtual void attachInterrupt() = 0;
     virtual void detachInterrupt() = 0;
 
-    virtual void begin() = 0;
+    virtual ErrorCode begin() = 0;
     virtual void end() = 0;
 };
 

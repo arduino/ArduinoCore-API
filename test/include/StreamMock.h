@@ -26,9 +26,9 @@ public:
   void operator << (char const * str);
 
   virtual size_t write(uint8_t ch) override;
-  virtual int available() override;
-  virtual int read() override;
-  virtual int peek() override;
+  arduino::ReturnValue available() override;
+  arduino::ReturnValue read() override;
+  arduino::ReturnValue peek() override;
 
 private:
   std::deque<char> _stream;
