@@ -93,7 +93,7 @@ typedef void (*voidFuncPtrParam)(void*);
 #endif
 
 /* TODO: request for removal */
-typedef bool      boolean;
+typedef bool      boolean __attribute__((deprecated));
 typedef uint8_t   byte;
 typedef uint16_t  word;
 
@@ -141,13 +141,13 @@ void loop(void);
 #endif
 
 #ifdef __cplusplus
-  template<class T, class L> 
+  template<class T, class L>
   auto min(const T& a, const L& b) -> decltype((b < a) ? b : a)
   {
     return (b < a) ? b : a;
   }
 
-  template<class T, class L> 
+  template<class T, class L>
   auto max(const T& a, const L& b) -> decltype((b < a) ? b : a)
   {
     return (a < b) ? b : a;
