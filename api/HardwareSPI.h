@@ -27,7 +27,7 @@
 
 namespace arduino {
 
-typedef enum {
+typedef enum ARD_CHAR_ENUM_XWEZPiBoACuGnH {
   SPI_MODE0 = 0,
   SPI_MODE1 = 1,
   SPI_MODE2 = 2,

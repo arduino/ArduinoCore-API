@@ -39,7 +39,7 @@ namespace arduino {
 // This enumeration provides the lookahead options for parseInt(), parseFloat()
 // The rules set out here are used until either the first valid character is found
 // or a time out occurs due to lack of input.
-enum LookaheadMode{
+enum LookaheadMode: uint8_t {
     SKIP_ALL,       // All invalid characters are ignored.
     SKIP_NONE,      // Nothing is skipped, and the stream is not touched unless the first waiting character is valid.
     SKIP_WHITESPACE // Only tabs, spaces, line feeds & carriage returns are skipped.
