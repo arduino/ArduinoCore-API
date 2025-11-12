@@ -47,8 +47,8 @@ template<typename T> void attachInterrupt(pin_size_t interruptNum, voidTemplateF
   // TODO: add structure to delete(__container__) when detachInterrupt() is called
   auto f = [](void* a) -> void
   {
-    T param = *(T*)((struct __container__<T>*)a)->param;
-    (((struct __container__<T>*)a)->function)(param);
+    T funcparam = *(T*)((struct __container__<T>*)a)->param;
+    (((struct __container__<T>*)a)->function)(funcparam);
   };
 
   attachInterruptParam(interruptNum, f, mode, cont);
