@@ -26,6 +26,12 @@
 
 #include <float.h>
 
+#ifdef __VERY_MINIMAL_LIBC__
+// These functions should be implemented in the user code (C++)
+long atol(char* c);
+float atof(char* c);
+#endif
+
 namespace arduino {
 
 /*********************************************/
