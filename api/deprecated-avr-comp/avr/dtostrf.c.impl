@@ -29,12 +29,9 @@
 char *dtostrf (double val, signed char width, unsigned char prec, char *sout) {
   asm(".global _printf_float");
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
   char fmt[20];
   sprintf(fmt, "%%%d.%df", width, prec);
   sprintf(sout, fmt, val);
   return sout;
-#pragma GCC diagnostic pop
 }
 
