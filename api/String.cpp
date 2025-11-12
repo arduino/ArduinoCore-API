@@ -625,6 +625,18 @@ String String::substring(unsigned int left, unsigned int right) const
 /*  Modification                             */
 /*********************************************/
 
+void String::insert(const String &str, unsigned int index, unsigned int length)
+{
+    if (index > len) return;
+    length = length < str.len ? length : str.len;
+    unsigned int size = len + length;
+    if (size > capacity && !reserve(size)) return; // XXX: tell user!
+    memmove(buffer + index + length, buffer + index, len - index + 1);
+    memcpy(buffer + index, str.buffer, length);
+    len += length;
+    return;
+}
+
 void String::replace(char find, char replace)
 {
 	if (!buffer) return;
