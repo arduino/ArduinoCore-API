@@ -55,9 +55,9 @@ class SPISettings {
 
   SPISettings(uint32_t clock, BitOrder bitOrder, int dataMode, SPIBusMode busMode = SPI_CONTROLLER) {
     if (__builtin_constant_p(clock)) {
-      init_AlwaysInline(clock, bitOrder, (SPIMode)dataMode, busMode);
+      init_AlwaysInline(clock, bitOrder, static_cast<SPIMode>(dataMode), busMode);
     } else {
-      init_MightInline(clock, bitOrder, (SPIMode)dataMode, busMode);
+      init_MightInline(clock, bitOrder, static_cast<SPIMode>(dataMode), busMode);
     }
   }
 

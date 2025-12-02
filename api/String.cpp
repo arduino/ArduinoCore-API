@@ -175,7 +175,7 @@ bool String::reserve(unsigned int size)
 
 bool String::changeBuffer(unsigned int maxStrLen)
 {
-	char *newbuffer = (char *)realloc(buffer, maxStrLen + 1);
+	char *newbuffer = static_cast<char *>(realloc(buffer, maxStrLen + 1));
 	if (newbuffer) {
 		buffer = newbuffer;
 		capacity = maxStrLen;
@@ -207,7 +207,7 @@ String & String::copy(const __FlashStringHelper *pstr, unsigned int length)
 		return *this;
 	}
 	len = length;
-	strcpy_P(buffer, (PGM_P)pstr);
+	strcpy_P(buffer, reinterpret_cast<PGM_P>(pstr));
 	return *this;
 }
 
@@ -253,7 +253,7 @@ String & String::operator = (const char *cstr)
 
 String & String::operator = (const __FlashStringHelper *pstr)
 {
-	if (pstr) copy(pstr, strlen_P((PGM_P)pstr));
+	if (pstr) copy(pstr, strlen_P(reinterpret_cast<PGM_P>(pstr)));
 	else invalidate();
 
 	return *this;
@@ -343,11 +343,11 @@ bool String::concat(double num)
 bool String::concat(const __FlashStringHelper * str)
 {
 	if (!str) return false;
-	int length = strlen_P((const char *) str);
+	int length = strlen_P(reinterpret_cast<const char*>(str));
 	if (length == 0) return true;
 	unsigned int newlen = len + length;
 	if (!reserve(newlen)) return false;
-	strcpy_P(buffer + len, (const char *) str);
+	strcpy_P(buffer + len, reinterpret_cast<const char*>(str));
 	len = newlen;
 	return true;
 }
@@ -440,8 +440,8 @@ StringSumHelper & operator + (const StringSumHelper &lhs, const __FlashStringHel
 int String::compareTo(const String &s) const
 {
 	if (!buffer || !s.buffer) {
-		if (s.buffer && s.len > 0) return 0 - *(unsigned char *)s.buffer;
-		if (buffer && len > 0) return *(unsigned char *)buffer;
+		if (s.buffer && s.len > 0) return 0 - *(reinterpret_cast<unsigned char *>(s.buffer));
+		if (buffer && len > 0) return *(reinterpret_cast<unsigned char *>(buffer));
 		return 0;
 	}
 	return strcmp(buffer, s.buffer);
@@ -450,8 +450,8 @@ int String::compareTo(const String &s) const
 int String::compareTo(const char *cstr) const
 {
 	if (!buffer || !cstr) {
-		if (cstr && *cstr) return 0 - *(unsigned char *)cstr;
-		if (buffer && len > 0) return *(unsigned char *)buffer;
+		if (cstr && *cstr) return 0 - *(const_cast<unsigned char *>(reinterpret_cast<const unsigned char*>(cstr)));
+		if (buffer && len > 0) return *(reinterpret_cast<unsigned char *>(buffer));
 		return 0;
 	}
 	return strcmp(buffer, cstr);
@@ -539,7 +539,7 @@ void String::getBytes(unsigned char *buf, unsigned int bufsize, unsigned int ind
 	}
 	unsigned int n = bufsize - 1;
 	if (n > len - index) n = len - index;
-	strncpy((char *)buf, buffer + index, n);
+	strncpy(reinterpret_cast<char *>(buf), buffer + index, n);
 	buf[n] = 0;
 }
 
@@ -602,7 +602,7 @@ int String::lastIndexOf(const String &s2, unsigned int fromIndex) const
 	for (char *p = buffer; p <= buffer + fromIndex; p++) {
 		p = strstr(p, s2.buffer);
 		if (!p) break;
-		if ((unsigned int)(p - buffer) <= fromIndex) found = p - buffer;
+		if (static_cast<unsigned int>(p - buffer) <= fromIndex) found = p - buffer;
 	}
 	return found;
 }
@@ -685,7 +685,7 @@ void String::remove(unsigned int index){
 	// Pass the biggest integer as the count. The remove method
 	// below will take care of truncating it at the end of the
 	// string.
-	remove(index, (unsigned int)-1);
+	remove(index, static_cast<unsigned int>(-1));
 }
 
 void String::remove(unsigned int index, unsigned int count){

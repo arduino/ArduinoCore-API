@@ -127,7 +127,7 @@ int RingBufferN<N>::peek()
 template <int N>
 int RingBufferN<N>::nextIndex(int index)
 {
-  return (uint32_t)(index + 1) % N;
+  return static_cast<uint32_t>(index + 1) % N;
 }
 
 template <int N>

@@ -87,7 +87,9 @@ bool PluggableUSB_::plug(PluggableUSBModule *node)
 	node->pluggedEndpoint = lastEp;
 	lastIf += node->numInterfaces;
 	for (uint8_t i = 0; i < node->numEndpoints; i++) {
-		*(unsigned int*)(epBuffer(lastEp)) = node->endpointType[i];
+		*(static_cast<unsigned int*>(epBuffer(lastEp))) = node->endpointType[i];
+
+		//*(unsigned int*)(epBuffer(lastEp)) = node->endpointType[i];
 		lastEp++;
 	}
 	return true;

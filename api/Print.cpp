@@ -73,17 +73,17 @@ size_t Print::print(char c)
 
 size_t Print::print(unsigned char b, int base)
 {
-  return print((unsigned long) b, base);
+  return print(static_cast<unsigned long>(b), base);
 }
 
 size_t Print::print(int n, int base)
 {
-  return print((long) n, base);
+  return print(static_cast<long>(n), base);
 }
 
 size_t Print::print(unsigned int n, int base)
 {
-  return print((unsigned long) n, base);
+  return print(static_cast<unsigned long>(n), base);
 }
 
 size_t Print::print(long n, int base)
@@ -366,8 +366,8 @@ size_t Print::printFloat(double number, int digits)
   number += rounding;
 
   // Extract the integer part of the number and print it
-  unsigned long int_part = (unsigned long)number;
-  double remainder = number - (double)int_part;
+  unsigned long int_part = static_cast<unsigned long>(number);
+  double remainder = number - static_cast<double>(int_part);
   n += print(int_part);
 
   // Print the decimal point, but only if there are digits beyond
@@ -379,7 +379,7 @@ size_t Print::printFloat(double number, int digits)
   while (digits-- > 0)
   {
     remainder *= 10.0;
-    unsigned int toPrint = (unsigned int)remainder;
+    unsigned int toPrint = static_cast<unsigned int>(remainder);
     n += print(toPrint);
     remainder -= toPrint;
   }
