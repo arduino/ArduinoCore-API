@@ -45,24 +45,25 @@ typedef enum {
 
 class SPISettings {
   public:
-  SPISettings(uint32_t clock, BitOrder bitOrder, SPIMode dataMode, SPIBusMode busMode = SPI_CONTROLLER) {
-    if (__builtin_constant_p(clock)) {
-      init_AlwaysInline(clock, bitOrder, dataMode, busMode);
-    } else {
-      init_MightInline(clock, bitOrder, dataMode, busMode);
-    }
-  }
-
-  SPISettings(uint32_t clock, BitOrder bitOrder, int dataMode, SPIBusMode busMode = SPI_CONTROLLER) {
-    if (__builtin_constant_p(clock)) {
-      init_AlwaysInline(clock, bitOrder, (SPIMode)dataMode, busMode);
-    } else {
-      init_MightInline(clock, bitOrder, (SPIMode)dataMode, busMode);
-    }
-  }
-
+  constexpr SPISettings(uint32_t clock, BitOrder bitOrder, SPIMode dataMode, SPIBusMode busMode = SPI_CONTROLLER)
+    : clockFreq(clock),
+      dataMode(dataMode),
+      bitOrder(bitOrder),
+      busMode(busMode)
+  { }
+    constexpr SPISettings(uint32_t clock, BitOrder bitOrder, int dataMode, SPIBusMode busMode = SPI_CONTROLLER)
+    : clockFreq(clock),
+      dataMode((SPIMode)dataMode),
+      bitOrder(bitOrder),
+      busMode(busMode)
+  { }
   // Default speed set to 4MHz, SPI mode set to MODE 0 and Bit order set to MSB first.
-  SPISettings() { init_AlwaysInline(4000000, MSBFIRST, SPI_MODE0, SPI_CONTROLLER); }
+  constexpr SPISettings()
+    : clockFreq(4000000),
+      dataMode(SPI_MODE0),
+      bitOrder(MSBFIRST),
+      busMode(SPI_CONTROLLER)
+  { }
 
   bool operator==(const SPISettings& rhs) const
   {
@@ -94,18 +95,6 @@ class SPISettings {
   }
 
   private:
-  void init_MightInline(uint32_t clock, BitOrder bitOrder, SPIMode dataMode, SPIBusMode busMode) {
-    init_AlwaysInline(clock, bitOrder, dataMode, busMode);
-  }
-
-  // Core developer MUST use an helper function in beginTransaction() to use this data
-  void init_AlwaysInline(uint32_t clock, BitOrder bitOrder, SPIMode dataMode, SPIBusMode busMode) __attribute__((__always_inline__)) {
-    this->clockFreq = clock;
-    this->dataMode = dataMode;
-    this->bitOrder = bitOrder;
-    this->busMode = busMode;
-  }
-
   uint32_t clockFreq;
   SPIMode dataMode;
   BitOrder bitOrder;
