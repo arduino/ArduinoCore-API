@@ -21,6 +21,7 @@
 
 #include <inttypes.h>
 #include <stdio.h> // for size_t
+#include <stdarg.h> // for printf
 
 #include "String.h"
 #include "Printable.h"
@@ -72,6 +73,7 @@ class Print
     size_t print(unsigned long, int = DEC);
     size_t print(long long, int = DEC);
     size_t print(unsigned long long, int = DEC);
+    size_t print(float, int = 2);
     size_t print(double, int = 2);
     size_t print(const Printable&);
 
@@ -86,9 +88,15 @@ class Print
     size_t println(unsigned long, int = DEC);
     size_t println(long long, int = DEC);
     size_t println(unsigned long long, int = DEC);
+    size_t println(float, int = 2);
     size_t println(double, int = 2);
     size_t println(const Printable&);
     size_t println(void);
+
+    int printf(const char *format, ...);
+    int printf(const __FlashStringHelper *format, ...);
+    int vprintf(const __FlashStringHelper *format, va_list ap);
+    int vprintf(const char *format, va_list ap);
 
     virtual void flush() { /* Empty implementation for backward compatibility */ }
 };

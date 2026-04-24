@@ -130,6 +130,11 @@ size_t Print::print(unsigned long long n, int base)
   else return printULLNumber(n, base);
 }
 
+size_t Print::print(float n, int digits)
+{
+  return printFloat(n, digits);
+}
+
 size_t Print::print(double n, int digits)
 {
   return printFloat(n, digits);
@@ -222,6 +227,13 @@ size_t Print::println(unsigned long long num, int base)
   return n;
 }
 
+size_t Print::println(float num, int digits)
+{
+  size_t n = print(num, digits);
+  n += println();
+  return n;
+}
+
 size_t Print::println(double num, int digits)
 {
   size_t n = print(num, digits);
@@ -234,6 +246,34 @@ size_t Print::println(const Printable& x)
   size_t n = print(x);
   n += println();
   return n;
+}
+
+int Print::printf(const char *format, ...)
+{
+  va_list ap;
+  va_start(ap, format);
+  int retval = vdprintf((int)this, format, ap);
+  va_end(ap);
+  return retval;
+}
+
+int Print::printf(const __FlashStringHelper *format, ...)
+{
+  va_list ap;
+  va_start(ap, format);
+  int retval = vdprintf((int)this, (const char *)format, ap);
+  va_end(ap);
+  return retval;
+}
+
+int Print::vprintf(const char *format, va_list ap)
+{
+  return vdprintf((int)this, format, ap);
+}
+
+int Print::vprintf(const __FlashStringHelper *format, va_list ap)
+{
+  return vdprintf((int)this, (const char *)format, ap);
 }
 
 // Private Methods /////////////////////////////////////////////////////////////
