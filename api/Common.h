@@ -98,7 +98,7 @@ typedef uint8_t   byte;
 typedef uint16_t  word;
 
 void init(void);
-void initVariant(void);
+void initVariant(void) __attribute__((weak));
 
 #ifndef HOST
 int atexit(void (*func)()) __attribute__((weak));
