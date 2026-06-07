@@ -22,6 +22,7 @@
 #pragma once
 
 #include <inttypes.h>
+
 #include "Print.h"
 
 // compatibility macros for testing
@@ -67,22 +68,22 @@ class Stream : public Print
 
   void setTimeout(unsigned long timeout);  // sets maximum milliseconds to wait for stream data, default is 1 second
   unsigned long getTimeout(void) { return _timeout; }
-  
-  bool find(const char *target);   // reads data from the stream until the target string is found
-  bool find(const uint8_t *target) { return find ((const char *)target); }
+
+  bool find(const uint8_t *target);   // reads data from the stream until the target string is found
+  bool find(const char *target) { return find ((const uint8_t *)target); }
   // returns true if target string is found, false if timed out (see setTimeout)
 
-  bool find(const char *target, size_t length);   // reads data from the stream until the target string of given length is found
-  bool find(const uint8_t *target, size_t length) { return find ((const char *)target, length); }
+  bool find(const uint8_t *target, size_t length);   // reads data from the stream until the target string of given length is found
+  bool find(const char *target, size_t length) { return find ((const uint8_t *)target, length); }
   // returns true if target string is found, false if timed out
 
-  bool find(char target) { return find (&target, 1); }
+  bool find(uint8_t target) { return find (&target, 1); }
 
-  bool findUntil(const char *target, const char *terminator);   // as find but search ends if the terminator string is found
-  bool findUntil(const uint8_t *target, const char *terminator) { return findUntil((const char *)target, terminator); }
+  bool findUntil(const uint8_t *target, const uint8_t *terminator);   // as find but search ends if the terminator string is found
+  bool findUntil(const char *target, const char *terminator) { return findUntil((const uint8_t *)target, (const uint8_t *)terminator); }
 
-  bool findUntil(const char *target, size_t targetLen, const char *terminate, size_t termLen);   // as above but search ends if the terminate string is found
-  bool findUntil(const uint8_t *target, size_t targetLen, const char *terminate, size_t termLen) {return findUntil((const char *)target, targetLen, terminate, termLen); }
+  bool findUntil(const uint8_t *target, size_t targetLen, const uint8_t *terminator, size_t termLen);
+  bool findUntil(const char *target, size_t targetLen, const char *terminator, size_t termLen) { return findUntil((const uint8_t*)target, targetLen, (const uint8_t*)terminator, termLen); }
 
   long parseInt(LookaheadMode lookahead = SKIP_ALL, char ignore = NO_IGNORE_CHAR);
   // returns the first valid (long) integer value from the current position.
@@ -116,7 +117,7 @@ class Stream : public Print
   // the public API simple, these overload remains protected.
 
   struct MultiTarget {
-    const char *str;  // string you're searching for
+    const uint8_t *str;  // string you're searching for
     size_t len;       // length of string you're searching for
     size_t index;     // index used by the search routine.
   };
