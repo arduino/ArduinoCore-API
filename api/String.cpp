@@ -444,7 +444,16 @@ int String::compareTo(const String &s) const
 		if (buffer && len > 0) return *(unsigned char *)buffer;
 		return 0;
 	}
-	return strcmp(buffer, s.buffer);
+	// Use memcmp() rather than strcmp() so Strings holding embedded NUL
+	// bytes (which len tracks explicitly) are compared over their full,
+	// known length instead of stopping at the first NUL either buffer
+	// happens to contain.
+	unsigned int minlen = (len < s.len) ? len : s.len;
+	int r = minlen ? memcmp(buffer, s.buffer, minlen) : 0;
+	if (r != 0) return r;
+	if (len < s.len) return -1;
+	if (len > s.len) return 1;
+	return 0;
 }
 
 int String::compareTo(const char *cstr) const
@@ -491,13 +500,16 @@ bool String::startsWith( const String &s2 ) const
 bool String::startsWith( const String &s2, unsigned int offset ) const
 {
 	if (offset > len - s2.len || !buffer || !s2.buffer) return false;
-	return strncmp( &buffer[offset], s2.buffer, s2.len ) == 0;
+	// memcmp(), not strncmp(): strncmp() also stops at the first NUL byte
+	// in either operand, so a match containing an embedded NUL followed
+	// by different bytes would be misreported as a full match.
+	return s2.len == 0 || memcmp( &buffer[offset], s2.buffer, s2.len ) == 0;
 }
 
 bool String::endsWith( const String &s2 ) const
 {
 	if ( len < s2.len || !buffer || !s2.buffer) return false;
-	return strcmp(&buffer[len - s2.len], s2.buffer) == 0;
+	return s2.len == 0 || memcmp(&buffer[len - s2.len], s2.buffer, s2.len) == 0;
 }
 
 /*********************************************/

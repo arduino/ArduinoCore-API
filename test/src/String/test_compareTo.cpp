@@ -37,6 +37,25 @@ TEST_CASE ("Testing String::compareTo(const String &)", "[String-compareTo-01]")
     arduino::String str1, str2("Hello");
     REQUIRE(str1.compareTo(str2) < 0);
   }
+
+  WHEN ("Strings are the same length but differ only after an embedded NUL byte")
+  {
+    char buf1[] = {'A', '\0', 'B'};
+    char buf2[] = {'A', '\0', 'C'};
+    arduino::String str1(buf1, sizeof(buf1));
+    arduino::String str2(buf2, sizeof(buf2));
+    REQUIRE(str1.compareTo(str2) != 0);
+  }
+
+  WHEN ("Strings are equal and both contain an embedded NUL byte")
+  {
+    char buf1[] = {'A', '\0', 'B'};
+    char buf2[] = {'A', '\0', 'B'};
+    arduino::String str1(buf1, sizeof(buf1));
+    arduino::String str2(buf2, sizeof(buf2));
+    REQUIRE(str1.compareTo(str2) == 0);
+    REQUIRE(str1 == str2);
+  }
 }
 
 TEST_CASE ("Testing String::compareTo(const char *)", "[String-compareTo-02]")
