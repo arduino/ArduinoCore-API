@@ -122,6 +122,22 @@ String::String(unsigned long value, unsigned char base)
 	*this = buf;
 }
 
+String::String(long long value, unsigned char base)
+{
+	init();
+	char buf[2 + 8 * sizeof(long long)];
+	lltoa(value, buf, base);
+	*this = buf;
+}
+
+String::String(unsigned long long value, unsigned char base)
+{
+	init();
+	char buf[1 + 8 * sizeof(unsigned long long)];
+	ulltoa(value, buf, base);
+	*this = buf;
+}
+
 String::String(float value, unsigned char decimalPlaces)
 {
 	static size_t const FLOAT_BUF_SIZE = FLT_MAX_10_EXP + FLT_MAX_DECIMAL_PLACES + 1 /* '-' */ + 1 /* '.' */ + 1 /* '\0' */;
@@ -326,6 +342,20 @@ bool String::concat(unsigned long num)
 	return concat(buf);
 }
 
+bool String::concat(long long num)
+{
+	char buf[2 + 3 * sizeof(long long)];
+	lltoa(num, buf, 10);
+	return concat(buf);
+}
+
+bool String::concat(unsigned long long num)
+{
+	char buf[1 + 3 * sizeof(unsigned long long)];
+	ulltoa(num, buf, 10);
+	return concat(buf);
+}
+
 bool String::concat(float num)
 {
 	char buf[20];
@@ -406,6 +436,20 @@ StringSumHelper & operator + (const StringSumHelper &lhs, long num)
 }
 
 StringSumHelper & operator + (const StringSumHelper &lhs, unsigned long num)
+{
+	StringSumHelper &a = const_cast<StringSumHelper&>(lhs);
+	if (!a.concat(num)) a.invalidate();
+	return a;
+}
+
+StringSumHelper & operator + (const StringSumHelper &lhs, long long num)
+{
+	StringSumHelper &a = const_cast<StringSumHelper&>(lhs);
+	if (!a.concat(num)) a.invalidate();
+	return a;
+}
+
+StringSumHelper & operator + (const StringSumHelper &lhs, unsigned long long num)
 {
 	StringSumHelper &a = const_cast<StringSumHelper&>(lhs);
 	if (!a.concat(num)) a.invalidate();

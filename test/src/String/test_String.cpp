@@ -84,7 +84,21 @@ TEST_CASE ("Testing String(unsigned long, unsigned char base = 10) constructor()
   REQUIRE(str == "1");
 }
 
-TEST_CASE ("Testing String(float, unsigned char decimalPlaces = 2) constructor()", "[String-Ctor-10]")
+TEST_CASE ("Testing String(long long, unsigned char base = 10) constructor()", "[String-Ctor-10]")
+{
+  long long const val = -1;
+  arduino::String str(val);
+  REQUIRE(str == "-1");
+}
+
+TEST_CASE ("Testing String(unsigned long long, unsigned char base = 10) constructor()", "[String-Ctor-11]")
+{
+  unsigned long long const val = 1;
+  arduino::String str(val);
+  REQUIRE(str == "1");
+}
+
+TEST_CASE ("Testing String(float, unsigned char decimalPlaces = 2) constructor()", "[String-Ctor-12]")
 {
   WHEN ("String::String (some float value)")
   {
@@ -103,7 +117,7 @@ TEST_CASE ("Testing String(float, unsigned char decimalPlaces = 2) constructor()
   }
 }
 
-TEST_CASE ("Testing String(double, unsigned char decimalPlaces = 2) constructor()", "[String-Ctor-11]")
+TEST_CASE ("Testing String(double, unsigned char decimalPlaces = 2) constructor()", "[String-Ctor-13]")
 {
   WHEN ("String::String (some double value)")
   {
@@ -122,7 +136,7 @@ TEST_CASE ("Testing String(double, unsigned char decimalPlaces = 2) constructor(
   }
 }
 
-TEST_CASE ("Testing String(const __FlashStringHelper) constructor() with invalid buffer", "[String-Ctor-12]")
+TEST_CASE ("Testing String(const __FlashStringHelper) constructor() with invalid buffer", "[String-Ctor-14]")
 {
 #undef F
 #define F(string_literal) (reinterpret_cast<const arduino::__FlashStringHelper *>(PSTR(string_literal)))
@@ -132,7 +146,7 @@ TEST_CASE ("Testing String(const __FlashStringHelper) constructor() with invalid
   REQUIRE_FALSE(str1);
 }
 
-TEST_CASE ("Testing String(StringSumHelper &&) constructor()", "[String-Ctor-13]")
+TEST_CASE ("Testing String(StringSumHelper &&) constructor()", "[String-Ctor-15]")
 {
   arduino::String str("Hello");
   char const ch = '!';
@@ -140,14 +154,14 @@ TEST_CASE ("Testing String(StringSumHelper &&) constructor()", "[String-Ctor-13]
   REQUIRE(str1 == "Hello!");
 }
 
-TEST_CASE ("Testing String(String &&) constructor()", "[String-Ctor-14]")
+TEST_CASE ("Testing String(String &&) constructor()", "[String-Ctor-16]")
 {
   arduino::String str("Hello");
   arduino::String str1(static_cast<arduino::String&&>(str));
   REQUIRE(str1 == "Hello");
 }
 
-TEST_CASE ("Testing String(String &&) with move(String &rhs) from smaller to larger buffer", "[String-Ctor-15]")
+TEST_CASE ("Testing String(String &&) with move(String &rhs) from smaller to larger buffer", "[String-Ctor-17]")
 {
   arduino::String str("Hello");
   arduino::String str1("Arduino");
@@ -155,7 +169,7 @@ TEST_CASE ("Testing String(String &&) with move(String &rhs) from smaller to lar
   REQUIRE(str1 == "Hello");
 }
 
-TEST_CASE ("Testing String(String &&) with move(String &rhs) from larger to smaller buffer", "[String-Ctor-16]")
+TEST_CASE ("Testing String(String &&) with move(String &rhs) from larger to smaller buffer", "[String-Ctor-18]")
 {
   arduino::String str("Hello");
   arduino::String str1("Arduino");

@@ -45,6 +45,15 @@ char * ltoa(long value, char * str, int radix)
   return str;
 }
 
+char * lltoa(long long value, char * str, int radix)
+{
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+  sprintf(str, radixToFmtString(radix).c_str(), value);
+#pragma GCC diagnostic pop
+  return str;
+}
+
 char * utoa(unsigned value, char *str, int radix)
 {
 #pragma GCC diagnostic push
@@ -55,6 +64,15 @@ char * utoa(unsigned value, char *str, int radix)
 }
 
 char * ultoa(unsigned long value, char * str, int radix)
+{
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+  sprintf(str, radixToFmtString(radix).c_str(), value);
+#pragma GCC diagnostic pop
+  return str;
+}
+
+char * ulltoa(unsigned long long value, char * str, int radix)
 {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
