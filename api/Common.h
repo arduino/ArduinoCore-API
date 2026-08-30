@@ -82,14 +82,14 @@ typedef void (*voidFuncPtrParam)(void*);
 #define lowByte(w) ((uint8_t) ((w) & 0xff))
 #define highByte(w) ((uint8_t) ((w) >> 8))
 
-#define bitRead(value, bit) (((value) >> (bit)) & 0x01)
-#define bitSet(value, bit) ((value) |= (1UL << (bit)))
-#define bitClear(value, bit) ((value) &= ~(1UL << (bit)))
-#define bitToggle(value, bit) ((value) ^= (1UL << (bit)))
+#define bitRead(value, bit) (((value) >> (bit)) & 0x01ULL)
+#define bitSet(value, bit) ((value) |= (1ULL << (bit)))
+#define bitClear(value, bit) ((value) &= ~(1ULL << (bit)))
+#define bitToggle(value, bit) ((value) ^= (1ULL << (bit)))
 #define bitWrite(value, bit, bitvalue) ((bitvalue) ? bitSet((value), (bit)) : bitClear((value), (bit)))
 
 #ifndef bit
-#define bit(b) (1UL << (b))
+#define bit(b) (1ULL << (b))
 #endif
 
 /* TODO: request for removal */
