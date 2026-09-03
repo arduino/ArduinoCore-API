@@ -119,17 +119,20 @@ TEST_CASE ("Print::print(unsigned long long, int = DEC|HEX|OCT|BIN)", "[Print-pr
 
     WHEN("DEC") { mock.print(val, DEC); REQUIRE(mock._str  == "0"); }
     WHEN("HEX") { mock.print(val, HEX); REQUIRE(mock._str  == "0"); }
+    WHEN("HEX_LEADINGZERO") { mock.print(val, HEX_LEADINGZERO); REQUIRE(mock._str  == "00"); }
     WHEN("OCT") { mock.print(val, OCT); REQUIRE(mock._str  == "0"); }
     WHEN("BIN") { mock.print(val, BIN); REQUIRE(mock._str  == "0"); }
   }
+
   GIVEN("a non-zero value ...")
   {
-    unsigned long long const val = 17;
+    unsigned long long const val = 15;
 
-    WHEN("DEC") { mock.print(val, DEC); REQUIRE(mock._str  == "17"); }
-    WHEN("HEX") { mock.print(val, HEX); REQUIRE(mock._str  == "11"); }
-    WHEN("OCT") { mock.print(val, OCT); REQUIRE(mock._str  == "21"); }
-    WHEN("BIN") { mock.print(val, BIN); REQUIRE(mock._str  == "10001"); }
+    WHEN("DEC") { mock.print(val, DEC); REQUIRE(mock._str  == "15"); }
+    WHEN("HEX") { mock.print(val, HEX); REQUIRE(mock._str  == "F"); }
+    WHEN("HEX_LEADINGZERO") { mock.print(val, HEX_LEADINGZERO); REQUIRE(mock._str  == "0F"); }
+    WHEN("OCT") { mock.print(val, OCT); REQUIRE(mock._str  == "17"); }
+    WHEN("BIN") { mock.print(val, BIN); REQUIRE(mock._str  == "1111"); }
   }
 }
 

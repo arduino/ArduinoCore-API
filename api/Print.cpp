@@ -238,24 +238,30 @@ size_t Print::println(const Printable& x)
 
 // Private Methods /////////////////////////////////////////////////////////////
 
-size_t Print::printNumber(unsigned long n, uint8_t base)
+size_t Print::printNumber(unsigned long n, int8_t base)
 {
   char buf[8 * sizeof(long) + 1]; // Assumes 8-bit chars plus zero byte.
   char *str = &buf[sizeof(buf) - 1];
-
   *str = '\0';
+  size_t leadingZero = 0;
 
-  // prevent crash if called with base == 1
-  if (base < 2) base = 10;
+  // insert leading zero for hex values less than 0x10
+  if (base == -16 && n < 16) {
+    write('0');
+    leadingZero = 1;
+  }
+  // or prevent crash if called with base == 1
+  else if (base < 2) base = 10;
 
   do {
-    char c = n % base;
-    n /= base;
+    // use abs() to support HEX_LEADINGZERO, which is negative
+    char c = n % abs(base);
+    n /= abs(base);
 
     *--str = c < 10 ? c + '0' : c + 'A' - 10;
   } while(n);
 
-  return write(str);
+  return write(str) + leadingZero;
 }
 
 // REFERENCE IMPLEMENTATION FOR ULL
@@ -281,28 +287,39 @@ size_t Print::printNumber(unsigned long n, uint8_t base)
 // }
 
 // FAST IMPLEMENTATION FOR ULL
-size_t Print::printULLNumber(unsigned long long n64, uint8_t base)
+size_t Print::printULLNumber(unsigned long long n64, int8_t base)
 {
   // if limited to base 10 and 16 the bufsize can be 20
   char buf[64];
   uint8_t i = 0;
   uint8_t innerLoops = 0;
+  size_t leadingZero = 0;
 
   // Special case workaround https://github.com/arduino/ArduinoCore-API/issues/178
   if (n64 == 0) {
+    if (base == -16) {
+      write('0');
+      write('0');
+      return 2;
+    }
     write('0');
     return 1;
   }
 
-  // prevent crash if called with base == 1
-  if (base < 2) base = 10;
+  // insert leading zero for hex values less than 0x10
+  if (base == -16 && n64 < 16) {
+    write('0');
+    leadingZero = 1;
+  }
+  // or prevent crash if called with base == 1
+  else if (base < 2) base = 10;
 
   // process chunks that fit in "16 bit math".
-  uint16_t top = 0xFFFF / base;
+  uint16_t top = 0xFFFF / abs(base);
   uint16_t th16 = 1;
   while (th16 < top)
   {
-    th16 *= base;
+    th16 *= abs(base);
     innerLoops++;
   }
 
@@ -316,8 +333,8 @@ size_t Print::printULLNumber(unsigned long long n64, uint8_t base)
     // 16 bit math loop to do remainder. (note buffer is filled reverse)
     for (uint8_t j=0; j < innerLoops; j++)
     {
-      uint16_t qq = r/base;
-      buf[i++] = r - qq*base;
+      uint16_t qq = r/abs(base);
+      buf[i++] = r - qq*abs(base);
       r = qq;
     }
   }
@@ -325,8 +342,8 @@ size_t Print::printULLNumber(unsigned long long n64, uint8_t base)
   uint16_t n16 = n64;
   while (n16 > 0)
   {
-    uint16_t qq = n16/base;
-    buf[i++] = n16 - qq*base;
+    uint16_t qq = n16/abs(base);
+    buf[i++] = n16 - qq*abs(base);
     n16 = qq;
   }
 
@@ -336,7 +353,7 @@ size_t Print::printULLNumber(unsigned long long n64, uint8_t base)
     '0' + buf[i - 1] :
     'A' + buf[i - 1] - 10));
 
-  return bytes;
+  return bytes + leadingZero;
 }
 
 size_t Print::printFloat(double number, int digits)

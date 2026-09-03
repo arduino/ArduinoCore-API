@@ -27,6 +27,7 @@
 
 #define DEC 10
 #define HEX 16
+#define HEX_LEADINGZERO -16
 #define OCT 8
 #define BIN 2
 
@@ -36,8 +37,8 @@ class Print
 {
   private:
     int write_error;
-    size_t printNumber(unsigned long, uint8_t);
-    size_t printULLNumber(unsigned long long, uint8_t);
+    size_t printNumber(unsigned long, int8_t);
+    size_t printULLNumber(unsigned long long, int8_t);
     size_t printFloat(double, int);
   protected:
     void setWriteError(int err = 1) { write_error = err; }
