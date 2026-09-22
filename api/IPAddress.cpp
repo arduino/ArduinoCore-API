@@ -201,7 +201,7 @@ bool IPAddress::fromString6(const char *address) {
                     // :: allowed once
                     return false;
                 }
-                if (*address != '\0' && *(address + 1) == ':') {
+                if (*(address + 1) == ':') {
                     // ::: not allowed
                     return false;
                 }
