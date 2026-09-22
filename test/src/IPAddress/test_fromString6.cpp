@@ -382,11 +382,13 @@ TEST_CASE ("Extract invalid IPv6 address", "[IPAddress-fromString-12]")
   arduino::IPAddress ip;
 
   REQUIRE(ip.fromString(":::") == false); // three colons by self
+  REQUIRE(ip.fromString("::::") == false); // four colons by self
   REQUIRE(ip.fromString("::3:4:5:6::") == false); // two compressions
   REQUIRE(ip.fromString("2001:db8:102:10304:506:708:90a:b0c") == false); // 5 character field
   REQUIRE(ip.fromString("200x:db8:102:304:506:708:90a:b0c") == false); // invalid character
   REQUIRE(ip.fromString("2001:db8:102:304::506:708:90a:b0c") == false); // double colon with 8 other fields (so not a compression)
   REQUIRE(ip.fromString("2001:db8:102:304:::708:90a:b0c") == false); // three colons in middle
+  REQUIRE(ip.fromString("2001:db8:102:304::::708:90a:b0c") == false); // four colons in middle
   REQUIRE(ip.fromString("2001:db8:102:304:506:708:90a:b0c:d0e") == false); // 9 fields
   REQUIRE(ip.fromString("2001:db8:102:304:506:708:90a:") == false); // missing last group (but has a colon)
   REQUIRE(ip.fromString("2001:db8:102:304:506:708:90a") == false); // only seven groups
