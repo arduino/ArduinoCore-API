@@ -19,12 +19,12 @@
 
 #pragma once
 
+#include <string.h>
 #include <stdint.h>
 #include "Printable.h"
 #include "String.h"
 
 #define IPADDRESS_V4_BYTES_INDEX 12
-#define IPADDRESS_V4_DWORD_INDEX 3
 
 // forward declarations of global name space friend classes
 class EthernetClass;
@@ -42,17 +42,20 @@ enum IPType {
 
 class IPAddress : public Printable {
 private:
-    union {
-        uint8_t bytes[16];
-        uint32_t dword[4];
-    } _address;
-    IPType _type;
+    alignas(alignof(uint32_t)) uint8_t _address[16]{}; // If the implementation does not require 
+                                                       // storage as a multibyte integer, you can 
+                                                       // remove the storage field alignment.
+                                                       // Address (as uint32) is accessed by copying.
+    IPType _type{IPv4};
 
     // Access the raw byte array containing the address.  Because this returns a pointer
     // to the internal structure rather than a copy of the address this function should only
     // be used when you know that the usage of the returned uint8_t* will be transient and not
     // stored.
-    uint8_t* raw_address() { return _type == IPv4 ? &_address.bytes[IPADDRESS_V4_BYTES_INDEX] : _address.bytes; }
+    const uint8_t* raw_address() const { return _type == IPv4 ? &_address[IPADDRESS_V4_BYTES_INDEX] : _address; }
+    uint8_t* raw_address() { return _type == IPv4 ? &_address[IPADDRESS_V4_BYTES_INDEX] : _address; }
+    // NOTE: If IPADDRESS_V4_BYTES_INDEX region can be initialized with a multibyte int, then a cast to unsigned char is required.
+
 
 public:
     // Constructors
@@ -63,6 +66,7 @@ public:
     IPAddress(uint8_t first_octet, uint8_t second_octet, uint8_t third_octet, uint8_t fourth_octet);
     IPAddress(uint8_t o1, uint8_t o2, uint8_t o3, uint8_t o4, uint8_t o5, uint8_t o6, uint8_t o7, uint8_t o8, uint8_t o9, uint8_t o10, uint8_t o11, uint8_t o12, uint8_t o13, uint8_t o14, uint8_t o15, uint8_t o16);
      // IPv4; see implementation note
+     // NOTE: address MUST BE BigEndian.
     IPAddress(uint32_t address);
      // Default IPv4
     IPAddress(const uint8_t *address);
@@ -75,7 +79,16 @@ public:
 
     // Overloaded cast operator to allow IPAddress objects to be used where a uint32_t is expected
     // NOTE: IPv4 only; see implementation note
-    operator uint32_t() const { return _type == IPv4 ? _address.dword[IPADDRESS_V4_DWORD_INDEX] : 0; };
+    // NOTE: Data of the returned integer in the native endianness, but relevant ordering is a BigEndian.
+    //       The user is responsible for ensuring that the value is converted to BigEndian.
+    operator uint32_t() const {
+        uint32_t ret;
+        memcpy(&ret, raw_address(), 4);
+        // NOTE: maybe use the placement-new (or standard initialisation of uint32_t since C++20)
+        // for starting of the integer type lifetime in the storage when constructing an IPAddress?
+        // FIXME: need endianness checking? how do this with the arduino-api?
+        return _type == IPv4 ? ret : 0;
+    };
 
     bool operator==(const IPAddress& addr) const;
     bool operator!=(const IPAddress& addr) const { return !(*this == addr); };
