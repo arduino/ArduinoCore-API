@@ -25,6 +25,7 @@
 #include "deprecated-avr-comp/avr/dtostrf.h"
 
 #include <float.h>
+#include <limits.h>
 
 namespace arduino {
 
@@ -732,8 +733,32 @@ void String::trim(void)
 
 long String::toInt(void) const
 {
-	if (buffer) return atol(buffer);
-	return 0;
+	if (!buffer) return 0;
+
+	char const *p = buffer;
+	while (isspace(static_cast<unsigned char>(*p))) p++;
+
+	bool const negative = *p == '-';
+	if (negative || *p == '+') p++;
+
+	unsigned long value = 0;
+	unsigned long const negative_limit = static_cast<unsigned long>(-(LONG_MIN + 1L)) + 1UL;
+	unsigned long const limit = negative
+		? negative_limit
+		: static_cast<unsigned long>(LONG_MAX);
+	unsigned long const cutoff = limit / 10UL;
+	unsigned long const cutlim = limit % 10UL;
+
+	while (isdigit(static_cast<unsigned char>(*p))) {
+		unsigned long const digit = static_cast<unsigned long>(*p - '0');
+		if (value > cutoff || (value == cutoff && digit > cutlim)) return 0;
+		value = value * 10UL + digit;
+		p++;
+	}
+
+	if (!negative) return static_cast<long>(value);
+	if (value == negative_limit) return LONG_MIN;
+	return -static_cast<long>(value);
 }
 
 float String::toFloat(void) const
