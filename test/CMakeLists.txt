@@ -42,6 +42,7 @@ set(TEST_SRCS
   src/CanMsg/test_CanStandardId.cpp
   src/CanMsg/test_isExtendedId.cpp
   src/CanMsg/test_isStandardId.cpp
+  src/CanMsg/test_isRtr.cpp
   src/CanMsg/test_operator_assignment.cpp
   src/CanMsg/test_printTo.cpp
   src/CanMsgRingbuffer/test_available.cpp

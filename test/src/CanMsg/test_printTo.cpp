@@ -44,3 +44,23 @@ TEST_CASE ("Print CAN frame with extended ID", "[CanMsg-printTo-2]")
 
   REQUIRE(mock._str  == "[00000020] (4) : DEADC0DE");
 }
+
+TEST_CASE ("Print CAN frame with standard RTR ID", "[CanMsg-printTo-3]")
+{
+  CanMsg const std_rtr_msg(CanStandardRtrId(0x20), 0, nullptr);
+
+  PrintMock mock;
+  mock.print(std_rtr_msg);
+
+  REQUIRE(mock._str  == "[020 RTR] (0) : ");
+}
+
+TEST_CASE ("Print CAN frame with extended RTR ID", "[CanMsg-printTo-4]")
+{
+  CanMsg const ext_rtr_msg(CanExtendedRtrId(0x20), 0, nullptr);
+
+  PrintMock mock;
+  mock.print(ext_rtr_msg);
+
+  REQUIRE(mock._str  == "[00000020 RTR] (0) : ");
+}
