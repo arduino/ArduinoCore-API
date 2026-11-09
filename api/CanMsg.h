@@ -48,12 +48,13 @@ public:
   static uint8_t  constexpr MAX_DATA_LENGTH = 8;
 
   static uint32_t constexpr CAN_EFF_FLAG    = 0x80000000U;
+  static uint32_t constexpr CAN_RTR_FLAG    = 0x40000000U; /* remote transmission request (RTR) */
   static uint32_t constexpr CAN_SFF_MASK    = 0x000007FFU; /* standard frame format (SFF) */
   static uint32_t constexpr CAN_EFF_MASK    = 0x1FFFFFFFU; /* extended frame format (EFF) */
 
 
-  CanMsg(uint32_t const can_id, uint8_t const can_data_len, uint8_t const * can_data_ptr)
-  : id{can_id}
+  CanMsg(uint32_t const can_id, uint8_t const can_data_len, uint8_t const * can_data_ptr, bool const rtr = false)
+  : id{can_id | (rtr ? CAN_RTR_FLAG : 0)}
   , data_length{min(can_data_len, MAX_DATA_LENGTH)}
   , data{0}
   {
@@ -87,14 +88,14 @@ public:
 
   virtual size_t printTo(Print & p) const override
   {
-    char buf[20] = {0};
+    char buf[24] = {0};
     size_t len = 0;
 
     /* Print the header. */
     if (isStandardId())
-      len = snprintf(buf, sizeof(buf), "[%03" PRIX32 "] (%d) : ", getStandardId(), data_length);
+      len = snprintf(buf, sizeof(buf), "[%03" PRIX32 "%s] (%d) : ", getStandardId(), isRtr() ? " RTR" : "", data_length);
     else
-      len = snprintf(buf, sizeof(buf), "[%08" PRIX32 "] (%d) : ", getExtendedId(), data_length);
+      len = snprintf(buf, sizeof(buf), "[%08" PRIX32 "%s] (%d) : ", getExtendedId(), isRtr() ? " RTR" : "", data_length);
     size_t n = p.write(buf, len);
 
     /* Print the data. */
@@ -121,12 +122,18 @@ public:
   bool isExtendedId() const {
     return ((id & CAN_EFF_FLAG) == CAN_EFF_FLAG);
   }
+  bool isRtr() const {
+    return ((id & CAN_RTR_FLAG) == CAN_RTR_FLAG);
+  }
+  bool isRemote() const {
+    return isRtr();
+  }
 
 
   /*
    * CAN ID semantics (mirroring definition by linux/can.h):
    * |- Bit   31 : frame format flag (0 = standard 11 bit, 1 = extended 29 bit)
-   * |- Bit   30 : reserved (future remote transmission request flag)
+   * |- Bit   30 : remote transmission request flag (1 = RTR frame)
    * |- Bit   29 : reserved (future error frame flag)
    * |- Bit 0-28 : CAN identifier (11/29 bit)
    */
@@ -145,6 +152,14 @@ inline uint32_t CanStandardId(uint32_t const id) {
 
 inline uint32_t CanExtendedId(uint32_t const id) {
   return (CanMsg::CAN_EFF_FLAG | (id & CanMsg::CAN_EFF_MASK));
+}
+
+inline uint32_t CanStandardRtrId(uint32_t const id) {
+  return (CanMsg::CAN_RTR_FLAG | (id & CanMsg::CAN_SFF_MASK));
+}
+
+inline uint32_t CanExtendedRtrId(uint32_t const id) {
+  return (CanMsg::CAN_EFF_FLAG | CanMsg::CAN_RTR_FLAG | (id & CanMsg::CAN_EFF_MASK));
 }
 
 /**************************************************************************************
